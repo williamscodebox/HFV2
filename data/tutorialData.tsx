@@ -46,19 +46,10 @@ export const tutorialData = [
             {/* Players Card */}
             <Card style={styles.playersCard}>
               <CardHeader>
-                <CardTitle className="flex flex-row items-center gap-2 m-5">
-                  <View>
-                    <Feather
-                      name="users"
-                      size={20}
-                      color="#065F46"
-                      // className="w-7 h-7 pr-5"
-                    />
-                  </View>
-                  <Text className="text-green-800 text-2xl font-bold">
-                    Players
-                  </Text>
-                </CardTitle>
+                <View style={styles.cardTitleRow}>
+                  <Feather name="users" size={20} color="#065F46" />
+                  <Text style={styles.cardTitleText}>Players</Text>
+                </View>
               </CardHeader>
               <View className="flex flex-col">
                 <CardContent className="ml-5 mb-8 gap-1">
@@ -512,5 +503,16 @@ const styles = StyleSheet.create({
   },
   cardRow: {
     gap: 24,
+  },
+  cardTitleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    margin: 20,
+  },
+  cardTitleText: {
+    color: "#065F46", // green-800
+    fontSize: 24,
+    fontWeight: "bold",
   },
 });
