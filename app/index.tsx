@@ -8,7 +8,6 @@ import {
   Text,
   View,
 } from "react-native";
-import "./../global.css";
 
 interface Player {
   id: number;
