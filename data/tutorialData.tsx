@@ -2,7 +2,7 @@ import { VerticalStack } from "@/components/Spacer";
 import { EvilIcons, Feather, Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import type { ComponentProps } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, useWindowDimensions, View } from "react-native";
 import Badge from "../components/Badge";
 import Card from "../components/Card";
 import CardContent from "../components/CardContent";
@@ -16,81 +16,89 @@ export const tutorialData = [
     icon: (props: ComponentProps<typeof Feather>) => (
       <Feather {...props} name="book-open" size={24} />
     ),
-    content: () => (
-      <VerticalStack>
-        <LinearGradient
-          colors={["#eff6ff", "#f5f3ff"]} // blue-50 to purple-50
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-          style={styles.gradient}
-        >
-          <View style={styles.introBox}>
-            <Text style={styles.heading}>What is Hand and Foot?</Text>
-            <Text style={styles.paragraph} className="leading-relaxed">
-              Hand and Foot is a North American card game similar to Canasta.
-              Players work to create melds (sets of cards) and earn points. The
-              game is called "Hand and Foot" because each player is dealt two
-              sets of cards: the "hand" (played first) and the "foot" (played
-              after the hand is exhausted).
-            </Text>
+    content: () => {
+      const { width } = useWindowDimensions();
+      const isMd = width >= 768;
+
+      return (
+        <VerticalStack>
+          <LinearGradient
+            colors={["#eff6ff", "#f5f3ff"]} // blue-50 to purple-50
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={styles.gradient}
+          >
+            <View style={styles.introBox}>
+              <Text style={styles.heading}>What is Hand and Foot?</Text>
+              <Text style={styles.paragraph} className="leading-relaxed">
+                Hand and Foot is a North American card game similar to Canasta.
+                Players work to create melds (sets of cards) and earn points.
+                The game is called "Hand and Foot" because each player is dealt
+                two sets of cards: the "hand" (played first) and the "foot"
+                (played after the hand is exhausted).
+              </Text>
+            </View>
+          </LinearGradient>
+
+          <View
+            style={[styles.cardRow, { flexDirection: isMd ? "row" : "column" }]}
+          >
+            {/* Players Card */}
+            <Card style={styles.playersCard}>
+              <CardHeader>
+                <CardTitle className="flex flex-row items-center gap-2 m-5">
+                  <View>
+                    <Feather
+                      name="users"
+                      size={20}
+                      color="#065F46"
+                      // className="w-7 h-7 pr-5"
+                    />
+                  </View>
+                  <Text className="text-green-800 text-2xl font-bold">
+                    Players
+                  </Text>
+                </CardTitle>
+              </CardHeader>
+              <View className="flex flex-col">
+                <CardContent className="ml-5 mb-8 gap-1">
+                  <Text className="text-lg">2-6 players (best with 4)</Text>
+                  <Text className="text-lg text-green-700 mt-2">
+                    Can be played in partnerships
+                  </Text>
+                </CardContent>
+              </View>
+            </Card>
+
+            <Card className="bg-fuchsia-100 border border-fuchsia-200">
+              <CardHeader>
+                <CardTitle className="flex flex-row items-center gap-2 m-5">
+                  <View>
+                    <Ionicons
+                      name="shuffle-sharp"
+                      size={20}
+                      color="#065F46"
+                      // className="w-7 h-7 pr-5"
+                    />
+                  </View>
+                  <Text className="text-fuchsia-800 text-2xl font-bold">
+                    Decks
+                  </Text>
+                </CardTitle>
+              </CardHeader>
+              <View className="flex flex-col">
+                <CardContent className="ml-5 mb-8 gap-1">
+                  <Text text-lg>4–7 standard decks + jokers</Text>
+                  <Text className="text-lg text-fuchsia-700 mt-2">
+                    Number depends on player count
+                  </Text>
+                </CardContent>
+              </View>
+            </Card>
           </View>
-        </LinearGradient>
-
-        <View className="flex flex-col md:flex-row gap-6">
-          <Card style={styles.playersCard}>
-            <CardHeader>
-              <CardTitle className="flex flex-row items-center gap-2 m-5">
-                <View>
-                  <Feather
-                    name="users"
-                    size={20}
-                    color="#065F46"
-                    // className="w-7 h-7 pr-5"
-                  />
-                </View>
-                <Text className="text-green-800 text-2xl font-bold">
-                  Players
-                </Text>
-              </CardTitle>
-            </CardHeader>
-            <View className="flex flex-col">
-              <CardContent className="ml-5 mb-8 gap-1">
-                <Text className="text-lg">2-6 players (best with 4)</Text>
-                <Text className="text-lg text-green-700 mt-2">
-                  Can be played in partnerships
-                </Text>
-              </CardContent>
-            </View>
-          </Card>
-
-          <Card className="bg-fuchsia-100 border border-fuchsia-200">
-            <CardHeader>
-              <CardTitle className="flex flex-row items-center gap-2 m-5">
-                <View>
-                  <Ionicons
-                    name="shuffle-sharp"
-                    size={20}
-                    color="#065F46"
-                    // className="w-7 h-7 pr-5"
-                  />
-                </View>
-                <Text className="text-fuchsia-800 text-2xl font-bold">
-                  Decks
-                </Text>
-              </CardTitle>
-            </CardHeader>
-            <View className="flex flex-col">
-              <CardContent className="ml-5 mb-8 gap-1">
-                <Text text-lg>4–7 standard decks + jokers</Text>
-                <Text className="text-lg text-fuchsia-700 mt-2">
-                  Number depends on player count
-                </Text>
-              </CardContent>
-            </View>
-          </Card>
-        </View>
-      </VerticalStack>
-    ),
+        </VerticalStack>
+      );
+    },
   },
   {
     id: "setup",
@@ -501,5 +509,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#f0fdf4", // Tailwind's bg-green-50
     borderWidth: 1,
     borderColor: "#bbf7d0", // Tailwind's border-green-200
+  },
+  cardRow: {
+    gap: 24,
   },
 });
