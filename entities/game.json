@@ -1,0 +1,85 @@
+{
+  "name": "Game",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Game name/description"
+    },
+    "players": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "player_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "total_score": {
+            "type": "number",
+            "default": 0
+          },
+          "rounds": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "round_number": {
+                  "type": "number"
+                },
+                "melds_score": {
+                  "type": "number",
+                  "default": 0
+                },
+                "cards_score": {
+                  "type": "number",
+                  "default": 0
+                },
+                "bonus_clean_books": {
+                  "type": "number",
+                  "default": 0
+                },
+                "bonus_dirty_books": {
+                  "type": "number",
+                  "default": 0
+                },
+                "bonus_red_threes": {
+                  "type": "number",
+                  "default": 0
+                },
+                "penalty_cards_left": {
+                  "type": "number",
+                  "default": 0
+                },
+                "went_out": {
+                  "type": "boolean",
+                  "default": false
+                },
+                "round_total": {
+                  "type": "number",
+                  "default": 0
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "current_round": {
+      "type": "number",
+      "default": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": ["active", "completed"],
+      "default": "active"
+    },
+    "winner_id": {
+      "type": "string",
+      "description": "ID of winning player"
+    }
+  },
+  "required": ["name", "players"]
+}

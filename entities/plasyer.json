@@ -1,0 +1,26 @@
+{
+  "name": "Player",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Player's name"
+    },
+    "total_score": {
+      "type": "number",
+      "default": 0,
+      "description": "Total cumulative score across all games"
+    },
+    "games_played": {
+      "type": "number",
+      "default": 0,
+      "description": "Number of games completed"
+    },
+    "games_won": {
+      "type": "number",
+      "default": 0,
+      "description": "Number of games won"
+    }
+  },
+  "required": ["name"]
+}
