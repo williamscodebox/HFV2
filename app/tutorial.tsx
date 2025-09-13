@@ -1,16 +1,7 @@
-import { Feather } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useCallback, useRef, useState } from "react";
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import Card from "../components/Card";
-import CardContent from "../components/CardContent";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { tutorialData } from "../data/tutorialData";
 
 export default function TutorialPage() {
@@ -47,14 +38,17 @@ export default function TutorialPage() {
         end={{ x: 1, y: 1 }}
         className="flex-1 p-4 md:p-8"
       >
-        <View className="max-w-4xl mx-auto">
+        <View>
+          <Text>Tutorial</Text>
+        </View>
+        {/* <View className="max-w-4xl mx-auto">
           <View className="text-center mb-8">
             <Text style={styles.title}>Learn Hand & Foot</Text>
             <Text style={styles.subtitle}>
               Master the classic card game with our interactive tutorial
             </Text>
 
-            {/* Progress Bar */}
+            {/* Progress Bar 
             <View style={styles.progressContainer}>
               <Text style={styles.progressText}>
                 {currentSection + 1} of {tutorialSections.length}
@@ -73,7 +67,7 @@ export default function TutorialPage() {
               </View>
             </View>
 
-            {/* Navigation Tabs */}
+            {/* Navigation Tabs 
             <View style={styles.tabContainer}>
               {tutorialSections.map((section, index) => {
                 const isActive = index === currentSection;
@@ -96,7 +90,7 @@ export default function TutorialPage() {
               })}
             </View>
 
-            {/* Current Section Content */}
+            {/* Current Section Content 
             <View className="-m-2 mb-3">
               <Card style={styles.card} className="mb-8">
                 <LinearGradient
@@ -118,7 +112,7 @@ export default function TutorialPage() {
               </Card>
             </View>
 
-            {/* Navigation Buttons */}
+            {/* Navigation Buttons 
 
             <View className="flex flex-row justify-between items-center mb-6">
               <TouchableOpacity
@@ -187,7 +181,7 @@ export default function TutorialPage() {
               </TouchableOpacity>
             </View>
           </View>
-        </View>
+        </View> */}
       </LinearGradient>
     </ScrollView>
   );

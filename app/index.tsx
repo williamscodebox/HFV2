@@ -1,6 +1,4 @@
-import { EvilIcons, Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { format } from "date-fns";
 import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useState } from "react";
 import {
@@ -8,21 +6,36 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from "react-native";
-import CardTitle from "../components/CardTitle";
 import "./../global.css";
 
-export default function HomeScreen() {
-  const [games, setGames] = useState([]);
-  const [players, setPlayers] = useState([]);
-  const [loading, setLoading] = useState(true);
+interface Player {
+  id: number;
+  name: string;
+  games_won: number;
+}
 
-  useEffect(() => {
-    loadData();
-    // setLoading(false);
-  }, []);
+interface GamePlayer {
+  player_id: number;
+  name: string;
+  total_score: number;
+}
+
+interface Game {
+  id: number;
+  name: string;
+  status: "active" | "completed";
+  current_round: number;
+  created_date: string;
+  winner_id?: number;
+  players: GamePlayer[];
+}
+
+export default function HomeScreen() {
+  const [games, setGames] = useState<Game[]>([]);
+  const [players, setPlayers] = useState<Player[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const loadData = async () => {
     // try {
@@ -40,7 +53,7 @@ export default function HomeScreen() {
 
     // Simulate API delay
     setTimeout(() => {
-      const mockGames = [
+      const mockGames: Game[] = [
         {
           id: 1,
           name: "Game 1",
@@ -78,7 +91,7 @@ export default function HomeScreen() {
         },
       ];
 
-      const mockPlayers = [
+      const mockPlayers: Player[] = [
         { id: 1, name: "Alice", games_won: 10 },
         { id: 2, name: "Bob", games_won: 8 },
         { id: 3, name: "Charlie", games_won: 12 },
@@ -92,6 +105,11 @@ export default function HomeScreen() {
       setLoading(false);
     }, 1000);
   };
+
+  useEffect(() => {
+    loadData();
+    // setLoading(false);
+  }, []);
 
   const navigation = useNavigation();
   const activeGames = games.filter((game) => game.status === "active");
@@ -134,9 +152,12 @@ export default function HomeScreen() {
         end={{ x: 0, y: 0 }}
         colors={["#fef2f2", "#eff6ff"]}
       >
-        <View className="min-h-screen p-4 md:p-8">
+        <View>
+          <Text>Welcom</Text>
+        </View>
+        {/* <View className="min-h-screen p-4 md:p-8">
           <View className="">
-            {/* Hero Section */}
+            {/* Hero Section *
             <View className="text-center">
               <View style={styles.heroSection}>
                 <LinearGradient
@@ -210,7 +231,7 @@ export default function HomeScreen() {
               </View>
             </View>
 
-            {/* Stats Grid */}
+            {/* Stats Grid 
             <View className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-12">
               <LinearGradient
                 colors={["#f0fdf4", "#dcfce7"]}
@@ -363,7 +384,7 @@ export default function HomeScreen() {
                   />
                 </View>
 
-                {/* Content */}
+                {/* Content 
                 {topPlayer ? (
                   <View style={{ marginTop: 16, marginBottom: 10, gap: 5 }}>
                     <Text
@@ -389,7 +410,7 @@ export default function HomeScreen() {
               </LinearGradient>
             </View>
 
-            {/* Recent Games */}
+            {/* Recent Games 
 
             <View className="flex flex-col gap-8 mb-8">
               <View className="shadow-xl border-2 border-gray-200 rounded-xl bg-slate-50 p-10 pb-2">
@@ -561,7 +582,7 @@ export default function HomeScreen() {
               </View>
             </View>
           </View>
-        </View>
+        </View> */}
       </LinearGradient>
     </ScrollView>
   );
