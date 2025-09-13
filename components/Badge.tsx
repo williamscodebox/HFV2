@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 
 interface BadgeProps {
   value: string | number;
-  size: number;
+  size?: number;
   height: number;
   width: number;
   color: string;

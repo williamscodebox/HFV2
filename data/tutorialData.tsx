@@ -1,3 +1,4 @@
+import { VerticalStack } from "@/components/Spacer";
 import { EvilIcons, Feather, Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import type { ComponentProps } from "react";
@@ -16,12 +17,12 @@ export const tutorialData = [
       <Feather {...props} name="book-open" size={24} />
     ),
     content: () => (
-      <View className="space-y-6">
+      <VerticalStack>
         <LinearGradient
           colors={["#eff6ff", "#f5f3ff"]} // blue-50 to purple-50
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
-          className="p-6 rounded-xl overflow-hidden mb-6 mt-2"
+          style={styles.gradient}
         >
           <View style={styles.introBox}>
             <Text style={styles.heading}>What is Hand and Foot?</Text>
@@ -36,7 +37,7 @@ export const tutorialData = [
         </LinearGradient>
 
         <View className="flex flex-col md:flex-row gap-6">
-          <Card className="bg-green-50 border border-green-200">
+          <Card style={styles.playersCard}>
             <CardHeader>
               <CardTitle className="flex flex-row items-center gap-2 m-5">
                 <View>
@@ -88,20 +89,22 @@ export const tutorialData = [
             </View>
           </Card>
         </View>
-      </View>
+      </VerticalStack>
     ),
   },
   {
     id: "setup",
     title: "Game Setup",
-    icon: (props) => <Ionicons name="shuffle-sharp" size={24} {...props} />,
+    icon: (props: ComponentProps<typeof Ionicons>) => (
+      <Ionicons {...props} name="shuffle-sharp" size={24} />
+    ),
     content: () => (
       <View className="space-y-6">
         <LinearGradient
           colors={["#eff6ff", "#f5f3ff"]} // blue-50 to purple-50
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
-          className="p-6 rounded-xl overflow-hidden mb-6 mt-2"
+          style={styles.gradient}
         >
           <View style={styles.introBox}>
             <Text style={styles.heading}>Initial Deal</Text>
@@ -178,14 +181,16 @@ export const tutorialData = [
   {
     id: "melds",
     title: "Making Melds",
-    icon: (props) => <Feather name="target" size={24} {...props} />,
+    icon: (props: ComponentProps<typeof Feather>) => (
+      <Feather {...props} name="target" size={24} />
+    ),
     content: () => (
       <View className="space-y-6">
         <LinearGradient
           colors={["#eff6ff", "#f5f3ff"]} // blue-50 to purple-50
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
-          className="p-6 rounded-xl overflow-hidden mb-6 mt-2"
+          style={styles.gradient}
         >
           <View style={styles.introBox}>
             <Text style={styles.heading}>What are Melds?</Text>
@@ -235,7 +240,6 @@ export const tutorialData = [
                   textColor={"green"}
                   height={28}
                   width={90}
-                  className="bg-green-100 text-green-800"
                 />
               </View>
             </CardContent>
@@ -283,7 +287,6 @@ export const tutorialData = [
                   textColor={"#854D0E"}
                   height={28}
                   width={90}
-                  className="bg-yellow-100 text-yellow-800"
                 />
               </View>
             </CardContent>
@@ -306,7 +309,9 @@ export const tutorialData = [
   {
     id: "scoring",
     title: "Scoring System",
-    icon: (props) => <EvilIcons name="trophy" size={24} {...props} />,
+    icon: (props: ComponentProps<typeof EvilIcons>) => (
+      <EvilIcons {...props} name="trophy" size={24} />
+    ),
     content: () => (
       <View className="space-y-6">
         <View style={styles.introBox}>
@@ -337,7 +342,6 @@ export const tutorialData = [
                   textColor={"white"}
                   height={30}
                   width={90}
-                  borderRadius={20}
                 />
               </View>
               <View className="flex flex-row justify-between mr-5 pb-2">
@@ -348,7 +352,6 @@ export const tutorialData = [
                   textColor={"white"}
                   height={30}
                   width={90}
-                  borderRadius={20}
                 />
               </View>
               <View className="flex flex-row justify-between mr-5 pb-2">
@@ -359,7 +362,6 @@ export const tutorialData = [
                   textColor={"white"}
                   height={30}
                   width={90}
-                  borderRadius={20}
                 />
               </View>
               <View className="flex flex-row justify-between mr-5 pb-2">
@@ -370,7 +372,6 @@ export const tutorialData = [
                   textColor={"white"}
                   height={30}
                   width={90}
-                  borderRadius={20}
                 />
               </View>
               <View className="flex flex-row justify-between mr-5 pb-2">
@@ -381,7 +382,6 @@ export const tutorialData = [
                   textColor={"white"}
                   height={30}
                   width={90}
-                  borderRadius={20}
                 />
               </View>
               <View className="flex flex-row justify-between mr-5 pb-2">
@@ -392,7 +392,6 @@ export const tutorialData = [
                   textColor={"white"}
                   height={30}
                   width={90}
-                  borderRadius={20}
                 />
               </View>
               <View className="flex flex-row justify-between mr-5 pb-2">
@@ -403,7 +402,6 @@ export const tutorialData = [
                   textColor={"white"}
                   height={30}
                   width={90}
-                  borderRadius={20}
                 />
               </View>
             </CardContent>
@@ -426,7 +424,6 @@ export const tutorialData = [
                   textColor={"black"}
                   height={30}
                   width={90}
-                  borderRadius={20}
                 />
               </View>
               <View className="flex flex-row justify-between mr-5 pb-2">
@@ -437,7 +434,6 @@ export const tutorialData = [
                   textColor={"black"}
                   height={30}
                   width={90}
-                  borderRadius={20}
                 />
               </View>
             </CardContent>
@@ -493,5 +489,17 @@ const styles = StyleSheet.create({
   cardSubtext: {
     fontSize: 12,
     color: "#6B7280",
+  },
+  gradient: {
+    padding: 24, // Tailwind's p-6
+    borderRadius: 12, // rounded-xl
+    overflow: "hidden",
+    marginBottom: 24, // mb-6
+    marginTop: 8, // mt-2
+  },
+  playersCard: {
+    backgroundColor: "#f0fdf4", // Tailwind's bg-green-50
+    borderWidth: 1,
+    borderColor: "#bbf7d0", // Tailwind's border-green-200
   },
 });
