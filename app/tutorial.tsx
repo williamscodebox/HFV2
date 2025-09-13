@@ -8,19 +8,19 @@ export default function TutorialPage() {
   const [currentSection, setCurrentSection] = useState(0);
   const tutorialSections = tutorialData;
   const currentTutorial = tutorialSections[currentSection];
-  const scrollRef = useRef(null);
+  const scrollRef = useRef<ScrollView>(null);
 
   const nextSection = () => {
     if (currentSection < tutorialSections.length - 1) {
       setCurrentSection(currentSection + 1);
-      scrollRef.current?.scrollTo({ y: 0, animated: true });
+      scrollRef.current?.scrollTo?.({ y: 0, animated: true });
     }
   };
 
   const prevSection = () => {
     if (currentSection > 0) {
       setCurrentSection(currentSection - 1);
-      scrollRef.current?.scrollTo({ y: 0, animated: true });
+      scrollRef.current?.scrollTo?.({ y: 0, animated: true });
     }
   };
 

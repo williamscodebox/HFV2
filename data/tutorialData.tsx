@@ -6,7 +6,6 @@ import { StyleSheet, Text, useWindowDimensions, View } from "react-native";
 import Card from "../components/Card";
 import CardContent from "../components/CardContent";
 import CardHeader from "../components/CardHeader";
-import CardTitle from "../components/CardTitle";
 
 export const tutorialData = [
   {
@@ -50,40 +49,28 @@ export const tutorialData = [
                   <Text style={styles.cardTitleText}>Players</Text>
                 </View>
               </CardHeader>
-              <View className="flex flex-col">
-                <CardContent className="ml-5 mb-8 gap-1">
-                  <Text className="text-lg">2-6 players (best with 4)</Text>
-                  <Text className="text-lg text-green-700 mt-2">
-                    Can be played in partnerships
-                  </Text>
-                </CardContent>
-              </View>
+              <CardContent style={styles.cardContent}>
+                <Text style={styles.cardText}>2–6 players (best with 4)</Text>
+                <Text style={styles.cardSubText}>
+                  Can be played in partnerships
+                </Text>
+              </CardContent>
             </Card>
 
-            <Card className="bg-fuchsia-100 border border-fuchsia-200">
+            {/* Decks Card */}
+            <Card style={styles.decksCard}>
               <CardHeader>
-                <CardTitle className="flex flex-row items-center gap-2 m-5">
-                  <View>
-                    <Ionicons
-                      name="shuffle-sharp"
-                      size={20}
-                      color="#065F46"
-                      // className="w-7 h-7 pr-5"
-                    />
-                  </View>
-                  <Text className="text-fuchsia-800 text-2xl font-bold">
-                    Decks
-                  </Text>
-                </CardTitle>
+                <View style={styles.cardTitleRow}>
+                  <Ionicons name="shuffle-sharp" size={20} color="#065F46" />
+                  <Text style={styles.cardTitleText}>Decks</Text>
+                </View>
               </CardHeader>
-              <View className="flex flex-col">
-                <CardContent className="ml-5 mb-8 gap-1">
-                  <Text text-lg>4–7 standard decks + jokers</Text>
-                  <Text className="text-lg text-fuchsia-700 mt-2">
-                    Number depends on player count
-                  </Text>
-                </CardContent>
-              </View>
+              <CardContent style={styles.cardContent}>
+                <Text style={styles.cardText}>4–7 standard decks + jokers</Text>
+                <Text style={styles.cardSubText}>
+                  Number depends on player count
+                </Text>
+              </CardContent>
             </Card>
           </View>
         </VerticalStack>
@@ -453,10 +440,6 @@ export const tutorialData = [
 ];
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    padding: 16,
-    backgroundColor: "#fff",
-  },
   introBox: {
     marginBottom: 16,
   },
@@ -471,24 +454,6 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     marginTop: 10,
   },
-  cardGrid: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  greenCard: {
-    backgroundColor: "#D1FAE5",
-  },
-  redCard: {
-    backgroundColor: "#FECACA",
-  },
-  cardText: {
-    fontSize: 14,
-    color: "#111827",
-  },
-  cardSubtext: {
-    fontSize: 12,
-    color: "#6B7280",
-  },
   gradient: {
     padding: 24, // Tailwind's p-6
     borderRadius: 12, // rounded-xl
@@ -500,6 +465,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#f0fdf4", // Tailwind's bg-green-50
     borderWidth: 1,
     borderColor: "#bbf7d0", // Tailwind's border-green-200
+  },
+  decksCard: {
+    backgroundColor: "#fae8ff", // fuchsia-100
+    borderWidth: 1,
+    borderColor: "#f5d0fe", // fuchsia-200
   },
   cardRow: {
     gap: 24,
@@ -514,5 +484,19 @@ const styles = StyleSheet.create({
     color: "#065F46", // green-800
     fontSize: 24,
     fontWeight: "bold",
+  },
+  cardContent: {
+    marginLeft: 20,
+    marginBottom: 32,
+    gap: 4,
+  },
+  cardText: {
+    fontSize: 18,
+    color: "#1F2937", // gray-800
+  },
+  cardSubText: {
+    fontSize: 18,
+    color: "#047857", // green-700 or fuchsia-700 depending on context
+    marginTop: 8,
   },
 });
