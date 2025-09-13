@@ -1,7 +1,17 @@
+import Card from "@/components/Card";
+import CardContent from "@/components/CardContent";
+import { Feather } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useCallback, useRef, useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  useWindowDimensions,
+} from "react-native";
 import { tutorialData } from "../data/tutorialData";
 
 export default function TutorialPage() {
@@ -9,6 +19,8 @@ export default function TutorialPage() {
   const tutorialSections = tutorialData;
   const currentTutorial = tutorialSections[currentSection];
   const scrollRef = useRef<ScrollView>(null);
+  const { width } = useWindowDimensions();
+  const isMd = width >= 768;
 
   const nextSection = () => {
     if (currentSection < tutorialSections.length - 1) {
@@ -33,22 +45,18 @@ export default function TutorialPage() {
   return (
     <ScrollView ref={scrollRef} contentContainerStyle={styles.container}>
       <LinearGradient
-        colors={["#ebf8ff", "#ffffff", "#f3e8ff"]} // from-blue-50 via-white to-purple-50
+        colors={["#ebf8ff", "#ffffff", "#f3e8ff"]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
-        className="flex-1 p-4 md:p-8"
+        style={[styles.gradientWrapper, isMd && { padding: 32 }]}
       >
-        <View>
-          <Text>Tutorial</Text>
-        </View>
-        {/* <View className="max-w-4xl mx-auto">
-          <View className="text-center mb-8">
+        <View style={styles.contentWrapper}>
+          <View style={styles.headerBlock}>
             <Text style={styles.title}>Learn Hand & Foot</Text>
             <Text style={styles.subtitle}>
               Master the classic card game with our interactive tutorial
             </Text>
 
-            {/* Progress Bar 
             <View style={styles.progressContainer}>
               <Text style={styles.progressText}>
                 {currentSection + 1} of {tutorialSections.length}
@@ -67,7 +75,6 @@ export default function TutorialPage() {
               </View>
             </View>
 
-            {/* Navigation Tabs 
             <View style={styles.tabContainer}>
               {tutorialSections.map((section, index) => {
                 const isActive = index === currentSection;
@@ -81,7 +88,7 @@ export default function TutorialPage() {
                     ]}
                     onPress={() => setCurrentSection(index)}
                   >
-                    {section.icon({ color: iconColor })}
+                    {section.icon({ name: "bell", size: 24, color: iconColor })}
                     <Text style={[styles.tabText, { color: iconColor }]}>
                       {section.title}
                     </Text>
@@ -90,35 +97,35 @@ export default function TutorialPage() {
               })}
             </View>
 
-            {/* Current Section Content 
-            <View className="-m-2 mb-3">
-              <Card style={styles.card} className="mb-8">
+            <View style={styles.sectionWrapper}>
+              <Card style={styles.card}>
                 <LinearGradient
-                  colors={["#2563eb", "#9333ea"]} // from-blue-600 to-purple-600
+                  colors={["#2563eb", "#9333ea"]}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 0 }}
-                  className="rounded-t-lg p-4 overflow-hidden"
+                  style={styles.gradientHeader}
                 >
-                  <View style={styles.cardHeader} className="mt-3">
-                    {currentTutorial.icon({ color: "white" })}
+                  <View style={styles.cardHeader}>
+                    {currentTutorial.icon({
+                      name: "bell",
+                      size: 24,
+                      color: "white",
+                    })}
                     <Text style={styles.cardTitle}>
                       {currentTutorial.title}
                     </Text>
                   </View>
                 </LinearGradient>
-                <CardContent className="p-8 mt-1">
+                <CardContent style={styles.cardContent}>
                   {currentTutorial.content()}
                 </CardContent>
               </Card>
             </View>
 
-            {/* Navigation Buttons 
-
-            <View className="flex flex-row justify-between items-center mb-6">
+            <View style={styles.navRow}>
               <TouchableOpacity
                 onPress={prevSection}
                 disabled={currentSection === 0}
-                className="flex flex-row items-center gap-2 px-4 pr-6 py-4 rounded-xl overflow-hidden"
                 style={[
                   styles.navButton,
                   currentSection === 0 && styles.disabled,
@@ -139,13 +146,16 @@ export default function TutorialPage() {
                 </Text>
               </TouchableOpacity>
 
-              <View className="flex flex-row gap-2">
+              <View style={styles.dotRow}>
                 {tutorialSections.map((_, index) => (
                   <View
                     key={index}
-                    className={`w-2 h-2 rounded-full ${
-                      index === currentSection ? "bg-blue-600" : "bg-gray-300"
-                    }`}
+                    style={[
+                      styles.dot,
+                      index === currentSection
+                        ? styles.dotActive
+                        : styles.dotInactive,
+                    ]}
                   />
                 ))}
               </View>
@@ -153,7 +163,6 @@ export default function TutorialPage() {
               <TouchableOpacity
                 onPress={nextSection}
                 disabled={currentSection === tutorialSections.length - 1}
-                className="flex flex-row items-center gap-2 px-4 pl-10 pr-8 py-4 rounded-xl overflow-hidden"
                 style={[
                   styles.navButton,
                   currentSection === tutorialSections.length - 1 &&
@@ -181,7 +190,7 @@ export default function TutorialPage() {
               </TouchableOpacity>
             </View>
           </View>
-        </View> */}
+        </View>
       </LinearGradient>
     </ScrollView>
   );
@@ -190,6 +199,19 @@ export default function TutorialPage() {
 const styles = StyleSheet.create({
   container: {
     padding: 0,
+  },
+  gradientWrapper: {
+    flex: 1,
+    padding: 16,
+  },
+  contentWrapper: {
+    maxWidth: 1024,
+    alignSelf: "center",
+    width: "100%",
+  },
+  headerBlock: {
+    alignItems: "center",
+    marginBottom: 32,
   },
   title: {
     fontSize: 32,
@@ -227,9 +249,9 @@ const styles = StyleSheet.create({
   tabContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 8,
     justifyContent: "center",
     marginBottom: 20,
+    gap: 8,
   },
   tabButton: {
     flexDirection: "row",
@@ -244,17 +266,28 @@ const styles = StyleSheet.create({
   },
   tabText: {
     marginLeft: 6,
-    color: "#FFFFFF",
+    fontSize: 14,
+  },
+  sectionWrapper: {
+    marginVertical: 12,
   },
   card: {
     backgroundColor: "#FFFFFF",
     marginBottom: 20,
+    borderRadius: 12,
     elevation: 1,
+  },
+  gradientHeader: {
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
+    padding: 16,
+    overflow: "hidden",
   },
   cardHeader: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 12,
+    marginTop: 12,
   },
   cardTitle: {
     fontSize: 20,
@@ -263,29 +296,48 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
   },
   cardContent: {
-    fontSize: 16,
-    color: "#4B5563",
+    padding: 32,
+    marginTop: 4,
   },
-  navButtons: {
+  navRow: {
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 24,
   },
   navButton: {
-    borderRadius: 6,
-    overflow: "hidden",
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 16,
+    paddingHorizontal: 20,
+    borderRadius: 12,
     backgroundColor: "#6366F1",
   },
   disabled: {
     opacity: 0.5,
     backgroundColor: "#E5E7EB",
   },
-  gradient: {
-    borderRadius: 12,
-  },
   textButton: {
+    fontSize: 16,
     color: "white",
+    marginHorizontal: 8,
   },
   buttonDisabled: {
-    color: "black",
+    color: "#4B5563", // gray-600
+  },
+  dotRow: {
+    flexDirection: "row",
+    gap: 8,
+  },
+  dot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+  },
+  dotActive: {
+    backgroundColor: "#2563eb", // blue-600
+  },
+  dotInactive: {
+    backgroundColor: "#D1D5DB", // gray-300
   },
 });

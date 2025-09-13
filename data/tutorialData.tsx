@@ -11,8 +11,8 @@ export const tutorialData = [
   {
     id: "overview",
     title: "Game Overview",
-    icon: (props: ComponentProps<typeof Feather>) => (
-      <Feather {...props} name="book-open" size={24} />
+    icon: ({ name, size, ...rest }: ComponentProps<typeof Feather>) => (
+      <Feather name="book-open" size={24} {...rest} />
     ),
     content: () => {
       const { width } = useWindowDimensions();
@@ -67,7 +67,7 @@ export const tutorialData = [
               </CardHeader>
               <CardContent style={styles.cardContent}>
                 <Text style={styles.cardText}>4–7 standard decks + jokers</Text>
-                <Text style={styles.cardSubText}>
+                <Text style={[styles.cardSubText, { color: "#C026D3" }]}>
                   Number depends on player count
                 </Text>
               </CardContent>
@@ -486,16 +486,17 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   cardContent: {
+    flexDirection: "column",
     marginLeft: 20,
     marginBottom: 32,
     gap: 4,
   },
   cardText: {
-    fontSize: 18,
+    fontSize: 16,
     color: "#1F2937", // gray-800
   },
   cardSubText: {
-    fontSize: 18,
+    fontSize: 14,
     color: "#047857", // green-700 or fuchsia-700 depending on context
     marginTop: 8,
   },

@@ -1,22 +1,13 @@
 import React from "react";
-import { StyleSheet, Text, TextStyle, View, ViewStyle } from "react-native";
+import { StyleSheet, View, ViewStyle } from "react-native";
 
 interface CardHeaderProps {
   children: React.ReactNode;
   style?: ViewStyle;
-  textStyle?: TextStyle;
 }
 
-export default function CardHeader({
-  children,
-  style,
-  textStyle,
-}: CardHeaderProps) {
-  return (
-    <View style={[styles.header, style]}>
-      <Text style={textStyle}>{children}</Text>
-    </View>
-  );
+export default function CardHeader({ children, style }: CardHeaderProps) {
+  return <View style={[styles.header, style]}>{children}</View>;
 }
 
 const styles = StyleSheet.create({

@@ -35,6 +35,11 @@ export default function HomeScreen() {
   const [games, setGames] = useState<Game[]>([]);
   const [players, setPlayers] = useState<Player[]>([]);
   const [loading, setLoading] = useState(true);
+  const navigation = useNavigation();
+  const activeGames = games.filter((game) => game.status === "active");
+  const completedGames = games.filter((game) => game.status === "completed");
+  const topPlayer = players[0];
+  console.log(activeGames.length);
 
   const loadData = async () => {
     // try {
@@ -109,12 +114,6 @@ export default function HomeScreen() {
     loadData();
     // setLoading(false);
   }, []);
-
-  const navigation = useNavigation();
-  const activeGames = games.filter((game) => game.status === "active");
-  const completedGames = games.filter((game) => game.status === "completed");
-  const topPlayer = players[0];
-  console.log(activeGames.length);
 
   if (loading) {
     return (
