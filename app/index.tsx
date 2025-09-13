@@ -152,7 +152,7 @@ export default function HomeScreen() {
         colors={["#fef2f2", "#eff6ff"]}
       >
         <View>
-          <Text>Welcom</Text>
+          <Text>Welcome</Text>
         </View>
         {/* <View className="min-h-screen p-4 md:p-8">
           <View className="">
