@@ -22,6 +22,12 @@ export default function TutorialPage() {
   const { width } = useWindowDimensions();
   const isMd = width >= 768;
 
+  useFocusEffect(
+    useCallback(() => {
+      setCurrentSection(0); // Reset to first section
+    }, [])
+  );
+
   const nextSection = () => {
     if (currentSection < tutorialSections.length - 1) {
       setCurrentSection(currentSection + 1);
@@ -35,12 +41,6 @@ export default function TutorialPage() {
       scrollRef.current?.scrollTo?.({ y: 0, animated: true });
     }
   };
-
-  useFocusEffect(
-    useCallback(() => {
-      setCurrentSection(0); // Reset to first section
-    }, [])
-  );
 
   return (
     <ScrollView ref={scrollRef} contentContainerStyle={styles.container}>
@@ -88,7 +88,12 @@ export default function TutorialPage() {
                     ]}
                     onPress={() => setCurrentSection(index)}
                   >
-                    {section.icon({ name: "bell", size: 24, color: iconColor })}
+                    <Feather
+                      name={section.iconname}
+                      size={24}
+                      color={iconColor}
+                    />
+
                     <Text style={[styles.tabText, { color: iconColor }]}>
                       {section.title}
                     </Text>
@@ -107,7 +112,7 @@ export default function TutorialPage() {
                 >
                   <View style={styles.cardHeader}>
                     {currentTutorial.icon({
-                      name: "bell",
+                      name: currentTutorial.iconname,
                       size: 24,
                       color: "white",
                     })}
@@ -117,7 +122,7 @@ export default function TutorialPage() {
                   </View>
                 </LinearGradient>
                 <CardContent style={styles.cardContent}>
-                  {currentTutorial.content()}
+                  <currentTutorial.content />
                 </CardContent>
               </Card>
             </View>
@@ -226,6 +231,7 @@ const styles = StyleSheet.create({
     color: "#6B7280",
     textAlign: "center",
     marginBottom: 20,
+    lineHeight: 28,
   },
   progressContainer: {
     marginTop: 6,

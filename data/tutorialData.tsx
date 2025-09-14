@@ -2,19 +2,29 @@ import { VerticalStack } from "@/components/Spacer";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import type { ComponentProps } from "react";
+import * as React from "react";
 import { StyleSheet, Text, useWindowDimensions, View } from "react-native";
 import Card from "../components/Card";
 import CardContent from "../components/CardContent";
 import CardHeader from "../components/CardHeader";
 
-export const tutorialData = [
+type FeatherIconName = React.ComponentProps<typeof Feather>["name"];
+
+type TutorialSection = {
+  id: string;
+  title: string;
+  iconname: FeatherIconName;
+  icon: (props: ComponentProps<typeof Feather>) => React.ReactElement;
+  content: React.FC;
+};
+
+export const tutorialData: TutorialSection[] = [
   {
     id: "overview",
     title: "Game Overview",
-    icon: ({ name, size, ...rest }: ComponentProps<typeof Feather>) => (
-      <Feather name="book-open" size={24} {...rest} />
-    ),
-    content: () => {
+    iconname: "book-open",
+    icon: (props: ComponentProps<typeof Feather>) => <Feather {...props} />,
+    content: function OverviewContent() {
       const { width } = useWindowDimensions();
       const isMd = width >= 768;
 
@@ -61,8 +71,10 @@ export const tutorialData = [
             <Card style={styles.decksCard}>
               <CardHeader>
                 <View style={styles.cardTitleRow}>
-                  <Ionicons name="shuffle-sharp" size={20} color="#065F46" />
-                  <Text style={styles.cardTitleText}>Decks</Text>
+                  <Ionicons name="shuffle-sharp" size={20} color="#C026D3" />
+                  <Text style={[styles.cardTitleText, { color: "#C026D3" }]}>
+                    Decks
+                  </Text>
                 </View>
               </CardHeader>
               <CardContent style={styles.cardContent}>
@@ -451,7 +463,7 @@ const styles = StyleSheet.create({
   paragraph: {
     fontSize: 18,
     color: "#4B5563",
-    lineHeight: 24,
+    lineHeight: 28,
     marginTop: 10,
   },
   gradient: {

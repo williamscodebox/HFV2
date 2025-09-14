@@ -39,7 +39,6 @@ export default function HomeScreen() {
   const activeGames = games.filter((game) => game.status === "active");
   const completedGames = games.filter((game) => game.status === "completed");
   const topPlayer = players[0];
-  console.log(activeGames.length);
 
   const loadData = async () => {
     // try {
@@ -114,6 +113,8 @@ export default function HomeScreen() {
     loadData();
     // setLoading(false);
   }, []);
+
+  console.log(activeGames.length);
 
   if (loading) {
     return (
