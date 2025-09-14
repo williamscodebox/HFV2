@@ -1,3 +1,4 @@
+import CardTitle from "@/components/CardTitle";
 import { VerticalStack } from "@/components/Spacer";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
@@ -20,9 +21,6 @@ type TutorialSection = {
 
 const asIcon = <T extends React.ComponentType<any>>(Icon: T) =>
   Icon as React.ComponentType<{ name: string; size: number; color: string }>;
-
-const { width } = useWindowDimensions();
-const isMd = width >= 768;
 
 export const tutorialData: TutorialSection[] = [
   {
@@ -100,51 +98,55 @@ export const tutorialData: TutorialSection[] = [
     title: "Game Setup",
     iconname: "shuffle-sharp",
     icon: asIcon(Ionicons),
-    content: () => (
-      <View className="space-y-6">
-        <LinearGradient
-          colors={["#eff6ff", "#f5f3ff"]} // blue-50 to purple-50
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-          style={styles.gradient}
-        >
-          <View style={styles.introBox}>
-            <Text style={styles.heading}>Initial Deal</Text>
-            <View style={[styles.flexRow, isMd ? styles.row : styles.column]}>
-              <View style={styles.cardBlock}>
-                <Text style={styles.cardTitle}>Hand Cards</Text>
-                <Text style={styles.cardDescription}>
-                  Each player receives 11 cards face down. Keep these cards
-                  hidden from other players.
-                </Text>
-              </View>
-              <View style={styles.cardBlock}>
-                <Text style={styles.cardTitle}>Foot Cards</Text>
-                <Text style={styles.cardDescription}>
-                  Each player receives 11 additional cards face down. Don't look
-                  at these until your hand is empty!
-                </Text>
+    content: function SetupContent() {
+      const { width } = useWindowDimensions();
+      const isMd = width >= 768;
+
+      return (
+        <VerticalStack>
+          <LinearGradient
+            colors={["#eff6ff", "#f5f3ff"]} // blue-50 to purple-50
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={styles.gradient}
+          >
+            <View style={styles.introBox}>
+              <Text style={styles.heading}>Initial Deal</Text>
+              <View style={[styles.flexRow, isMd ? styles.row : styles.column]}>
+                <View style={styles.cardBlock}>
+                  <Text style={styles.cardTitle}>Hand Cards</Text>
+                  <Text style={styles.cardDescription}>
+                    Each player receives 11 cards face down. Keep these cards
+                    hidden from other players.
+                  </Text>
+                </View>
+                <View style={styles.cardBlock}>
+                  <Text style={styles.cardTitle}>Foot Cards</Text>
+                  <Text style={styles.cardDescription}>
+                    Each player receives 11 additional cards face down. Don't
+                    look at these until your hand is empty!
+                  </Text>
+                </View>
               </View>
             </View>
-          </View>
-        </LinearGradient>
+          </LinearGradient>
 
-        {/* <View className="flex flex-col md:flex-row gap-4">
-          <Card className="text-center bg-indigo-50 border border-indigo-100">
-            <CardHeader>
-              <CardTitle className="text-lg">
-                <Text className="text-center font-bold text-xl pt-6 pb-2">
-                  Step 1
+          <View
+            style={[styles.cardContainer, isMd ? styles.row : styles.column]}
+          >
+            <Card style={[styles.card, styles.indigoSetupCard]}>
+              <CardHeader>
+                <CardTitle>
+                  <Text style={styles.cardSetupTitle}>Step 1</Text>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Text style={styles.cardSetupText}>
+                  Deal 11 cards to each player's hand
                 </Text>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Text className="text-center text-xl m-4 leading-relaxed pb-4">
-                Deal 11 cards to each player's hand
-              </Text>
-            </CardContent>
-          </Card>
-          <Card className="text-center bg-slate-50 border border-slate-100">
+              </CardContent>
+            </Card>
+            {/* <Card className="text-center bg-slate-50 border border-slate-100">
             <CardHeader>
               <CardTitle className="text-lg">
                 <Text className="text-center font-bold text-xl pt-6 pb-2">
@@ -171,10 +173,11 @@ export const tutorialData: TutorialSection[] = [
                 Place remaining cards as stock pile
               </Text>
             </CardContent>
-          </Card>
-        </View> */}
-      </View>
-    ),
+          </Card> */}
+          </View>
+        </VerticalStack>
+      );
+    },
   },
   // {
   //   id: "melds",
@@ -536,5 +539,33 @@ const styles = StyleSheet.create({
     color: "#374151", // Tailwind's gray-700
     fontSize: 20,
     lineHeight: 28,
+  },
+  cardContainer: {
+    flexDirection: "column",
+    gap: 16,
+  },
+  card: {
+    alignItems: "center",
+    borderWidth: 1,
+    paddingVertical: 16,
+  },
+  indigoSetupCard: {
+    backgroundColor: "#eef2ff", // Tailwind's indigo-50
+    borderColor: "#e0e7ff", // Tailwind's indigo-100
+    paddingTop: 32,
+  },
+  cardSetupTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    paddingTop: 24,
+    paddingBottom: 8,
+    textAlign: "center",
+  },
+  cardSetupText: {
+    fontSize: 20,
+    margin: 16,
+    lineHeight: 28,
+    paddingBottom: 16,
+    textAlign: "center",
   },
 });
