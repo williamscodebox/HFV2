@@ -42,6 +42,8 @@ export default function TutorialPage() {
     }
   };
 
+  const IconMain = currentTutorial.icon;
+
   return (
     <ScrollView ref={scrollRef} contentContainerStyle={styles.container}>
       <LinearGradient
@@ -79,6 +81,7 @@ export default function TutorialPage() {
               {tutorialSections.map((section, index) => {
                 const isActive = index === currentSection;
                 const iconColor = isActive ? "white" : "black";
+                const Icon = section.icon;
                 return (
                   <TouchableOpacity
                     key={section.id}
@@ -88,11 +91,7 @@ export default function TutorialPage() {
                     ]}
                     onPress={() => setCurrentSection(index)}
                   >
-                    <Feather
-                      name={section.iconname}
-                      size={24}
-                      color={iconColor}
-                    />
+                    <Icon name={section.iconname} size={24} color={iconColor} />
 
                     <Text style={[styles.tabText, { color: iconColor }]}>
                       {section.title}
@@ -111,11 +110,11 @@ export default function TutorialPage() {
                   style={styles.gradientHeader}
                 >
                   <View style={styles.cardHeader}>
-                    {currentTutorial.icon({
-                      name: currentTutorial.iconname,
-                      size: 24,
-                      color: "white",
-                    })}
+                    <IconMain
+                      name={currentTutorial.iconname}
+                      size={24}
+                      color="white"
+                    />
                     <Text style={styles.cardTitle}>
                       {currentTutorial.title}
                     </Text>

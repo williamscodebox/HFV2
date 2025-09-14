@@ -1,7 +1,6 @@
 import { VerticalStack } from "@/components/Spacer";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import type { ComponentProps } from "react";
 import * as React from "react";
 import { StyleSheet, Text, useWindowDimensions, View } from "react-native";
 import Card from "../components/Card";
@@ -9,21 +8,25 @@ import CardContent from "../components/CardContent";
 import CardHeader from "../components/CardHeader";
 
 type FeatherIconName = React.ComponentProps<typeof Feather>["name"];
+type IoniconsIconName = React.ComponentProps<typeof Ionicons>["name"];
 
 type TutorialSection = {
   id: string;
   title: string;
-  iconname: FeatherIconName;
-  icon: (props: ComponentProps<typeof Feather>) => React.ReactElement;
+  iconname: FeatherIconName | IoniconsIconName;
+  icon: React.ComponentType<{ name: string; size: number; color: string }>;
   content: React.FC;
 };
+
+const asIcon = <T extends React.ComponentType<any>>(Icon: T) =>
+  Icon as React.ComponentType<{ name: string; size: number; color: string }>;
 
 export const tutorialData: TutorialSection[] = [
   {
     id: "overview",
     title: "Game Overview",
     iconname: "book-open",
-    icon: (props: ComponentProps<typeof Feather>) => <Feather {...props} />,
+    icon: asIcon(Feather),
     content: function OverviewContent() {
       const { width } = useWindowDimensions();
       const isMd = width >= 768;
@@ -92,9 +95,8 @@ export const tutorialData: TutorialSection[] = [
   // {
   //   id: "setup",
   //   title: "Game Setup",
-  //   icon: (props: ComponentProps<typeof Ionicons>) => (
-  //     <Ionicons {...props} name="shuffle-sharp" size={24} />
-  //   ),
+  //   iconname: "shuffle-sharp",
+  //   icon: asIcon(Ionicons),
   //   content: () => (
   //     <View className="space-y-6">
   //       <LinearGradient
