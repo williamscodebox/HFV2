@@ -1,3 +1,4 @@
+import Badge from "@/components/Badge";
 import CardTitle from "@/components/CardTitle";
 import { VerticalStack } from "@/components/Spacer";
 import { Feather, Ionicons } from "@expo/vector-icons";
@@ -200,100 +201,95 @@ export const tutorialData: TutorialSection[] = [
               </Text>
             </View>
           </LinearGradient>
-          {/* 
-        <View className="flex flex-col md:flex-row gap-6">
-          <Card className="bg-white border border-green-200 p-6">
-            <CardHeader>
-              <CardTitle className="flex">
-                <View className="flex flex-row gap-4">
-                  <View className="w-6 h-6 mt-3 bg-green-500 rounded-full"></View>
-                  <Text className="text-green-800 text-2xl font-bold">
-                    Clean Books
-                  </Text>
-                </View>
-                <Text className="text-green-800 text-2xl font-bold ml-9 -mt-2">
-                  (Natural Melds)
-                </Text>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Text className="mt-4 pb-1 text-xl">
-                7 or more cards of the same rank with NO wildcards
-              </Text>
-              <Text className="my-4 pb-1 text-xl">
-                Another name for this is a red meld
-              </Text>
-              <View className="flex flex-row gap-2 mb-2">
-                {["K♥", "K♠", "K♥", "K♦", "K♣", "K♣", "K♥"].map((card, i) => (
-                  <Text
-                    key={i}
-                    className="w-8 h-12 bg-gray-100 border border-gray-400 rounded flex text-center items-center align-middle justify-center text-xs"
-                  >
-                    {card}
-                  </Text>
-                ))}
-              </View>
-              <View className="mt-6 pb-2">
-                <Badge
-                  value={"+ 500 points"}
-                  color={"#DCFCE7"}
-                  textColor={"green"}
-                  height={28}
-                  width={90}
-                />
-              </View>
-            </CardContent>
-          </Card>
 
-          <Card className="bg-white border border-yellow-200 p-6">
-            <CardHeader>
-              <CardTitle className="flex">
-                <View className="flex flex-row gap-4">
-                  <View className="w-6 h-6 mt-3 bg-yellow-500 rounded-full"></View>
-                  <Text className="text-yellow-800 text-2xl font-bold">
-                    Dirty Books
-                  </Text>
+          <View
+            style={[styles.flexContainer, isMd ? styles.row : styles.column]}
+          >
+            <Card style={[styles.cardMelds, styles.greenCard]}>
+              <CardHeader>
+                <View style={styles.titleRow}>
+                  <View style={styles.greenDot} />
+                  <Text style={styles.cardMeldGTitle}>Clean Books</Text>
                 </View>
-                <Text className="text-yellow-800 text-2xl font-bold ml-9 -mt-2">
-                  (Mixed Melds)
+                <Text style={styles.cardMeldGSubtitle}>(Natural Melds)</Text>
+              </CardHeader>
+              <CardContent>
+                <Text style={styles.cardMeldText}>
+                  7 or more cards of the same rank with NO wildcards
                 </Text>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Text className="mt-4 pb-1 text-xl">
-                7 or more cards of the same rank with wildcards (2s, Jokers)
-              </Text>
-              <Text className="my-4 pb-1 text-xl">
-                Another name for this is a black meld
-              </Text>
-              <View className="flex flex-row gap-2 mb-2">
-                {["K♥", "K♠", "2♣", "K♦", "JKR", "K♣", "K♥"].map((card, i) => (
-                  <Text
-                    key={i}
-                    className={`w-8 h-12 border rounded flex text-center align-middle items-center justify-center text-xs ${
-                      card.includes("2") || card === "JKR"
-                        ? "bg-yellow-100 border-gray-400"
-                        : "bg-gray-100 border-gray-400"
-                    }`}
-                  >
-                    {card}
-                  </Text>
-                ))}
-              </View>
-              <View className="mt-6 pb-2">
-                <Badge
-                  value={"+ 300 points"}
-                  color={"#FEF9C3"}
-                  textColor={"#854D0E"}
-                  height={28}
-                  width={90}
-                />
-              </View>
-            </CardContent>
-          </Card>
-        </View>
+                <Text style={styles.cardMeldText}>
+                  Another name for this is a red meld
+                </Text>
+                <View style={styles.cardMeldRow}>
+                  {["K♥", "K♠", "K♥", "K♦", "K♣", "K♣", "K♥"].map((card, i) => (
+                    <Text key={i} style={styles.cardMeldChip}>
+                      {card}
+                    </Text>
+                  ))}
+                </View>
+                <View style={styles.badgeWrapper}>
+                  <Badge
+                    value={"+ 500 points"}
+                    color={"#DCFCE7"}
+                    textColor={"green"}
+                    height={28}
+                    width={90}
+                  />
+                </View>
+              </CardContent>
+            </Card>
 
-        <View className="bg-gray-50  rounded-lg mt-8 p-6">
+            {/* <Card className="bg-white border border-yellow-200 p-6">
+              <CardHeader>
+                <CardTitle className="flex">
+                  <View className="flex flex-row gap-4">
+                    <View className="w-6 h-6 mt-3 bg-yellow-500 rounded-full"></View>
+                    <Text className="text-yellow-800 text-2xl font-bold">
+                      Dirty Books
+                    </Text>
+                  </View>
+                  <Text className="text-yellow-800 text-2xl font-bold ml-9 -mt-2">
+                    (Mixed Melds)
+                  </Text>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Text className="mt-4 pb-1 text-xl">
+                  7 or more cards of the same rank with wildcards (2s, Jokers)
+                </Text>
+                <Text className="my-4 pb-1 text-xl">
+                  Another name for this is a black meld
+                </Text>
+                <View className="flex flex-row gap-2 mb-2">
+                  {["K♥", "K♠", "2♣", "K♦", "JKR", "K♣", "K♥"].map(
+                    (card, i) => (
+                      <Text
+                        key={i}
+                        className={`w-8 h-12 border rounded flex text-center align-middle items-center justify-center text-xs ${
+                          card.includes("2") || card === "JKR"
+                            ? "bg-yellow-100 border-gray-400"
+                            : "bg-gray-100 border-gray-400"
+                        }`}
+                      >
+                        {card}
+                      </Text>
+                    )
+                  )}
+                </View>
+                <View className="mt-6 pb-2">
+                  <Badge
+                    value={"+ 300 points"}
+                    color={"#FEF9C3"}
+                    textColor={"#854D0E"}
+                    height={28}
+                    width={90}
+                  />
+                </View>
+              </CardContent>
+            </Card> */}
+          </View>
+
+          {/* <View className="bg-gray-50  rounded-lg mt-8 p-6">
           <Text className="font-bold text-2xl mb-4">Wildcard Rules</Text>
           <View className=" flex space-y-1 gap-3 mb-2 text-sm text-gray-700">
             <Text className="text-xl">2s and Jokers are wildcards</Text>
@@ -456,6 +452,9 @@ export const tutorialData: TutorialSection[] = [
 ];
 
 const styles = StyleSheet.create({
+  flexContainer: {
+    gap: 24, // Tailwind's gap-6 = 1.5rem = 24px
+  },
   introBox: {
     marginBottom: 16,
   },
@@ -577,5 +576,63 @@ const styles = StyleSheet.create({
     lineHeight: 28,
     paddingBottom: 16,
     textAlign: "center",
+  },
+  cardMelds: {
+    backgroundColor: "#FFFFFF",
+    borderWidth: 1,
+    padding: 24,
+    borderRadius: 12,
+  },
+  greenCard: {
+    borderColor: "#BBF7D0", // Tailwind green-200
+  },
+  titleRow: {
+    flexDirection: "row",
+    gap: 16,
+    alignItems: "center",
+  },
+  greenDot: {
+    width: 24,
+    height: 24,
+    marginTop: 12,
+    backgroundColor: "#22C55E", // Tailwind green-500
+    borderRadius: 12,
+  },
+  cardMeldGTitle: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#166534", // Tailwind green-800
+  },
+  cardMeldGSubtitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#166534",
+    marginLeft: 38,
+    marginTop: -8,
+  },
+  cardMeldText: {
+    fontSize: 20,
+    marginVertical: 8,
+  },
+  cardMeldRow: {
+    flexDirection: "row",
+    gap: 8,
+    marginBottom: 8,
+  },
+  cardMeldChip: {
+    width: 32,
+    height: 48,
+    backgroundColor: "#F3F4F6", // Tailwind gray-100
+    borderColor: "#9CA3AF", // Tailwind gray-400
+    borderWidth: 1,
+    borderRadius: 6,
+    textAlign: "center",
+    textAlignVertical: "center",
+    fontSize: 12,
+    marginTop: 12,
+  },
+  badgeWrapper: {
+    marginTop: 24,
+    paddingBottom: 8,
   },
 });
