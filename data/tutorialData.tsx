@@ -21,6 +21,9 @@ type TutorialSection = {
 const asIcon = <T extends React.ComponentType<any>>(Icon: T) =>
   Icon as React.ComponentType<{ name: string; size: number; color: string }>;
 
+const { width } = useWindowDimensions();
+const isMd = width >= 768;
+
 export const tutorialData: TutorialSection[] = [
   {
     id: "overview",
@@ -92,91 +95,87 @@ export const tutorialData: TutorialSection[] = [
       );
     },
   },
-  // {
-  //   id: "setup",
-  //   title: "Game Setup",
-  //   iconname: "shuffle-sharp",
-  //   icon: asIcon(Ionicons),
-  //   content: () => (
-  //     <View className="space-y-6">
-  //       <LinearGradient
-  //         colors={["#eff6ff", "#f5f3ff"]} // blue-50 to purple-50
-  //         start={{ x: 0, y: 0 }}
-  //         end={{ x: 1, y: 0 }}
-  //         style={styles.gradient}
-  //       >
-  //         <View style={styles.introBox}>
-  //           <Text style={styles.heading}>Initial Deal</Text>
-  //           <View className="flex flex-col md:flex-row mt-3 gap-6">
-  //             <View>
-  //               <Text className="font-semibold text-blue-800 mb-2 text-xl">
-  //                 Hand Cards
-  //               </Text>
-  //               <Text className="text-gray-700 text-xl leading-relaxed">
-  //                 Each player receives 11 cards face down. Keep these cards
-  //                 hidden from other players.
-  //               </Text>
-  //             </View>
-  //             <View>
-  //               <Text className="font-semibold text-blue-800 mb-2 text-xl">
-  //                 Foot Cards
-  //               </Text>
-  //               <Text className="text-gray-700 text-xl leading-relaxed">
-  //                 Each player receives 11 additional cards face down. Don't look
-  //                 at these until your hand is empty!
-  //               </Text>
-  //             </View>
-  //           </View>
-  //         </View>
-  //       </LinearGradient>
+  {
+    id: "setup",
+    title: "Game Setup",
+    iconname: "shuffle-sharp",
+    icon: asIcon(Ionicons),
+    content: () => (
+      <View className="space-y-6">
+        <LinearGradient
+          colors={["#eff6ff", "#f5f3ff"]} // blue-50 to purple-50
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+          style={styles.gradient}
+        >
+          <View style={styles.introBox}>
+            <Text style={styles.heading}>Initial Deal</Text>
+            <View style={[styles.flexRow, isMd ? styles.row : styles.column]}>
+              <View style={styles.cardBlock}>
+                <Text style={styles.cardTitle}>Hand Cards</Text>
+                <Text style={styles.cardDescription}>
+                  Each player receives 11 cards face down. Keep these cards
+                  hidden from other players.
+                </Text>
+              </View>
+              <View style={styles.cardBlock}>
+                <Text style={styles.cardTitle}>Foot Cards</Text>
+                <Text style={styles.cardDescription}>
+                  Each player receives 11 additional cards face down. Don't look
+                  at these until your hand is empty!
+                </Text>
+              </View>
+            </View>
+          </View>
+        </LinearGradient>
 
-  //       <View className="flex flex-col md:flex-row gap-4">
-  //         <Card className="text-center bg-indigo-50 border border-indigo-100">
-  //           <CardHeader>
-  //             <CardTitle className="text-lg">
-  //               <Text className="text-center font-bold text-xl pt-6 pb-2">
-  //                 Step 1
-  //               </Text>
-  //             </CardTitle>
-  //           </CardHeader>
-  //           <CardContent>
-  //             <Text className="text-center text-xl m-4 leading-relaxed pb-4">
-  //               Deal 11 cards to each player's hand
-  //             </Text>
-  //           </CardContent>
-  //         </Card>
-  //         <Card className="text-center bg-slate-50 border border-slate-100">
-  //           <CardHeader>
-  //             <CardTitle className="text-lg">
-  //               <Text className="text-center font-bold text-xl pt-6 pb-2">
-  //                 Step 2
-  //               </Text>
-  //             </CardTitle>
-  //           </CardHeader>
-  //           <CardContent>
-  //             <Text className="text-center text-xl m-4 leading-relaxed pb-4">
-  //               Deal 11 cards to each player's foot
-  //             </Text>
-  //           </CardContent>
-  //         </Card>
-  //         <Card className="text-center bg-green-50 border border-green-100">
-  //           <CardHeader>
-  //             <CardTitle className="text-lg">
-  //               <Text className="text-center font-bold text-xl pt-6 pb-2">
-  //                 Step 3
-  //               </Text>
-  //             </CardTitle>
-  //           </CardHeader>
-  //           <CardContent>
-  //             <Text className="text-center text-xl m-4 leading-relaxed pb-4">
-  //               Place remaining cards as stock pile
-  //             </Text>
-  //           </CardContent>
-  //         </Card>
-  //       </View>
-  //     </View>
-  //   ),
-  // },
+        {/* <View className="flex flex-col md:flex-row gap-4">
+          <Card className="text-center bg-indigo-50 border border-indigo-100">
+            <CardHeader>
+              <CardTitle className="text-lg">
+                <Text className="text-center font-bold text-xl pt-6 pb-2">
+                  Step 1
+                </Text>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Text className="text-center text-xl m-4 leading-relaxed pb-4">
+                Deal 11 cards to each player's hand
+              </Text>
+            </CardContent>
+          </Card>
+          <Card className="text-center bg-slate-50 border border-slate-100">
+            <CardHeader>
+              <CardTitle className="text-lg">
+                <Text className="text-center font-bold text-xl pt-6 pb-2">
+                  Step 2
+                </Text>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Text className="text-center text-xl m-4 leading-relaxed pb-4">
+                Deal 11 cards to each player's foot
+              </Text>
+            </CardContent>
+          </Card>
+          <Card className="text-center bg-green-50 border border-green-100">
+            <CardHeader>
+              <CardTitle className="text-lg">
+                <Text className="text-center font-bold text-xl pt-6 pb-2">
+                  Step 3
+                </Text>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Text className="text-center text-xl m-4 leading-relaxed pb-4">
+                Place remaining cards as stock pile
+              </Text>
+            </CardContent>
+          </Card>
+        </View> */}
+      </View>
+    ),
+  },
   // {
   //   id: "melds",
   //   title: "Making Melds",
@@ -513,5 +512,29 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#047857", // green-700 or fuchsia-700 depending on context
     marginTop: 8,
+  },
+  flexRow: {
+    marginTop: 12,
+    gap: 24,
+  },
+  row: {
+    flexDirection: "row",
+  },
+  column: {
+    flexDirection: "column",
+  },
+  cardBlock: {
+    marginBottom: 16,
+  },
+  cardTitle: {
+    fontWeight: "600",
+    color: "#1E40AF", // Tailwind's blue-800
+    marginBottom: 8,
+    fontSize: 20,
+  },
+  cardDescription: {
+    color: "#374151", // Tailwind's gray-700
+    fontSize: 20,
+    lineHeight: 28,
   },
 });
