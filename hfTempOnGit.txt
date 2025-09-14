@@ -13,3 +13,13 @@ index for finding expo/vector-icons -->  https://icons.expo.fyi/Index
 
 Work on history page 09-12-25 
 
+Targets changed due to build issues with runtime failures
+Entire app being reworked into Typescript language and removing NativeWind from the apps styling
+New targets belolw
+
+Goal to have Tutorial finished 09-16-25  --> 
+Have Home Screen finished 09-18-25  --> 
+Have History page finished 09-20-25  -->
+Have Newgame page finished 09-25-25 --> 
+
+
