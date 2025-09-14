@@ -290,16 +290,19 @@ export const tutorialData: TutorialSection[] = [
             </Card>
           </View>
 
-          {/* <View className="bg-gray-50  rounded-lg mt-8 p-6">
-          <Text className="font-bold text-2xl mb-4">Wildcard Rules</Text>
-          <View className=" flex space-y-1 gap-3 mb-2 text-sm text-gray-700">
-            <Text className="text-xl">2s and Jokers are wildcards</Text>
-            <Text className="text-xl">Maximum of 3 wildcards per meld</Text>
-            <Text className="text-xl">
-              Wildcards can not out number natural cards
-            </Text>
+          <View style={styles.ruleBox}>
+            <Text style={styles.ruleHeading}>Wildcard Rules</Text>
+            <View style={styles.ruleList}>
+              <Text style={styles.ruleText}>2s and Jokers are wildcards</Text>
+              <Text style={styles.ruleText}>
+                Maximum number of wildcards per Meld is limited to the rule
+                below as follows
+              </Text>
+              <Text style={styles.ruleText}>
+                Wildcards cannot outnumber natural cards
+              </Text>
+            </View>
           </View>
-        </View> */}
         </VerticalStack>
       );
     },
@@ -680,5 +683,24 @@ const styles = StyleSheet.create({
   normalCard: {
     backgroundColor: "#F3F4F6", // gray-100
     borderColor: "#9CA3AF", // gray-400
+  },
+  ruleBox: {
+    backgroundColor: "#F9FAFB", // Tailwind gray-50
+    borderRadius: 12,
+    marginTop: 32,
+    padding: 24,
+  },
+  ruleHeading: {
+    fontWeight: "bold",
+    fontSize: 24,
+    marginBottom: 16,
+  },
+  ruleList: {
+    gap: 12,
+    marginBottom: 8,
+  },
+  ruleText: {
+    fontSize: 20,
+    color: "#374151", // Tailwind gray-700
   },
 });
