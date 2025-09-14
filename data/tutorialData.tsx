@@ -117,14 +117,14 @@ export const tutorialData: TutorialSection[] = [
                 <View style={styles.cardBlock}>
                   <Text style={styles.cardTitle}>Hand Cards</Text>
                   <Text style={styles.cardDescription}>
-                    Each player receives 11 cards face down. Keep these cards
+                    Each player receives 13 cards face down. Keep these cards
                     hidden from other players.
                   </Text>
                 </View>
                 <View style={styles.cardBlock}>
                   <Text style={styles.cardTitle}>Foot Cards</Text>
                   <Text style={styles.cardDescription}>
-                    Each player receives 11 additional cards face down. Don't
+                    Each player receives 13 additional cards face down. Don't
                     look at these until your hand is empty!
                   </Text>
                 </View>
@@ -143,7 +143,7 @@ export const tutorialData: TutorialSection[] = [
               </CardHeader>
               <CardContent>
                 <Text style={styles.cardSetupText}>
-                  Deal 11 cards to each player's hand
+                  Deal 13 cards to each player's hand
                 </Text>
               </CardContent>
             </Card>
@@ -155,7 +155,7 @@ export const tutorialData: TutorialSection[] = [
               </CardHeader>
               <CardContent>
                 <Text style={styles.cardSetupText}>
-                  Deal 11 cards to each player's foot
+                  Deal 13 cards to each player's foot
                 </Text>
               </CardContent>
             </Card>
@@ -196,8 +196,12 @@ export const tutorialData: TutorialSection[] = [
             <View style={styles.introBox}>
               <Text style={styles.heading}>What are Melds?</Text>
               <Text style={styles.paragraph}>
-                Melds are sets of 3 or more cards of the same rank. You need
-                melds to score points and eventually "go out" to win the round.
+                Melds are sets of 8 or more cards of the same rank. Melds begin
+                as sets of 3 or more cards. You must play at least 3 cards of
+                the same rank (Red Meld) or at least 2 cards of the same rank
+                and a wildcard (Black Meld) in order to begin a meld on the
+                table. You need melds to score points and eventually "go out" to
+                win the round.
               </Text>
             </View>
           </LinearGradient>
@@ -215,17 +219,19 @@ export const tutorialData: TutorialSection[] = [
               </CardHeader>
               <CardContent>
                 <Text style={styles.cardMeldText}>
-                  7 or more cards of the same rank with NO wildcards
+                  8 or more cards of the same rank with NO wildcards
                 </Text>
                 <Text style={styles.cardMeldText}>
                   Another name for this is a red meld
                 </Text>
                 <View style={styles.cardMeldRow}>
-                  {["K♥", "K♠", "K♥", "K♦", "K♣", "K♣", "K♥"].map((card, i) => (
-                    <Text key={i} style={styles.cardMeldChip}>
-                      {card}
-                    </Text>
-                  ))}
+                  {["K♥", "K♠", "K♥", "K♦", "K♣", "K♣", "K♥", "K♠"].map(
+                    (card, i) => (
+                      <Text key={i} style={styles.cardMeldChip}>
+                        {card}
+                      </Text>
+                    )
+                  )}
                 </View>
                 <View style={styles.badgeWrapper}>
                   <Badge
@@ -239,44 +245,39 @@ export const tutorialData: TutorialSection[] = [
               </CardContent>
             </Card>
 
-            {/* <Card className="bg-white border border-yellow-200 p-6">
+            <Card style={[styles.cardMelds, styles.yellowCard]}>
               <CardHeader>
-                <CardTitle className="flex">
-                  <View className="flex flex-row gap-4">
-                    <View className="w-6 h-6 mt-3 bg-yellow-500 rounded-full"></View>
-                    <Text className="text-yellow-800 text-2xl font-bold">
-                      Dirty Books
-                    </Text>
-                  </View>
-                  <Text className="text-yellow-800 text-2xl font-bold ml-9 -mt-2">
-                    (Mixed Melds)
-                  </Text>
-                </CardTitle>
+                <View style={styles.titleRow}>
+                  <View style={styles.yellowDot}></View>
+                  <Text style={styles.cardMeldYTitle}>Dirty Books</Text>
+                </View>
+                <Text style={styles.cardMeldYSubtitle}>(Mixed Melds)</Text>
               </CardHeader>
               <CardContent>
-                <Text className="mt-4 pb-1 text-xl">
-                  7 or more cards of the same rank with wildcards (2s, Jokers)
+                <Text style={styles.cardMeldText}>
+                  8 or more cards of the same rank with wildcards (2s, Jokers)
                 </Text>
-                <Text className="my-4 pb-1 text-xl">
+                <Text style={styles.cardMeldText}>
                   Another name for this is a black meld
                 </Text>
-                <View className="flex flex-row gap-2 mb-2">
-                  {["K♥", "K♠", "2♣", "K♦", "JKR", "K♣", "K♥"].map(
+                <View style={styles.cardMeldRow}>
+                  {["K♥", "K♠", "2♣", "K♦", "JKR", "K♣", "K♥", "JKR"].map(
                     (card, i) => (
                       <Text
                         key={i}
-                        className={`w-8 h-12 border rounded flex text-center align-middle items-center justify-center text-xs ${
+                        style={[
+                          styles.cardBox,
                           card.includes("2") || card === "JKR"
-                            ? "bg-yellow-100 border-gray-400"
-                            : "bg-gray-100 border-gray-400"
-                        }`}
+                            ? styles.wildCard
+                            : styles.normalCard,
+                        ]}
                       >
                         {card}
                       </Text>
                     )
                   )}
                 </View>
-                <View className="mt-6 pb-2">
+                <View style={styles.badgeWrapper}>
                   <Badge
                     value={"+ 300 points"}
                     color={"#FEF9C3"}
@@ -286,7 +287,7 @@ export const tutorialData: TutorialSection[] = [
                   />
                 </View>
               </CardContent>
-            </Card> */}
+            </Card>
           </View>
 
           {/* <View className="bg-gray-50  rounded-lg mt-8 p-6">
@@ -586,6 +587,9 @@ const styles = StyleSheet.create({
   greenCard: {
     borderColor: "#BBF7D0", // Tailwind green-200
   },
+  yellowCard: {
+    borderColor: "#FEF9C3", // Tailwind yellow-200
+  },
   titleRow: {
     flexDirection: "row",
     gap: 16,
@@ -598,15 +602,34 @@ const styles = StyleSheet.create({
     backgroundColor: "#22C55E", // Tailwind green-500
     borderRadius: 12,
   },
+  yellowDot: {
+    width: 24,
+    height: 24,
+    marginTop: 12,
+    backgroundColor: "#EAB308", // Tailwind yellow-500
+    borderRadius: 12,
+  },
   cardMeldGTitle: {
     fontSize: 24,
     fontWeight: "bold",
     color: "#166534", // Tailwind green-800
   },
+  cardMeldYTitle: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#975A16", // Tailwind yellow-800
+  },
   cardMeldGSubtitle: {
     fontSize: 20,
     fontWeight: "bold",
     color: "#166534",
+    marginLeft: 38,
+    marginTop: -8,
+  },
+  cardMeldYSubtitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#975A16",
     marginLeft: 38,
     marginTop: -8,
   },
@@ -616,11 +639,12 @@ const styles = StyleSheet.create({
   },
   cardMeldRow: {
     flexDirection: "row",
-    gap: 8,
+    gap: 0,
     marginBottom: 8,
+    marginLeft: 4,
   },
   cardMeldChip: {
-    width: 32,
+    width: 30,
     height: 48,
     backgroundColor: "#F3F4F6", // Tailwind gray-100
     borderColor: "#9CA3AF", // Tailwind gray-400
@@ -630,9 +654,31 @@ const styles = StyleSheet.create({
     textAlignVertical: "center",
     fontSize: 12,
     marginTop: 12,
+    marginLeft: -4,
   },
   badgeWrapper: {
     marginTop: 24,
     paddingBottom: 8,
+  },
+  cardBox: {
+    width: 30,
+    height: 48,
+    borderWidth: 1,
+    borderRadius: 6,
+    textAlign: "center",
+    textAlignVertical: "center",
+    fontSize: 12,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 12,
+    marginLeft: -4,
+  },
+  wildCard: {
+    backgroundColor: "#FEF9C3", // yellow-100
+    borderColor: "#9CA3AF", // gray-400
+  },
+  normalCard: {
+    backgroundColor: "#F3F4F6", // gray-100
+    borderColor: "#9CA3AF", // gray-400
   },
 });
