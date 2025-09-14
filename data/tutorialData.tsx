@@ -146,34 +146,30 @@ export const tutorialData: TutorialSection[] = [
                 </Text>
               </CardContent>
             </Card>
-            {/* <Card className="text-center bg-slate-50 border border-slate-100">
-            <CardHeader>
-              <CardTitle className="text-lg">
-                <Text className="text-center font-bold text-xl pt-6 pb-2">
-                  Step 2
+            <Card style={[styles.card, styles.slateSetupCard]}>
+              <CardHeader>
+                <CardTitle>
+                  <Text style={styles.cardSetupTitle}>Step 2</Text>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Text style={styles.cardSetupText}>
+                  Deal 11 cards to each player's foot
                 </Text>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Text className="text-center text-xl m-4 leading-relaxed pb-4">
-                Deal 11 cards to each player's foot
-              </Text>
-            </CardContent>
-          </Card>
-          <Card className="text-center bg-green-50 border border-green-100">
-            <CardHeader>
-              <CardTitle className="text-lg">
-                <Text className="text-center font-bold text-xl pt-6 pb-2">
-                  Step 3
+              </CardContent>
+            </Card>
+            <Card style={[styles.card, styles.greenSetupCard]}>
+              <CardHeader>
+                <CardTitle>
+                  <Text style={styles.cardSetupTitle}>Step 3</Text>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Text style={styles.cardSetupText}>
+                  Place remaining cards as stock pile
                 </Text>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Text className="text-center text-xl m-4 leading-relaxed pb-4">
-                Place remaining cards as stock pile
-              </Text>
-            </CardContent>
-          </Card> */}
+              </CardContent>
+            </Card>
           </View>
         </VerticalStack>
       );
@@ -552,6 +548,16 @@ const styles = StyleSheet.create({
   indigoSetupCard: {
     backgroundColor: "#eef2ff", // Tailwind's indigo-50
     borderColor: "#e0e7ff", // Tailwind's indigo-100
+    paddingTop: 32,
+  },
+  slateSetupCard: {
+    backgroundColor: "#F8FAFC", // Tailwind's slate-50
+    borderColor: "#F1F5F9", // Tailwind's slate-100
+    paddingTop: 32,
+  },
+  greenSetupCard: {
+    backgroundColor: "#F0FDF4", // Tailwind's green-50
+    borderColor: "#DCFCE7", // Tailwind's green-100
     paddingTop: 32,
   },
   cardSetupTitle: {
