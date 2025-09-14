@@ -175,134 +175,138 @@ export const tutorialData: TutorialSection[] = [
       );
     },
   },
-  // {
-  //   id: "melds",
-  //   title: "Making Melds",
-  //   icon: (props: ComponentProps<typeof Feather>) => (
-  //     <Feather {...props} name="target" size={24} />
-  //   ),
-  //   content: () => (
-  //     <View className="space-y-6">
-  //       <LinearGradient
-  //         colors={["#eff6ff", "#f5f3ff"]} // blue-50 to purple-50
-  //         start={{ x: 0, y: 0 }}
-  //         end={{ x: 1, y: 0 }}
-  //         style={styles.gradient}
-  //       >
-  //         <View style={styles.introBox}>
-  //           <Text style={styles.heading}>What are Melds?</Text>
-  //           <Text style={styles.paragraph} className="leading-relaxed">
-  //             Melds are sets of 3 or more cards of the same rank. You need melds
-  //             to score points and eventually "go out" to win the round.
-  //           </Text>
-  //         </View>
-  //       </LinearGradient>
+  {
+    id: "melds",
+    title: "Making Melds",
+    iconname: "target",
+    icon: asIcon(Feather),
+    content: function SetupContent() {
+      const { width } = useWindowDimensions();
+      const isMd = width >= 768;
 
-  //       <View className="flex flex-col md:flex-row gap-6">
-  //         <Card className="bg-white border border-green-200 p-6">
-  //           <CardHeader>
-  //             <CardTitle className="flex">
-  //               <View className="flex flex-row gap-4">
-  //                 <View className="w-6 h-6 mt-3 bg-green-500 rounded-full"></View>
-  //                 <Text className="text-green-800 text-2xl font-bold">
-  //                   Clean Books
-  //                 </Text>
-  //               </View>
-  //               <Text className="text-green-800 text-2xl font-bold ml-9 -mt-2">
-  //                 (Natural Melds)
-  //               </Text>
-  //             </CardTitle>
-  //           </CardHeader>
-  //           <CardContent>
-  //             <Text className="mt-4 pb-1 text-xl">
-  //               7 or more cards of the same rank with NO wildcards
-  //             </Text>
-  //             <Text className="my-4 pb-1 text-xl">
-  //               Another name for this is a red meld
-  //             </Text>
-  //             <View className="flex flex-row gap-2 mb-2">
-  //               {["K♥", "K♠", "K♥", "K♦", "K♣", "K♣", "K♥"].map((card, i) => (
-  //                 <Text
-  //                   key={i}
-  //                   className="w-8 h-12 bg-gray-100 border border-gray-400 rounded flex text-center items-center align-middle justify-center text-xs"
-  //                 >
-  //                   {card}
-  //                 </Text>
-  //               ))}
-  //             </View>
-  //             <View className="mt-6 pb-2">
-  //               <Badge
-  //                 value={"+ 500 points"}
-  //                 color={"#DCFCE7"}
-  //                 textColor={"green"}
-  //                 height={28}
-  //                 width={90}
-  //               />
-  //             </View>
-  //           </CardContent>
-  //         </Card>
+      return (
+        <VerticalStack>
+          <LinearGradient
+            colors={["#eff6ff", "#f5f3ff"]} // blue-50 to purple-50
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={styles.gradient}
+          >
+            <View style={styles.introBox}>
+              <Text style={styles.heading}>What are Melds?</Text>
+              <Text style={styles.paragraph}>
+                Melds are sets of 3 or more cards of the same rank. You need
+                melds to score points and eventually "go out" to win the round.
+              </Text>
+            </View>
+          </LinearGradient>
+          {/* 
+        <View className="flex flex-col md:flex-row gap-6">
+          <Card className="bg-white border border-green-200 p-6">
+            <CardHeader>
+              <CardTitle className="flex">
+                <View className="flex flex-row gap-4">
+                  <View className="w-6 h-6 mt-3 bg-green-500 rounded-full"></View>
+                  <Text className="text-green-800 text-2xl font-bold">
+                    Clean Books
+                  </Text>
+                </View>
+                <Text className="text-green-800 text-2xl font-bold ml-9 -mt-2">
+                  (Natural Melds)
+                </Text>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Text className="mt-4 pb-1 text-xl">
+                7 or more cards of the same rank with NO wildcards
+              </Text>
+              <Text className="my-4 pb-1 text-xl">
+                Another name for this is a red meld
+              </Text>
+              <View className="flex flex-row gap-2 mb-2">
+                {["K♥", "K♠", "K♥", "K♦", "K♣", "K♣", "K♥"].map((card, i) => (
+                  <Text
+                    key={i}
+                    className="w-8 h-12 bg-gray-100 border border-gray-400 rounded flex text-center items-center align-middle justify-center text-xs"
+                  >
+                    {card}
+                  </Text>
+                ))}
+              </View>
+              <View className="mt-6 pb-2">
+                <Badge
+                  value={"+ 500 points"}
+                  color={"#DCFCE7"}
+                  textColor={"green"}
+                  height={28}
+                  width={90}
+                />
+              </View>
+            </CardContent>
+          </Card>
 
-  //         <Card className="bg-white border border-yellow-200 p-6">
-  //           <CardHeader>
-  //             <CardTitle className="flex">
-  //               <View className="flex flex-row gap-4">
-  //                 <View className="w-6 h-6 mt-3 bg-yellow-500 rounded-full"></View>
-  //                 <Text className="text-yellow-800 text-2xl font-bold">
-  //                   Dirty Books
-  //                 </Text>
-  //               </View>
-  //               <Text className="text-yellow-800 text-2xl font-bold ml-9 -mt-2">
-  //                 (Mixed Melds)
-  //               </Text>
-  //             </CardTitle>
-  //           </CardHeader>
-  //           <CardContent>
-  //             <Text className="mt-4 pb-1 text-xl">
-  //               7 or more cards of the same rank with wildcards (2s, Jokers)
-  //             </Text>
-  //             <Text className="my-4 pb-1 text-xl">
-  //               Another name for this is a black meld
-  //             </Text>
-  //             <View className="flex flex-row gap-2 mb-2">
-  //               {["K♥", "K♠", "2♣", "K♦", "JKR", "K♣", "K♥"].map((card, i) => (
-  //                 <Text
-  //                   key={i}
-  //                   className={`w-8 h-12 border rounded flex text-center align-middle items-center justify-center text-xs ${
-  //                     card.includes("2") || card === "JKR"
-  //                       ? "bg-yellow-100 border-gray-400"
-  //                       : "bg-gray-100 border-gray-400"
-  //                   }`}
-  //                 >
-  //                   {card}
-  //                 </Text>
-  //               ))}
-  //             </View>
-  //             <View className="mt-6 pb-2">
-  //               <Badge
-  //                 value={"+ 300 points"}
-  //                 color={"#FEF9C3"}
-  //                 textColor={"#854D0E"}
-  //                 height={28}
-  //                 width={90}
-  //               />
-  //             </View>
-  //           </CardContent>
-  //         </Card>
-  //       </View>
+          <Card className="bg-white border border-yellow-200 p-6">
+            <CardHeader>
+              <CardTitle className="flex">
+                <View className="flex flex-row gap-4">
+                  <View className="w-6 h-6 mt-3 bg-yellow-500 rounded-full"></View>
+                  <Text className="text-yellow-800 text-2xl font-bold">
+                    Dirty Books
+                  </Text>
+                </View>
+                <Text className="text-yellow-800 text-2xl font-bold ml-9 -mt-2">
+                  (Mixed Melds)
+                </Text>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Text className="mt-4 pb-1 text-xl">
+                7 or more cards of the same rank with wildcards (2s, Jokers)
+              </Text>
+              <Text className="my-4 pb-1 text-xl">
+                Another name for this is a black meld
+              </Text>
+              <View className="flex flex-row gap-2 mb-2">
+                {["K♥", "K♠", "2♣", "K♦", "JKR", "K♣", "K♥"].map((card, i) => (
+                  <Text
+                    key={i}
+                    className={`w-8 h-12 border rounded flex text-center align-middle items-center justify-center text-xs ${
+                      card.includes("2") || card === "JKR"
+                        ? "bg-yellow-100 border-gray-400"
+                        : "bg-gray-100 border-gray-400"
+                    }`}
+                  >
+                    {card}
+                  </Text>
+                ))}
+              </View>
+              <View className="mt-6 pb-2">
+                <Badge
+                  value={"+ 300 points"}
+                  color={"#FEF9C3"}
+                  textColor={"#854D0E"}
+                  height={28}
+                  width={90}
+                />
+              </View>
+            </CardContent>
+          </Card>
+        </View>
 
-  //       <View className="bg-gray-50  rounded-lg mt-8 p-6">
-  //         <Text className="font-bold text-2xl mb-4">Wildcard Rules</Text>
-  //         <View className=" flex space-y-1 gap-3 mb-2 text-sm text-gray-700">
-  //           <Text className="text-xl">2s and Jokers are wildcards</Text>
-  //           <Text className="text-xl">Maximum of 3 wildcards per meld</Text>
-  //           <Text className="text-xl">
-  //             Wildcards can not out number natural cards
-  //           </Text>
-  //         </View>
-  //       </View>
-  //     </View>
-  //   ),
-  // },
+        <View className="bg-gray-50  rounded-lg mt-8 p-6">
+          <Text className="font-bold text-2xl mb-4">Wildcard Rules</Text>
+          <View className=" flex space-y-1 gap-3 mb-2 text-sm text-gray-700">
+            <Text className="text-xl">2s and Jokers are wildcards</Text>
+            <Text className="text-xl">Maximum of 3 wildcards per meld</Text>
+            <Text className="text-xl">
+              Wildcards can not out number natural cards
+            </Text>
+          </View>
+        </View> */}
+        </VerticalStack>
+      );
+    },
+  },
   // {
   //   id: "scoring",
   //   title: "Scoring System",
