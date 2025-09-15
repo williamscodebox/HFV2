@@ -1,3 +1,4 @@
+import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useState } from "react";
@@ -6,6 +7,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
 
@@ -151,12 +153,10 @@ export default function HomeScreen() {
         end={{ x: 0, y: 0 }}
         colors={["#fef2f2", "#eff6ff"]}
       >
-        <View>
-          <Text>Welcome</Text>
-        </View>
-        {/* <View className="min-h-screen p-4 md:p-8">
+        <View className="min-h-screen p-4 md:p-8">
           <View className="">
-            {/* Hero Section *
+            {/* Hero Section */}
+
             <View className="text-center">
               <View style={styles.heroSection}>
                 <LinearGradient
@@ -229,8 +229,7 @@ export default function HomeScreen() {
                 </TouchableOpacity>
               </View>
             </View>
-
-            {/* Stats Grid 
+            {/*   {/* Stats Grid 
             <View className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-12">
               <LinearGradient
                 colors={["#f0fdf4", "#dcfce7"]}
@@ -579,9 +578,9 @@ export default function HomeScreen() {
                   </View>
                 )}
               </View>
-            </View>
+            </View>*/}
           </View>
-        </View> */}
+        </View>
       </LinearGradient>
     </ScrollView>
   );
