@@ -403,48 +403,42 @@ export const tutorialData: TutorialSection[] = [
               </CardContent>
             </Card>
 
-            {/*}         <Card className="bg-white border border-gray-50 p-6">
-  //           <CardHeader>
-  //             <CardTitle className="text-blue-700 pb-4">
-  //               <Text className="text-blue-700 text-3xl font-bold">
-  //                 Bonuses
-  //               </Text>
-  //             </CardTitle>
-  //           </CardHeader>
-  //           <CardContent className="space-y-2">
-  //             <View className="flex flex-row justify-between mr-5 pb-2">
-  //               <Text className="text-xl font-semibold">Clean Book</Text>
-  //               <Badge
-  //                 value={"+ 500 points"}
-  //                 color={"#DCFCE7"}
-  //                 textColor={"black"}
-  //                 height={30}
-  //                 width={90}
-  //               />
-  //             </View>
-  //             <View className="flex flex-row justify-between mr-5 pb-2">
-  //               <Text className="text-xl font-semibold">Dirty Book</Text>
-  //               <Badge
-  //                 value={"+ 300 points"}
-  //                 color={"#FEF9C3"}
-  //                 textColor={"black"}
-  //                 height={30}
-  //                 width={90}
-  //               />
-  //             </View>
-  //           </CardContent>
-  //         </Card> */}
+            <Card style={styles.CvCard}>
+              <CardHeader>
+                <Text style={styles.Btitle}>Bonuses</Text>
+              </CardHeader>
+              <CardContent>
+                <View style={styles.Cvrow}>
+                  <Text style={styles.Cvlabel}>Clean Book</Text>
+                  <Badge
+                    value={"+ 500 points"}
+                    color={"#DCFCE7"}
+                    textColor={"black"}
+                    height={30}
+                    width={90}
+                  />
+                </View>
+                <View style={styles.Cvrow}>
+                  <Text style={styles.Cvlabel}>Dirty Book</Text>
+                  <Badge
+                    value={"+ 300 points"}
+                    color={"#FEF9C3"}
+                    textColor={"black"}
+                    height={30}
+                    width={90}
+                  />
+                </View>
+              </CardContent>
+            </Card>
           </View>
 
-          {/* <View className="bg-red-50 p-8 rounded-lg border border-red-200 mt-8">
-            <Text className="text-2xl font-semibold text-red-800 mb-4">
-              Penalty:Cards Left in Hand/Foot
-            </Text>
-            <Text className="text-red-700 text-xl leading-relaxed">
+          <View style={styles.P4container}>
+            <Text style={styles.P4title}>Penalty</Text>
+            <Text style={styles.P4description}>
               At round end, subtract the point value of all cards remaining in
               your hand and foot from your score.
             </Text>
-          </View> */}
+          </View>
         </VerticalStack>
       );
     },
@@ -452,6 +446,25 @@ export const tutorialData: TutorialSection[] = [
 ];
 
 const styles = StyleSheet.create({
+  P4container: {
+    backgroundColor: "#FEF2F2", // red-50
+    padding: 32, // p-8
+    borderRadius: 12, // rounded-lg
+    borderWidth: 1,
+    borderColor: "#FECACA", // red-200
+    marginTop: 32, // mt-8
+  },
+  P4title: {
+    fontSize: 28, // text-2xl
+    fontWeight: "600", // font-semibold
+    color: "#991B1B", // red-800
+    marginBottom: 16, // mb-4
+  },
+  P4description: {
+    fontSize: 20, // text-xl
+    lineHeight: 28, // leading-relaxed
+    color: "#B91C1C", // red-700
+  },
   gridContainer: {
     gap: 24, // Tailwind gap-6 = 1.5rem
   },
@@ -473,6 +486,13 @@ const styles = StyleSheet.create({
   },
   Cvtitle: {
     color: "#15803D", // Tailwind green-700
+    fontSize: 28,
+    fontWeight: "bold",
+    paddingBottom: 20,
+    marginLeft: -8,
+  },
+  Btitle: {
+    color: "#1D4ED8", // Tailwind blue-700
     fontSize: 28,
     fontWeight: "bold",
     paddingBottom: 20,
