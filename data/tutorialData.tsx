@@ -319,37 +319,37 @@ export const tutorialData: TutorialSection[] = [
         {
           label: "Jokers",
           value: "50 points",
-          color: "#374151",
+          color: "#5b7db4ff",
           textColor: "white",
         },
         {
           label: "2s (wildcards)",
           value: "20 points",
-          color: "#374151",
+          color: "#5b7db4ff",
           textColor: "white",
         },
         {
           label: "Aces",
           value: "20 points",
-          color: "#374151",
+          color: "#5b7db4ff",
           textColor: "white",
         },
         {
           label: "8, 9, 10, J, Q, K",
           value: "10 points",
-          color: "#374151",
+          color: "#5b7db4ff",
           textColor: "white",
         },
         {
           label: "4, 5, 6, 7",
           value: "5 points",
-          color: "#374151",
+          color: "#5b7db4ff",
           textColor: "white",
         },
         {
           label: "Black 3s",
           value: "5 points",
-          color: "#374151",
+          color: "#5b7db4ff",
           textColor: "white",
         },
         {
@@ -383,16 +383,14 @@ export const tutorialData: TutorialSection[] = [
               isMd ? styles.gridTwoCols : styles.gridOneCol,
             ]}
           >
-            <Card style={styles.card}>
+            <Card style={styles.CvCard}>
               <CardHeader>
-                <CardTitle>
-                  <Text style={styles.title}>Card Values</Text>
-                </CardTitle>
+                <Text style={styles.Cvtitle}>Card Values</Text>
               </CardHeader>
               <CardContent>
                 {cardValueRows.map(({ label, value, color, textColor }, i) => (
-                  <View key={i} style={styles.row}>
-                    <Text style={styles.label}>{label}</Text>
+                  <View key={i} style={styles.Cvrow}>
+                    <Text style={styles.Cvlabel}>{label}</Text>
                     <Badge
                       value={value}
                       color={color}
@@ -475,19 +473,23 @@ const styles = StyleSheet.create({
   },
   Cvtitle: {
     color: "#15803D", // Tailwind green-700
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: "bold",
-    paddingBottom: 16,
+    paddingBottom: 20,
+    marginLeft: -8,
   },
   Cvrow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginRight: 20,
+    marginRight: -10,
+    marginLeft: -10,
     paddingBottom: 8,
   },
   Cvlabel: {
     fontSize: 20,
     fontWeight: "600",
+    marginBottom: 4,
+    marginTop: -2,
   },
   flexContainer: {
     gap: 24, // Tailwind's gap-6 = 1.5rem = 24px
