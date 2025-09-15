@@ -91,7 +91,11 @@ export default function TutorialPage() {
                     ]}
                     onPress={() => setCurrentSection(index)}
                   >
-                    <Icon name={section.iconname} size={24} color={iconColor} />
+                    <Icon
+                      name={section.iconname}
+                      size={section.id !== "scoring" ? 24 : 30}
+                      color={iconColor}
+                    />
 
                     <Text style={[styles.tabText, { color: iconColor }]}>
                       {section.title}
@@ -112,7 +116,7 @@ export default function TutorialPage() {
                   <View style={styles.cardHeader}>
                     <IconMain
                       name={currentTutorial.iconname}
-                      size={24}
+                      size={currentTutorial.iconname !== "trophy" ? 24 : 28}
                       color="white"
                     />
                     <Text style={styles.cardTitle}>

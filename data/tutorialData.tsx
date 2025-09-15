@@ -1,7 +1,7 @@
 import Badge from "@/components/Badge";
 import CardTitle from "@/components/CardTitle";
 import { VerticalStack } from "@/components/Spacer";
-import { Feather, Ionicons } from "@expo/vector-icons";
+import { EvilIcons, Feather, Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import * as React from "react";
 import { StyleSheet, Text, useWindowDimensions, View } from "react-native";
@@ -307,108 +307,105 @@ export const tutorialData: TutorialSection[] = [
       );
     },
   },
-  // {
-  //   id: "scoring",
-  //   title: "Scoring System",
-  //   icon: (props: ComponentProps<typeof EvilIcons>) => (
-  //     <EvilIcons {...props} name="trophy" size={24} />
-  //   ),
-  //   content: () => (
-  //     <View className="space-y-6">
-  //       <View style={styles.introBox}>
-  //         <View className="bg-yellow-50 mt-2 p-6 rounded-xl pb-10">
-  //           <Text style={styles.heading}>How Points Work</Text>
-  //           <Text style={styles.paragraph} className="leading-relaxed">
-  //             Points come from melds, individual cards, and bonuses. At the end
-  //             of each round, subtract points for cards left in hand.
-  //           </Text>
-  //         </View>
-  //       </View>
+  {
+    id: "scoring",
+    title: "Scoring System",
+    iconname: "trophy",
+    icon: asIcon(EvilIcons),
+    content: function SetupContent() {
+      const { width } = useWindowDimensions();
+      const isMd = width >= 768;
+      const cardValueRows = [
+        {
+          label: "Jokers",
+          value: "50 points",
+          color: "#374151",
+          textColor: "white",
+        },
+        {
+          label: "2s (wildcards)",
+          value: "20 points",
+          color: "#374151",
+          textColor: "white",
+        },
+        {
+          label: "Aces",
+          value: "20 points",
+          color: "#374151",
+          textColor: "white",
+        },
+        {
+          label: "8, 9, 10, J, Q, K",
+          value: "10 points",
+          color: "#374151",
+          textColor: "white",
+        },
+        {
+          label: "4, 5, 6, 7",
+          value: "5 points",
+          color: "#374151",
+          textColor: "white",
+        },
+        {
+          label: "Black 3s",
+          value: "5 points",
+          color: "#374151",
+          textColor: "white",
+        },
+        {
+          label: "Red 3s",
+          value: "500 points",
+          color: "#EF4444",
+          textColor: "white",
+        },
+      ];
 
-  //       <View className="grid md:grid-cols-2 gap-6">
-  //         <Card className="bg-white border border-gray-50 p-6 mt-4">
-  //           <CardHeader>
-  //             <CardTitle className="text-green-700 pb-4">
-  //               <Text className="text-green-700 text-3xl font-bold">
-  //                 Card Values
-  //               </Text>
-  //             </CardTitle>
-  //           </CardHeader>
-  //           <CardContent className="space-y-2">
-  //             <View className="flex flex-row justify-between mr-5 pb-2">
-  //               <Text className="text-xl font-semibold">Jokers</Text>
-  //               <Badge
-  //                 value={"50 points"}
-  //                 color={"#374151"}
-  //                 textColor={"white"}
-  //                 height={30}
-  //                 width={90}
-  //               />
-  //             </View>
-  //             <View className="flex flex-row justify-between mr-5 pb-2">
-  //               <Text className="text-xl font-semibold">2s (wildcards)</Text>
-  //               <Badge
-  //                 value={"20 points"}
-  //                 color={"#374151"}
-  //                 textColor={"white"}
-  //                 height={30}
-  //                 width={90}
-  //               />
-  //             </View>
-  //             <View className="flex flex-row justify-between mr-5 pb-2">
-  //               <Text className="text-xl font-semibold">Aces</Text>
-  //               <Badge
-  //                 value={"20 points"}
-  //                 color={"#374151"}
-  //                 textColor={"white"}
-  //                 height={30}
-  //                 width={90}
-  //               />
-  //             </View>
-  //             <View className="flex flex-row justify-between mr-5 pb-2">
-  //               <Text className="text-xl font-semibold">8, 9, 10, J, Q, K</Text>
-  //               <Badge
-  //                 value={"10 points"}
-  //                 color={"#374151"}
-  //                 textColor={"white"}
-  //                 height={30}
-  //                 width={90}
-  //               />
-  //             </View>
-  //             <View className="flex flex-row justify-between mr-5 pb-2">
-  //               <Text className="text-xl font-semibold">4, 5, 6, 7</Text>
-  //               <Badge
-  //                 value={"5 points"}
-  //                 color={"#374151"}
-  //                 textColor={"white"}
-  //                 height={30}
-  //                 width={90}
-  //               />
-  //             </View>
-  //             <View className="flex flex-row justify-between mr-5 pb-2">
-  //               <Text className="text-xl font-semibold">Black 3s</Text>
-  //               <Badge
-  //                 value={"5 points"}
-  //                 color={"#374151"}
-  //                 textColor={"white"}
-  //                 height={30}
-  //                 width={90}
-  //               />
-  //             </View>
-  //             <View className="flex flex-row justify-between mr-5 pb-2">
-  //               <Text className="text-xl font-semibold">Red 3s</Text>
-  //               <Badge
-  //                 value={"500 points"}
-  //                 color={"#EF4444"}
-  //                 textColor={"white"}
-  //                 height={30}
-  //                 width={90}
-  //               />
-  //             </View>
-  //           </CardContent>
-  //         </Card>
+      return (
+        <VerticalStack>
+          <LinearGradient
+            colors={["#eff6ff", "#f5f3ff"]} // blue-50 to purple-50
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={styles.gradient}
+          >
+            <View style={styles.introBox}>
+              <Text style={styles.heading}>How Points Work</Text>
+              <Text style={styles.paragraph}>
+                Points come from melds, individual cards, and bonuses. At the
+                end of each round, subtract points for cards left in hand.
+              </Text>
+            </View>
+          </LinearGradient>
 
-  //         <Card className="bg-white border border-gray-50 p-6">
+          <View
+            style={[
+              styles.gridContainer,
+              isMd ? styles.gridTwoCols : styles.gridOneCol,
+            ]}
+          >
+            <Card style={styles.card}>
+              <CardHeader>
+                <CardTitle>
+                  <Text style={styles.title}>Card Values</Text>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {cardValueRows.map(({ label, value, color, textColor }, i) => (
+                  <View key={i} style={styles.row}>
+                    <Text style={styles.label}>{label}</Text>
+                    <Badge
+                      value={value}
+                      color={color}
+                      textColor={textColor}
+                      height={30}
+                      width={90}
+                    />
+                  </View>
+                ))}
+              </CardContent>
+            </Card>
+
+            {/*}         <Card className="bg-white border border-gray-50 p-6">
   //           <CardHeader>
   //             <CardTitle className="text-blue-700 pb-4">
   //               <Text className="text-blue-700 text-3xl font-bold">
@@ -438,24 +435,60 @@ export const tutorialData: TutorialSection[] = [
   //               />
   //             </View>
   //           </CardContent>
-  //         </Card>
-  //       </View>
+  //         </Card> */}
+          </View>
 
-  //       <View className="bg-red-50 p-8 rounded-lg border border-red-200 mt-8">
-  //         <Text className="text-2xl font-semibold text-red-800 mb-4">
-  //           Penalty:Cards Left in Hand/Foot
-  //         </Text>
-  //         <Text className="text-red-700 text-xl leading-relaxed">
-  //           At round end, subtract the point value of all cards remaining in
-  //           your hand and foot from your score.
-  //         </Text>
-  //       </View>
-  //     </View>
-  //   ),
-  // },
+          {/* <View className="bg-red-50 p-8 rounded-lg border border-red-200 mt-8">
+            <Text className="text-2xl font-semibold text-red-800 mb-4">
+              Penalty:Cards Left in Hand/Foot
+            </Text>
+            <Text className="text-red-700 text-xl leading-relaxed">
+              At round end, subtract the point value of all cards remaining in
+              your hand and foot from your score.
+            </Text>
+          </View> */}
+        </VerticalStack>
+      );
+    },
+  },
 ];
 
 const styles = StyleSheet.create({
+  gridContainer: {
+    gap: 24, // Tailwind gap-6 = 1.5rem
+  },
+  gridOneCol: {
+    flexDirection: "column",
+  },
+  gridTwoCols: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+  },
+  CvCard: {
+    backgroundColor: "#FFFFFF",
+    borderWidth: 1,
+    borderColor: "#F9FAFB", // Tailwind gray-50
+    padding: 24,
+    marginTop: 16,
+    borderRadius: 12,
+  },
+  Cvtitle: {
+    color: "#15803D", // Tailwind green-700
+    fontSize: 24,
+    fontWeight: "bold",
+    paddingBottom: 16,
+  },
+  Cvrow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginRight: 20,
+    paddingBottom: 8,
+  },
+  Cvlabel: {
+    fontSize: 20,
+    fontWeight: "600",
+  },
   flexContainer: {
     gap: 24, // Tailwind's gap-6 = 1.5rem = 24px
   },
@@ -466,6 +499,13 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 12,
+  },
+  yellowBox: {
+    backgroundColor: "#FEF9C3", // Tailwind yellow-50
+    marginTop: 8,
+    padding: 24,
+    borderRadius: 16,
+    paddingBottom: 40,
   },
   paragraph: {
     fontSize: 18,
