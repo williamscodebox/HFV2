@@ -239,6 +239,7 @@ const styles = StyleSheet.create({
   progressContainer: {
     marginTop: 6,
     marginBottom: 32,
+    width: "80%",
   },
   progressText: {
     fontSize: 14,
