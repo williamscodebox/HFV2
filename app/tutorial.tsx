@@ -310,6 +310,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   navRow: {
+    width: "95%",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -318,6 +319,8 @@ const styles = StyleSheet.create({
   navButton: {
     flexDirection: "row",
     alignItems: "center",
+    width: 120,
+    justifyContent: "center",
     paddingVertical: 16,
     paddingHorizontal: 20,
     borderRadius: 12,
