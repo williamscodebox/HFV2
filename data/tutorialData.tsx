@@ -181,7 +181,7 @@ export const tutorialData: TutorialSection[] = [
     title: "Making Melds",
     iconname: "target",
     icon: asIcon(Feather),
-    content: function SetupContent() {
+    content: function MeldsContent() {
       const { width } = useWindowDimensions();
       const isMd = width >= 768;
 
@@ -312,7 +312,7 @@ export const tutorialData: TutorialSection[] = [
     title: "Scoring System",
     iconname: "trophy",
     icon: asIcon(EvilIcons),
-    content: function SetupContent() {
+    content: function ScoringContent() {
       const { width } = useWindowDimensions();
       const isMd = width >= 768;
       const cardValueRows = [
