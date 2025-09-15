@@ -17,7 +17,7 @@ Targets changed due to build issues with runtime failures
 Entire app being reworked into Typescript language and removing NativeWind from the apps styling
 New targets belolw
 
-Goal to have Tutorial finished 09-16-25  --> 
+Goal to have Tutorial finished 09-16-25  --> completed on 09-15-25 one day earlier than target
 Have Home Screen finished 09-18-25  --> 
 Have History page finished 09-20-25  -->
 Have Newgame page finished 09-25-25 --> 
