@@ -1,9 +1,10 @@
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
+import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
+  Dimensions,
   ScrollView,
   StyleSheet,
   Text,
@@ -37,7 +38,7 @@ export default function HomeScreen() {
   const [games, setGames] = useState<Game[]>([]);
   const [players, setPlayers] = useState<Player[]>([]);
   const [loading, setLoading] = useState(true);
-  const navigation = useNavigation();
+  const router = useRouter();
   const activeGames = games.filter((game) => game.status === "active");
   const completedGames = games.filter((game) => game.status === "completed");
   const topPlayer = players[0];
@@ -153,83 +154,67 @@ export default function HomeScreen() {
         end={{ x: 0, y: 0 }}
         colors={["#fef2f2", "#eff6ff"]}
       >
-        <View className="min-h-screen p-4 md:p-8">
-          <View className="">
-            {/* Hero Section */}
-
-            <View className="text-center">
-              <View style={styles.heroSection}>
-                <LinearGradient
-                  colors={["#DC2626", "#2563EB"]} // from-red-600 to-blue-600
-                  start={{ x: 0, y: 0 }} // top-left
-                  end={{ x: 1, y: 1 }} // bottom-right
-                  style={styles.iconWrapper}
-                >
-                  <View className="w-16 h-16 bg-gradient-to-br from-red-600 to-blue-600 rounded-2xl flex items-center justify-center shadow-xl">
-                    <MaterialCommunityIcons
-                      name="cards-spade-outline"
-                      size={50}
-                      color="white"
-                    />
-                  </View>
-                </LinearGradient>
+        <View style={styles.screen}>
+          <View style={styles.heroContainer}>
+            <LinearGradient
+              colors={["#DC2626", "#2563EB"]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.iconWrapper}
+            >
+              <View style={styles.iconBackground}>
+                <MaterialCommunityIcons
+                  name="cards-spade-outline"
+                  size={50}
+                  color="white"
+                />
               </View>
-              <Text className="text-center text-5xl md:text-5xl font-bold text-gray-900 mb-6">
-                Hand & Foot
-              </Text>
-              <Text className="text-center text-2xl text-gray-600 mb-8 leading-relaxed">
-                Learn the classic card game and keep perfect scores with friends
-                and family
-              </Text>
+            </LinearGradient>
 
-              <View className="flex flex-col sm:flex-row gap-4 items-center justify-center mb-12">
-                <TouchableOpacity
-                  activeOpacity={0.8}
-                  onPress={() => {
-                    console.log("test");
-                    navigation.navigate("newgame");
-                  }} // 👈 matches Drawer.Screen name
-                >
-                  <LinearGradient
-                    colors={["#DC2626", "#B91C1C"]} // red-600 to red-700
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 0 }}
-                    style={styles.button}
-                    className="border border-gray-400"
-                  >
-                    <Feather
-                      name="play"
-                      size={20}
-                      color="white"
-                      style={{ marginRight: 12 }}
-                    />
-                    <Text style={styles.buttonText}>Start New Game</Text>
-                  </LinearGradient>
-                </TouchableOpacity>
+            <Text style={styles.title}>Hand & Foot</Text>
+            <Text style={styles.subtitle}>
+              Learn the classic card game and keep perfect scores with friends
+              and family
+            </Text>
 
-                <TouchableOpacity
-                  activeOpacity={0.8}
-                  onPress={() => {
-                    console.log("test");
-                    navigation.navigate("tutorial");
-                  }} // 👈 matches Drawer.Screen name
-                  style={styles.button2}
-                  className="border border-gray-400 bg-slate-50"
+            <View style={styles.buttonGroup}>
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() => router.push("/newgame")}
+              >
+                <LinearGradient
+                  colors={["#DC2626", "#B91C1C"]}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 0 }}
+                  style={[styles.button, styles.buttonGradient]}
                 >
                   <Feather
-                    name="book-open"
+                    name="play"
                     size={20}
-                    color="black"
-                    style={{ marginRight: 14 }}
+                    color="white"
+                    style={styles.iconSpacing}
                   />
+                  <Text style={styles.buttonText}>Start New Game</Text>
+                </LinearGradient>
+              </TouchableOpacity>
 
-                  <Text className="text-2xl text-black font-bold">
-                    Learn the Rules
-                  </Text>
-                </TouchableOpacity>
-              </View>
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() => router.push("/tutorial")}
+                style={[styles.button, styles.buttonOutline]}
+              >
+                <Feather
+                  name="book-open"
+                  size={20}
+                  color="black"
+                  style={styles.iconSpacing}
+                />
+                <Text style={styles.buttonAltText}>Learn the Rules</Text>
+              </TouchableOpacity>
             </View>
-            {/*   {/* Stats Grid 
+          </View>
+
+          {/*   {/* Stats Grid 
             <View className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-12">
               <LinearGradient
                 colors={["#f0fdf4", "#dcfce7"]}
@@ -579,7 +564,6 @@ export default function HomeScreen() {
                 )}
               </View>
             </View>*/}
-          </View>
         </View>
       </LinearGradient>
     </ScrollView>
@@ -593,6 +577,14 @@ const styles = StyleSheet.create({
     paddingTop: 30,
     justifyContent: "center",
     alignItems: "center",
+  },
+  screen: {
+    minHeight: Dimensions.get("window").height,
+    padding: 16,
+  },
+  heroContainer: {
+    alignItems: "center",
+    marginTop: 16,
   },
   heroSection: {
     alignItems: "center",
@@ -609,10 +601,47 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     elevation: 4,
   },
+  iconBackground: {
+    width: 64,
+    height: 64,
+    borderRadius: 24,
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
+    elevation: 6,
+  },
   title: {
     fontSize: 24,
     fontWeight: "bold",
     color: "#1f2937", // gray-800
+  },
+  subtitle: {
+    fontSize: 20,
+    color: "#4B5563", // gray-600
+    textAlign: "center",
+    marginBottom: 32,
+    lineHeight: 28,
+  },
+  buttonGroup: {
+    flexDirection: "column",
+    alignItems: "center",
+    gap: 16,
+  },
+  buttonGradient: {
+    backgroundColor: "#DC2626",
+  },
+  buttonOutline: {
+    backgroundColor: "#F8FAFC", // slate-50
+  },
+  buttonAltText: {
+    fontSize: 20,
+    color: "black",
+    fontWeight: "bold",
+  },
+  iconSpacing: {
+    marginRight: 12,
   },
   gradient: {
     flex: 1,
