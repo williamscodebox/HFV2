@@ -6,12 +6,12 @@ create marketing video 5 min length -- current at 0:02:48
 
 Goal to have Tutorial finished 09-09-25  --> completed 09-09-25 on target
 Have Home Screen finished 09-12-25  --> completed 09-11-25 one day earlier than target
-Have History page finished 09-15-25  -->
-Have Newgame page finished 09-19-25 --> 
+Have History page finished 09-15-25  --> app needed reworking (building with typescript) see new goals below
+Have Newgame page finished 09-19-25 --> app needed reworking (building with typescript) see new goals below
 
 index for finding expo/vector-icons -->  https://icons.expo.fyi/Index
 
-Work on history page 09-12-25 
+Work on home page 09-16-25 
 
 Targets changed due to build issues with runtime failures
 Entire app being reworked into Typescript language and removing NativeWind from the apps styling
