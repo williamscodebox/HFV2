@@ -214,8 +214,8 @@ export default function HomeScreen() {
             </View>
           </View>
 
-          {/*   {/* Stats Grid 
-            <View className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-12">
+          {/* Stats Grid */}
+          {/* <View className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-12">
               <LinearGradient
                 colors={["#f0fdf4", "#dcfce7"]}
                 start={{ x: 0, y: 0 }}
@@ -365,10 +365,10 @@ export default function HomeScreen() {
                     color="#9333ea"
                     marginBottom={6}
                   />
-                </View>
+                </View> */}
 
-                {/* Content 
-                {topPlayer ? (
+          {/* Content */}
+          {/* {topPlayer ? (
                   <View style={{ marginTop: 16, marginBottom: 10, gap: 5 }}>
                     <Text
                       style={{
@@ -391,9 +391,9 @@ export default function HomeScreen() {
                   </View>
                 )}
               </LinearGradient>
-            </View>
+            </View> */}
 
-            {/* Recent Games 
+          {/*  {/* Recent Games 
 
             <View className="flex flex-col gap-8 mb-8">
               <View className="shadow-xl border-2 border-gray-200 rounded-xl bg-slate-50 p-10 pb-2">
