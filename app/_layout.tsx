@@ -1,3 +1,4 @@
+import CustomDrawer from "@/components/CustomDrawer";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Drawer } from "expo-router/drawer";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -8,6 +9,7 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <Drawer
+        drawerContent={(props) => <CustomDrawer {...props} />}
         screenOptions={{
           headerTitleAlign: "center",
           headerTintColor: "#010000",
