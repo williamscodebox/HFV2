@@ -201,7 +201,7 @@ export default function HomeScreen() {
               <TouchableOpacity
                 activeOpacity={0.8}
                 onPress={() => router.push("/tutorial")}
-                style={[styles.button, styles.buttonOutline]}
+                style={[styles.button2, styles.buttonOutline]}
               >
                 <Feather
                   name="book-open"
@@ -574,7 +574,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    paddingTop: 30,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -613,12 +612,14 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   title: {
-    fontSize: 24,
+    marginTop: 12,
+    fontSize: 48,
     fontWeight: "bold",
     color: "#1f2937", // gray-800
+    marginBottom: 20,
   },
   subtitle: {
-    fontSize: 20,
+    fontSize: 22,
     color: "#4B5563", // gray-600
     textAlign: "center",
     marginBottom: 32,
