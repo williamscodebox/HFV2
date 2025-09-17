@@ -209,7 +209,6 @@ export default function history() {
             </LinearGradient>
           </View>
 
-          {/* Work from below here .....  ************************************************  ---> Work from below here */}
           <View style={styles.grid2}>
             {/* Recent Games */}
             {/* Games List */}
@@ -287,26 +286,29 @@ export default function history() {
               </View>
             </View>
 
+            {/* Work from below here .....  ************************************************  ---> Work from below here */}
+            {/* PLayer Leaderboard  and Game Details Modal-like section need to be finished */}
+
             {/* Player Leaderboard */}
-            {/* <View>
-              <Card className="shadow-lg">
+            <View>
+              {/* <Card className="shadow-lg">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     {/* <TrendingUp className="w-5 h-5 text-purple-600" /> 
-                    Player Leaderboard
+                    <Text>Player Leaderboard</Text>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   {players.length === 0 ? (
                     <View className="text-center py-8">
-                      {/* <Award className="w-12 h-12 text-gray-400 mx-auto mb-3" /> 
+                      {/* <Award className="w-12 h-12 text-gray-400 mx-auto mb-3" />  
                       <Text className="text-gray-500">No players yet</Text>
                     </View>
                   ) : (
                     <View className="space-y-4">
                       {players.slice(0, 10).map((player, index) => (
                         <View
-                          key={player.id}
+                          key={player.player_id}
                           className="flex items-center justify-between"
                         >
                           <View className="flex items-center gap-3">
@@ -324,7 +326,9 @@ export default function history() {
                               {index + 1}
                             </View>
                             <View>
-                              <Text className="font-semibold">{player.name}</Text>
+                              <Text className="font-semibold">
+                                {player.name}
+                              </Text>
                               <View className="flex gap-2 text-xs text-gray-500">
                                 <Text>{player.games_played || 0} games</Text>
                                 <Text>{player.games_won || 0} wins</Text>
@@ -335,17 +339,21 @@ export default function history() {
                             <Text className="font-bold">
                               {player.total_score || 0}
                             </Text>
-                            <Text className="text-xs text-gray-500">points</Text>
+                            <Text className="text-xs text-gray-500">
+                              points
+                            </Text>
                           </View>
                         </View>
                       ))}
                     </View>
                   )}
                 </CardContent>
-              </Card>
+              </Card> */}
 
-              {/* Game Details Modal-like section 
-              {selectedGame && (
+              {/* Do aboove section first and then work on this section */}
+
+              {/* Game Details Modal-like section */}
+              {/* {selectedGame && (
                 <Card className="shadow-lg mt-6">
                   <CardHeader>
                     <CardTitle className="flex items-center justify-between">
@@ -405,8 +413,8 @@ export default function history() {
                     </View>
                   </CardContent>
                 </Card>
-              )}
-            </View> */}
+              )} */}
+            </View>
           </View>
         </View>
       </LinearGradient>
