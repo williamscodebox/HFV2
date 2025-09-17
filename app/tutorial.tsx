@@ -25,6 +25,7 @@ export default function TutorialPage() {
   useFocusEffect(
     useCallback(() => {
       setCurrentSection(0); // Reset to first section
+      scrollRef.current?.scrollTo?.({ y: 0, animated: true });
     }, [])
   );
 
