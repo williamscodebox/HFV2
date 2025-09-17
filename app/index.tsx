@@ -1,4 +1,5 @@
 import { EvilIcons, Feather, MaterialCommunityIcons } from "@expo/vector-icons";
+import { format } from "date-fns";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
@@ -309,175 +310,121 @@ export default function HomeScreen() {
 
           {/* Recent Games */}
 
-          {/*    <View className="flex flex-col gap-8 mb-8">
-              <View className="shadow-xl border-2 border-gray-200 rounded-xl bg-slate-50 p-10 pb-2">
-                <View>
-                  <CardTitle className="flex flex-row items-center gap-4 text-lg font-bold">
-                    <Feather
-                      name="clock"
-                      size={24}
-                      color="#B7791F"
-                      marginBottom={4}
-                    />
-                    <Text className="text-3xl font-bold">Active Games</Text>
-                  </CardTitle>
-                </View>
-                <View className="mb-8">
-                  {activeGames.length > 0 ? (
-                    <View className="flex flex-col gap-3 mt-6">
-                      {activeGames.map((game) => {
-                        // Safely get leader if players exist
-                        const leader =
-                          Array.isArray(game.players) && game.players.length > 0
-                            ? game.players.reduce((prev, current) =>
-                                current.total_score > prev.total_score
-                                  ? current
-                                  : prev
-                              )
-                            : null;
-                        return (
-                          <View
-                            key={game.id}
-                            className="flex flex-row justify-between items-center p-4 bg-orange-50 rounded-lg border border-orange-200"
-                          >
-                            <View>
-                              <Text className="font-semibold">
-                                {game.name || "Untitled Game"}
-                              </Text>
-                              <Text className="text-sm text-gray-600">
-                                Round {game.current_round ?? "?"} •{" "}
-                                {Array.isArray(game.players)
-                                  ? game.players.length
-                                  : 0}{" "}
-                                players
-                              </Text>
-                              {leader && (
-                                <Text className="text-xs text-gray-500 mt-2">
-                                  Leader: {leader.name} ({leader.total_score}{" "}
-                                  pts)
-                                </Text>
-                              )}
-                            </View>
-                            <View>
-                              <View className="bg-orange-100 border border-orange-300 rounded px-2 py-1">
-                                <Text className="text-orange-800 text-xs">
-                                  In Progress
-                                </Text>
-                              </View>
-                              <View className="mt-4">
-                                <TouchableOpacity
-                                  className="border border-orange-300 bg-orange-200 flex-row items-center justify-center py-[6px] px-[12px] rounded-[10px] shadow-lg"
-                                  activeOpacity={0.8}
-                                  onPress={() => navigation.navigate("newgame")}
-                                >
-                                  <Text className="text-xs text-orange-800 font-bold">
-                                    Continue
-                                  </Text>
-                                </TouchableOpacity>
-                              </View>
-                            </View>
-                          </View>
-                        );
-                      })}
-                    </View>
-                  ) : (
-                    <View className="items-center pt-16 pb-12">
-                      <Feather name="clock" size={62} color="#9CA3AF" />
-                      <Text className="text-xl text-gray-400 mt-6">
-                        No active games
-                      </Text>
-                      <View className="mt-4">
-                        <TouchableOpacity
-                          style={styles.button3}
-                          className="border border-gray-400 bg-slate-50"
-                          activeOpacity={0.8}
-                          onPress={() => navigation.navigate("newgame")}
-                        >
-                          <Text className="text-xl text-black font-bold">
-                            Start a Game
-                          </Text>
-                        </TouchableOpacity>
-                      </View>
-                    </View>
-                  )}
-                </View>
+          <View style={styles.dashboardContainer}>
+            {/* Active Games Card */}
+            <View style={styles.dashboardCard}>
+              <View style={styles.dashboardCardHeader}>
+                <Feather name="clock" size={24} color="#B7791F" />
+                <Text style={styles.cardTitle}>Active Games</Text>
               </View>
-            </View>
-
-            <View className="shadow-xl border-2 border-gray-200 rounded-xl bg-slate-50 p-10 pb-2 mb-8">
-              <View className="mb-4">
-                <CardTitle className="flex flex-row items-center gap-4 text-lg font-bold">
-                  <Feather
-                    name="trending-up"
-                    size={24}
-                    color="#2B6CB0"
-                    marginBottom={4}
-                  />
-                  <Text className="text-3xl font-bold">Recent Results</Text>
-                </CardTitle>
-              </View>
-
-              <View>
-                {completedGames.length > 0 ? (
-                  <View className="flex flex-col gap-6 mt-3 pb-8">
-                    {completedGames.map((game) => {
-                      const winner = Array.isArray(game.players)
-                        ? game.players.find(
-                            (p) => p.player_id === game.winner_id
+              {activeGames.length > 0 ? (
+                <View style={styles.gameList}>
+                  {activeGames.map((game) => {
+                    const leader =
+                      Array.isArray(game.players) && game.players.length > 0
+                        ? game.players.reduce((prev, current) =>
+                            current.total_score > prev.total_score
+                              ? current
+                              : prev
                           )
                         : null;
 
-                      return (
-                        <View
-                          key={game.id}
-                          className="flex flex-row justify-between items-center p-3 bg-blue-50 rounded-lg border border-blue-200"
-                        >
-                          <View>
-                            <Text className="font-semibold mb-1">
-                              {game.name || "Untitled Game"}
+                    return (
+                      <View key={game.id} style={styles.activeGameCard}>
+                        <View>
+                          <Text style={styles.gameName}>
+                            {game.name || "Untitled Game"}
+                          </Text>
+                          <Text style={styles.gameMeta}>
+                            Round {game.current_round ?? "?"} •{" "}
+                            {game.players?.length ?? 0} players
+                          </Text>
+                          {leader && (
+                            <Text style={styles.leaderText}>
+                              Leader: {leader.name} ({leader.total_score} pts)
                             </Text>
-                            {game.created_date && (
-                              <Text className="text-sm text-gray-600 mt-1">
-                                {format(
-                                  new Date(game.created_date),
-                                  "MMM d, yyyy"
-                                )}
-                              </Text>
-                            )}
-                          </View>
-
-                          <View className="items-end">
-                            <View className="bg-blue-100 border border-blue-300 rounded px-2 py-1">
-                              <Text className="text-blue-800 text-xs">
-                                Completed
-                              </Text>
-                            </View>
-                            {winner && (
-                              <Text className="text-sm text-gray-600 mt-1">
-                                Winner: {winner.name}
-                              </Text>
-                            )}
-                          </View>
+                          )}
                         </View>
-                      );
-                    })}
-                  </View>
-                ) : (
-                  <View className="items-center py-4 mb-4">
-                    <EvilIcons
-                      name="trophy"
-                      size={82}
-                      fontWeight="bold"
-                      color="#9CA3AF"
-                      marginBottom={18}
-                    />
-                    <Text className="text-gray-300 text-center text-xl font-bold">
-                      No completed games yet
-                    </Text>
-                  </View>
-                )}
+                        <View style={styles.statusContainer}>
+                          <View style={styles.statusBadge}>
+                            <Text style={styles.statusText}>In Progress</Text>
+                          </View>
+                          <TouchableOpacity
+                            style={styles.continueButton}
+                            activeOpacity={0.8}
+                            onPress={() => router.push("/newgame")}
+                          >
+                            <Text style={styles.continueText}>Continue</Text>
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                    );
+                  })}
+                </View>
+              ) : (
+                <View style={styles.emptyState}>
+                  <Feather name="clock" size={62} color="#9CA3AF" />
+                  <Text style={styles.emptyText}>No active games</Text>
+                  <TouchableOpacity
+                    style={styles.startButton}
+                    activeOpacity={0.8}
+                    onPress={() => router.push("/newgame")}
+                  >
+                    <Text style={styles.startText}>Start a Game</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+            </View>
+
+            {/* Recent Results Card */}
+            <View style={styles.dashboardCard}>
+              <View style={styles.dashboardCardHeader}>
+                <Feather name="trending-up" size={24} color="#2B6CB0" />
+                <Text style={styles.cardTitle}>Recent Results</Text>
               </View>
-            </View>*/}
+              {completedGames.length > 0 ? (
+                <View style={styles.resultList}>
+                  {completedGames.map((game) => {
+                    const winner = game.players?.find(
+                      (p) => p.player_id === game.winner_id
+                    );
+                    return (
+                      <View key={game.id} style={styles.resultCard}>
+                        <View>
+                          <Text style={styles.gameName}>
+                            {game.name || "Untitled Game"}
+                          </Text>
+                          {game.created_date && (
+                            <Text style={styles.gameMeta}>
+                              {format(
+                                new Date(game.created_date),
+                                "MMM d, yyyy"
+                              )}
+                            </Text>
+                          )}
+                        </View>
+                        <View style={{ alignItems: "flex-end" }}>
+                          <View style={styles.completedBadge}>
+                            <Text style={styles.completedText}>Completed</Text>
+                          </View>
+                          {winner && (
+                            <Text style={styles.winnerText}>
+                              Winner: {winner.name}
+                            </Text>
+                          )}
+                        </View>
+                      </View>
+                    );
+                  })}
+                </View>
+              ) : (
+                <View style={styles.emptyState}>
+                  <EvilIcons name="trophy" size={82} color="#9CA3AF" />
+                  <Text style={styles.emptyText}>No completed games yet</Text>
+                </View>
+              )}
+            </View>
+          </View>
         </View>
       </LinearGradient>
     </ScrollView>
@@ -616,7 +563,7 @@ const styles = StyleSheet.create({
   grid: {
     flexDirection: "column",
     gap: 28,
-    marginBottom: 48,
+    marginBottom: 36,
   },
   card: {
     borderRadius: 12,
@@ -681,5 +628,150 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: "bold",
     color: "#9333ea",
+  },
+  dashboardContainer: {
+    flexDirection: "column",
+    gap: 32,
+    marginBottom: 42,
+  },
+  dashboardCard: {
+    backgroundColor: "#F8FAFC", // slate-50
+    borderRadius: 16,
+    borderWidth: 2,
+    borderColor: "#E5E7EB", // gray-200
+    padding: 24,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 4,
+  },
+  dashboardCardHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    marginBottom: 12,
+  },
+  cardTitle: {
+    fontSize: 24,
+    fontWeight: "bold",
+  },
+  gameList: {
+    flexDirection: "column",
+    gap: 12,
+    marginTop: 16,
+  },
+  activeGameCard: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "#FFF7ED", // orange-50
+    borderColor: "#FED7AA", // orange-200
+    borderWidth: 1,
+    borderRadius: 12,
+    padding: 16,
+  },
+  gameName: {
+    fontWeight: "600",
+    fontSize: 16,
+  },
+  gameMeta: {
+    fontSize: 14,
+    color: "#4B5563", // gray-600
+  },
+  leaderText: {
+    fontSize: 12,
+    color: "#6B7280", // gray-500
+    marginTop: 4,
+  },
+  statusContainer: {
+    alignItems: "flex-end",
+  },
+  statusBadge: {
+    backgroundColor: "#FFEDD5", // orange-100
+    borderColor: "#FDBA74", // orange-300
+    borderWidth: 1,
+    borderRadius: 6,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+  statusText: {
+    fontSize: 12,
+    color: "#C2410C", // orange-800
+  },
+  continueButton: {
+    marginTop: 12,
+    backgroundColor: "#FED7AA",
+    borderColor: "#FDBA74",
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    flexDirection: "row",
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  continueText: {
+    fontSize: 12,
+    fontWeight: "bold",
+    color: "#C2410C",
+  },
+  emptyState: {
+    alignItems: "center",
+    paddingVertical: 32,
+  },
+  emptyText: {
+    fontSize: 18,
+    color: "#9CA3AF",
+    marginTop: 12,
+    fontWeight: "bold",
+  },
+  startButton: {
+    marginTop: 16,
+    backgroundColor: "#F8FAFC",
+    borderColor: "#D1D5DB",
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+  },
+  startText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#000",
+  },
+  resultList: {
+    flexDirection: "column",
+    gap: 16,
+    paddingBottom: 24,
+  },
+  resultCard: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "#EFF6FF", // blue-50
+    borderColor: "#BFDBFE", // blue-200
+    borderWidth: 1,
+    borderRadius: 12,
+    padding: 12,
+  },
+  completedBadge: {
+    backgroundColor: "#DBEAFE",
+    borderColor: "#93C5FD",
+    borderWidth: 1,
+    borderRadius: 6,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+  completedText: {
+    fontSize: 12,
+    color: "#1D4ED8",
+  },
+  winnerText: {
+    fontSize: 14,
+    color: "#4B5563",
+    marginTop: 4,
   },
 });
