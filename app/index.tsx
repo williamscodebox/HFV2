@@ -1,4 +1,4 @@
-import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
+import { EvilIcons, Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
@@ -215,160 +215,74 @@ export default function HomeScreen() {
           </View>
 
           {/* Stats Grid */}
-          {/* <View className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-12">
-              <LinearGradient
-                colors={["#f0fdf4", "#dcfce7"]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={{
-                  borderRadius: 12,
-                  padding: 32,
-                  paddingBottom: 30,
-                  shadowColor: "#000",
-                  shadowOpacity: 0.1,
-                  shadowRadius: 6,
-                  elevation: 3,
-                }}
-                className="border border-green-200"
-              >
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: 30,
-                      fontWeight: "bold",
-                      color: "#065f46",
-                    }}
-                  >
-                    Total Games
-                  </Text>
-                  <EvilIcons
-                    name="trophy"
-                    size={50}
-                    fontWeight="bold"
-                    color="green"
-                    marginBottom={8}
-                  />
-                </View>
+          <View style={styles.grid}>
+            <LinearGradient
+              colors={["#f0fdf4", "#dcfce7"]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={[styles.card, styles.greenBorder]}
+            >
+              <View style={styles.cardHeader}>
+                <Text style={styles.greenTitle}>Total Games</Text>
+                <EvilIcons
+                  name="trophy"
+                  size={50}
+                  fontWeight="bold"
+                  color="green"
+                  marginBottom={8}
+                />
+              </View>
 
-                <View style={{ marginTop: 16, marginBottom: 6, gap: 5 }}>
-                  <Text
-                    style={{
-                      fontSize: 28,
-                      fontWeight: "bold",
-                      color: "#064e3b",
-                    }}
-                  >
-                    {games.length}
-                  </Text>
-                  <Text style={{ color: "#047857", fontSize: 14 }}>
-                    {completedGames.length} completed, {activeGames.length}{" "}
-                    active
-                  </Text>
-                </View>
-              </LinearGradient>
+              <View style={styles.cardBody}>
+                <Text style={styles.greenCount}>{games.length}</Text>
+                <Text style={styles.greenSubtext}>
+                  {completedGames.length} completed, {activeGames.length} active
+                </Text>
+              </View>
+            </LinearGradient>
 
-              <LinearGradient
-                colors={["#eff6ff", "#dbeafe"]} // blue-50 to blue-100
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={{
-                  borderRadius: 12,
-                  padding: 36,
-                  shadowColor: "#000",
-                  shadowOpacity: 0.1,
-                  shadowRadius: 6,
-                  elevation: 3,
-                }}
-                className="border border-blue-200"
-              >
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: 30,
-                      fontWeight: "bold",
-                      color: "#2563eb",
-                    }}
-                  >
-                    Players
-                  </Text>
-                  <Feather
-                    name="users"
-                    size={32}
-                    fontWeight="bold"
-                    color="#3B82F6"
-                    marginRight={6}
-                  />
-                </View>
+            <LinearGradient
+              colors={["#eff6ff", "#dbeafe"]} // blue-50 to blue-100
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={[styles.card, styles.blueBorder]}
+            >
+              <View style={styles.cardHeader}>
+                <Text style={styles.blueTitle}>Players</Text>
+                <Feather
+                  name="users"
+                  size={32}
+                  fontWeight="bold"
+                  color="#3B82F6"
+                  marginRight={6}
+                />
+              </View>
 
-                <View style={{ marginTop: 16, marginBottom: 10, gap: 5 }}>
-                  <Text
-                    style={{
-                      fontSize: 28,
-                      fontWeight: "bold",
-                      color: "#2563eb",
-                    }}
-                  >
-                    {players.length}
-                  </Text>
-                  <Text style={{ color: "#3B82F6", fontSize: 14 }}>
-                    Registered players
-                  </Text>
-                </View>
-              </LinearGradient>
+              <View style={styles.cardBody}>
+                <Text style={styles.blueCount}>{players.length}</Text>
+                <Text style={styles.blueSubtext}>Registered players</Text>
+              </View>
+            </LinearGradient>
 
-              <LinearGradient
-                colors={["#faf5ff", "#f3e8ff"]} // purple-50 to purple-100
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={{
-                  borderRadius: 12,
-                  padding: 36,
-                  shadowColor: "#000",
-                  shadowOpacity: 0.1,
-                  shadowRadius: 6,
-                  elevation: 3,
-                }}
-                className="border border-purple-200"
-              >
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: 30,
-                      fontWeight: "bold",
-                      color: "#9333ea",
-                    }}
-                  >
-                    Champion
-                  </Text>
-                  <MaterialCommunityIcons
-                    name="crown-outline"
-                    size={48}
-                    // fontWeight="bold"
-                    color="#9333ea"
-                    marginBottom={6}
-                  />
-                </View> */}
+            <LinearGradient
+              colors={["#faf5ff", "#f3e8ff"]} // purple-50 to purple-100
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={[styles.card, styles.purpleBorder]}
+            >
+              <View style={styles.cardHeader}>
+                <Text style={styles.purpleTitle}>Champion</Text>
+                <MaterialCommunityIcons
+                  name="crown-outline"
+                  size={48}
+                  // fontWeight="bold"
+                  color="#9333ea"
+                  marginBottom={6}
+                />
+              </View>
 
-          {/* Content */}
-          {/* {topPlayer ? (
+              {/* Content */}
+              {/* {topPlayer ? (
                   <View style={{ marginTop: 16, marginBottom: 10, gap: 5 }}>
                     <Text
                       style={{
@@ -389,9 +303,9 @@ export default function HomeScreen() {
                       No games yet
                     </Text>
                   </View>
-                )}
-              </LinearGradient>
-            </View> */}
+                )}*/}
+            </LinearGradient>
+          </View>
 
           {/*  {/* Recent Games 
 
@@ -584,6 +498,7 @@ const styles = StyleSheet.create({
   heroContainer: {
     alignItems: "center",
     marginTop: 16,
+    marginBottom: 48,
   },
   heroSection: {
     alignItems: "center",
@@ -697,5 +612,72 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 18,
     fontWeight: "600",
+  },
+  grid: {
+    flexDirection: "column",
+    gap: 28,
+    marginBottom: 48,
+  },
+  card: {
+    borderRadius: 12,
+    padding: 32,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 3,
+  },
+  cardHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  cardBody: {
+    marginTop: 16,
+    marginBottom: 10,
+  },
+  greenBorder: {
+    borderWidth: 1,
+    borderColor: "#bbf7d0",
+  },
+  blueBorder: {
+    borderWidth: 1,
+    borderColor: "#bfdbfe",
+  },
+  purpleBorder: {
+    borderWidth: 1,
+    borderColor: "#e9d5ff",
+  },
+  greenTitle: {
+    fontSize: 30,
+    fontWeight: "bold",
+    color: "#065f46",
+  },
+  greenCount: {
+    fontSize: 28,
+    fontWeight: "bold",
+    color: "#064e3b",
+  },
+  greenSubtext: {
+    fontSize: 14,
+    color: "#047857",
+  },
+  blueTitle: {
+    fontSize: 30,
+    fontWeight: "bold",
+    color: "#2563eb",
+  },
+  blueCount: {
+    fontSize: 28,
+    fontWeight: "bold",
+    color: "#2563eb",
+  },
+  blueSubtext: {
+    fontSize: 14,
+    color: "#3B82F6",
+  },
+  purpleTitle: {
+    fontSize: 30,
+    fontWeight: "bold",
+    color: "#9333ea",
   },
 });
