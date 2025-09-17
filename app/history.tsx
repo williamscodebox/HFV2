@@ -1,7 +1,3 @@
-import Card from "@/components/Card";
-import CardContent from "@/components/CardContent";
-import CardHeader from "@/components/CardHeader";
-import CardTitle from "@/components/CardTitle";
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { format } from "date-fns";
 import { LinearGradient } from "expo-linear-gradient";
@@ -12,6 +8,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
 //   Award,
@@ -25,15 +22,27 @@ import {
 
 type Game = {
   id: string;
+  name: string;
   status: "active" | "completed" | "pending";
+  players: Player[];
+  current_round: number;
+  created_date: string;
+  winner_id?: string;
   // other fields...
+};
+type Player = {
+  player_id: string;
+  name: string;
+  total_score?: number;
+  games_played?: number;
+  games_won?: number;
 };
 
 export default function history() {
   const [games, setGames] = useState<Game[]>([]);
-  const [players, setPlayers] = useState([]);
+  const [players, setPlayers] = useState<Player[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedGame, setSelectedGame] = useState(null);
+  const [selectedGame, setSelectedGame] = useState<Game | null>(null);
   const [completedGames, activeGames] = Array.isArray(games)
     ? [
         games.filter((g) => g.status === "completed"),
@@ -41,12 +50,65 @@ export default function history() {
       ]
     : [[], []];
 
-  useEffect(() => {
-    // loadData();
-    setLoading(false);
-  }, []);
+  const loadData = async () => {
+    setTimeout(() => {
+      const mockGames: Game[] = [
+        {
+          id: "1",
+          name: "Game 1",
+          status: "active",
+          current_round: 2,
+          created_date: "2025-09-01T10:00:00Z",
+          players: [
+            { player_id: "1", name: "Alice", total_score: 120 },
+            { player_id: "2", name: "Bob", total_score: 95 },
+          ],
+        },
+        {
+          id: "2",
+          name: "Game 2",
+          status: "completed",
+          current_round: 4,
+          created_date: "2025-08-28T14:30:00Z",
+          winner_id: "3",
+          players: [
+            { player_id: "3", name: "Charlie", total_score: 200 },
+            { player_id: "4", name: "Dana", total_score: 180 },
+          ],
+        },
+        {
+          id: "3",
+          name: "Game 3",
+          status: "completed",
+          current_round: 3,
+          created_date: "2025-08-20T09:15:00Z",
+          winner_id: "5",
+          players: [
+            { player_id: "5", name: "Eve", total_score: 150 },
+            { player_id: "6", name: "Frank", total_score: 140 },
+          ],
+        },
+      ];
 
-  const loadData = async () => {};
+      const mockPlayers: Player[] = [
+        { player_id: "1", name: "Alice", games_won: 10 },
+        { player_id: "2", name: "Bob", games_won: 8 },
+        { player_id: "3", name: "Charlie", games_won: 12 },
+        { player_id: "4", name: "Dana", games_won: 7 },
+        { player_id: "5", name: "Eve", games_won: 15 },
+        { player_id: "6", name: "Frank", games_won: 5 },
+      ];
+
+      setGames(mockGames);
+      setPlayers(mockPlayers);
+      setLoading(false);
+    }, 1000);
+  };
+
+  useEffect(() => {
+    loadData();
+    // setLoading(false);
+  }, []);
 
   if (loading) {
     return (
@@ -97,7 +159,7 @@ export default function history() {
                 <Text style={styles.cardTitleGreen}>Total Games</Text>
                 <MaterialCommunityIcons
                   name="trophy-outline"
-                  size={24}
+                  size={44}
                   color="#047857"
                 />
               </View>
@@ -148,86 +210,81 @@ export default function history() {
           </View>
 
           {/* Work from below here .....  ************************************************  ---> Work from below here */}
-          <View className="grid lg:grid-cols-3 gap-8">
+          <View style={styles.grid2}>
+            {/* Recent Games */}
             {/* Games List */}
-            <View className="lg:col-span-2">
-              <Card className="shadow-lg">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    {/* <Calendar className="w-5 h-5 text-blue-600" /> */}
-                    Recent Games
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
+            <View style={styles.gamesList}>
+              <View style={styles.card2}>
+                <View style={styles.cardHeader2}>
+                  <Feather name="calendar" size={24} color="#3B82F6" />
+                  <Text style={styles.cardTitle}>Recent Games</Text>
+                </View>
+                <View style={styles.cardContent}>
                   {games.length === 0 ? (
-                    <View className="text-center py-12">
-                      {/* <Trophy className="w-16 h-16 text-gray-400 mx-auto mb-4" /> */}
-                      <Text className="text-xl font-semibold text-gray-600 mb-2">
-                        No Games Yet
-                      </Text>
-                      <Text className="text-gray-500">
+                    <View style={styles.emptyState}>
+                      <Text style={styles.emptyTitle}>No Games Yet</Text>
+                      <Text style={styles.emptySubtitle}>
                         Start your first Hand & Foot game to see history here!
                       </Text>
                     </View>
                   ) : (
-                    <View className="space-y-4">
-                      {games.map((game) => (
-                        <View
-                          key={game.id}
-                          onClick={() => setSelectedGame(game)}
-                          className="p-4 border border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 cursor-pointer transition-all"
-                        >
-                          <View className="flex justify-between items-start mb-2">
-                            <Text className="font-semibold text-lg">
-                              {game.name}
-                            </Text>
-                            {/* <Badge
-                              className={
-                                game.status === "completed"
-                                  ? "bg-green-100 text-green-800 border-green-300"
-                                  : "bg-orange-100 text-orange-800 border-orange-300"
-                              }
-                            >
-                              {game.status === "completed"
-                                ? "Completed"
-                                : "Active"}
-                            </Badge> */}
-                          </View>
-
-                          <View className="flex justify-between items-center text-sm text-gray-600">
-                            <View className="flex items-center gap-4">
-                              <Text className="flex items-center gap-1">
-                                {/* <Users className="w-4 h-4" /> */}
-                                {game.players.length} players
-                              </Text>
-                              <Text>Round {game.current_round}</Text>
-                              <Text>
-                                {format(
-                                  new Date(game.created_date),
-                                  "MMM d, yyyy"
-                                )}
-                              </Text>
-                            </View>
-
-                            {game.status === "completed" && game.winner_id && (
-                              <View className="flex items-center gap-1 text-yellow-600">
-                                {/* <Crown className="w-4 h-4" /> */}
-                                <Text className="font-medium">
-                                  {
-                                    game.players.find(
-                                      (p) => p.player_id === game.winner_id
-                                    )?.name
-                                  }
-                                </Text>
-                              </View>
-                            )}
-                          </View>
+                    games.map((game) => (
+                      <TouchableOpacity
+                        key={game.id}
+                        style={styles.gameCard}
+                        activeOpacity={0.8}
+                        onPress={() => {
+                          setSelectedGame(game);
+                          console.log("gameSelected", game);
+                        }}
+                      >
+                        <View style={styles.gameHeader}>
+                          <Text style={styles.gameName}>{game.name}</Text>
+                          <Text
+                            style={
+                              game.status === "completed"
+                                ? styles.badgeCompleted
+                                : styles.badgeActive
+                            }
+                          >
+                            {game.status === "completed"
+                              ? "Completed"
+                              : "Active"}
+                          </Text>
                         </View>
-                      ))}
-                    </View>
+                        <View style={styles.gameMeta}>
+                          <Feather name="users" size={18} color="#676d77ff" />
+                          <Text>{game.players.length} players</Text>
+                          <Text>Round {game.current_round}</Text>
+                          <Text>
+                            {format(new Date(game.created_date), "MMM d, yyyy")}
+                          </Text>
+                        </View>
+                        {game.status === "completed" && game.winner_id && (
+                          <View style={styles.winnerRow}>
+                            <Text style={styles.winnerIcon}>
+                              <MaterialCommunityIcons
+                                name="crown-outline"
+                                size={24}
+                                color="#CA8A04"
+                                style={{ marginRight: 14, marginTop: -18 }}
+                              />
+                            </Text>
+                            <Text style={styles.winnerText}>
+                              Winner:{" "}
+                              {
+                                game.players.find(
+                                  (p) => p.player_id === game.winner_id
+                                )?.name
+                              }
+                            </Text>
+                          </View>
+                        )}
+                      </TouchableOpacity>
+                    ))
                   )}
-                </CardContent>
-              </Card>
+                </View>
+              </View>
             </View>
 
             {/* Player Leaderboard */}
@@ -388,7 +445,7 @@ const styles = StyleSheet.create({
   grid: {
     flexDirection: "column",
     gap: 24,
-    marginBottom: 42,
+    marginBottom: 32,
   },
   card: {
     borderRadius: 12,
@@ -479,42 +536,51 @@ const styles = StyleSheet.create({
   card2: {
     backgroundColor: "#fff",
     borderRadius: 12,
-    padding: 16,
+    padding: 26,
     shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowRadius: 6,
     elevation: 4,
+    marginBottom: 32,
   },
   cardHeader2: {
-    marginBottom: 12,
+    flexDirection: "row",
+    gap: 12,
+    marginBottom: 24,
+    marginTop: 6,
   },
   cardTitle: {
-    fontSize: 20,
+    fontSize: 28,
     fontWeight: "bold",
     color: "#1E3A8A",
+    marginTop: -5,
   },
   cardContent: {
     gap: 12,
   },
   emptyState: {
     alignItems: "center",
-    paddingVertical: 32,
+    paddingVertical: 20,
   },
   emptyTitle: {
     fontSize: 18,
     fontWeight: "600",
     color: "#4B5563",
-    marginBottom: 8,
+    marginTop: 32,
+    marginBottom: 38,
   },
   emptySubtitle: {
-    fontSize: 14,
+    textAlign: "center",
+    fontSize: 18,
     color: "#6B7280",
+    marginTop: 24,
   },
   gameCard: {
     borderWidth: 1,
     borderColor: "#E5E7EB",
     borderRadius: 10,
-    padding: 12,
+    padding: 18,
+    gap: 6,
     backgroundColor: "#F9FAFB",
   },
   gameHeader: {
@@ -541,16 +607,27 @@ const styles = StyleSheet.create({
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 6,
+    // marginRight: 12,
   },
   gameMeta: {
+    marginTop: 8,
     flexDirection: "row",
     justifyContent: "space-between",
     fontSize: 12,
     color: "#6B7280",
   },
+  winnerRow: {
+    marginTop: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  winnerIcon: {
+    marginRight: 2,
+    marginLeft: -4,
+  },
   winnerText: {
-    marginTop: 6,
-    fontSize: 12,
+    fontSize: 16,
     color: "#CA8A04",
   },
 });
