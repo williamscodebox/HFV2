@@ -638,4 +638,75 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#CA8A04",
   },
+  leaderboardContainer: {
+    padding: 16,
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 4,
+  },
+  emptyState2: {
+    alignItems: "center",
+    paddingVertical: 32,
+  },
+  emptyText: {
+    fontSize: 16,
+    color: "#6B7280",
+  },
+  playerRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  playerInfo: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+  },
+  rankBadge: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  rankText: {
+    fontWeight: "bold",
+    fontSize: 14,
+  },
+  badgeGold: {
+    backgroundColor: "#FEF3C7",
+  },
+  badgeSilver: {
+    backgroundColor: "#F3F4F6",
+  },
+  badgeBronze: {
+    backgroundColor: "#FFE4B5",
+  },
+  badgeDefault: {
+    backgroundColor: "#EFF6FF",
+  },
+  playerName: {
+    fontWeight: "600",
+    fontSize: 16,
+  },
+  playerStats: {
+    flexDirection: "row",
+    gap: 8,
+    marginTop: 4,
+  },
+  statText: {
+    fontSize: 12,
+    color: "#6B7280",
+  },
+  scoreBlock: {
+    alignItems: "flex-end",
+  },
+  scoreText: {
+    fontWeight: "bold",
+    fontSize: 16,
+  },
 });
