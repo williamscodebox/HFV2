@@ -2,8 +2,8 @@ import Card from "@/components/Card";
 import CardContent from "@/components/CardContent";
 import CardHeader from "@/components/CardHeader";
 import CardTitle from "@/components/CardTitle";
-import { format } from "date-fns";
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
+import { format } from "date-fns";
 import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useState } from "react";
 import {
@@ -14,7 +14,6 @@ import {
   Text,
   View,
 } from "react-native";
-import Badge from "@/components/Badge";
 //   Award,
 //   Calendar,
 //   Clock,
@@ -232,18 +231,18 @@ export default function history() {
             </View>
 
             {/* Player Leaderboard */}
-            <View>
+            {/* <View>
               <Card className="shadow-lg">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    {/* <TrendingUp className="w-5 h-5 text-purple-600" /> */}
+                    {/* <TrendingUp className="w-5 h-5 text-purple-600" /> 
                     Player Leaderboard
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   {players.length === 0 ? (
                     <View className="text-center py-8">
-                      {/* <Award className="w-12 h-12 text-gray-400 mx-auto mb-3" /> */}
+                      {/* <Award className="w-12 h-12 text-gray-400 mx-auto mb-3" /> 
                       <Text className="text-gray-500">No players yet</Text>
                     </View>
                   ) : (
@@ -288,7 +287,7 @@ export default function history() {
                 </CardContent>
               </Card>
 
-              {/* Game Details Modal-like section */}
+              {/* Game Details Modal-like section 
               {selectedGame && (
                 <Card className="shadow-lg mt-6">
                   <CardHeader>
@@ -300,7 +299,7 @@ export default function history() {
                         onClick={() => setSelectedGame(null)}
                       >
                         ✕
-                      </Button> */}
+                      </Button> 
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
@@ -350,7 +349,7 @@ export default function history() {
                   </CardContent>
                 </Card>
               )}
-            </View>
+            </View> */}
           </View>
         </View>
       </LinearGradient>
@@ -469,5 +468,89 @@ const styles = StyleSheet.create({
   loadingText: {
     color: "#4B5563", // Tailwind's gray-600
     fontSize: 16,
+  },
+  grid2: {
+    flexDirection: "column",
+    gap: 24,
+  },
+  gamesList: {
+    flex: 2,
+  },
+  card2: {
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    padding: 16,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 4,
+  },
+  cardHeader2: {
+    marginBottom: 12,
+  },
+  cardTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#1E3A8A",
+  },
+  cardContent: {
+    gap: 12,
+  },
+  emptyState: {
+    alignItems: "center",
+    paddingVertical: 32,
+  },
+  emptyTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#4B5563",
+    marginBottom: 8,
+  },
+  emptySubtitle: {
+    fontSize: 14,
+    color: "#6B7280",
+  },
+  gameCard: {
+    borderWidth: 1,
+    borderColor: "#E5E7EB",
+    borderRadius: 10,
+    padding: 12,
+    backgroundColor: "#F9FAFB",
+  },
+  gameHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 8,
+  },
+  gameName: {
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  badgeCompleted: {
+    fontSize: 12,
+    color: "#065F46",
+    backgroundColor: "#D1FAE5",
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 6,
+  },
+  badgeActive: {
+    fontSize: 12,
+    color: "#C2410C",
+    backgroundColor: "#FFEDD5",
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 6,
+  },
+  gameMeta: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    fontSize: 12,
+    color: "#6B7280",
+  },
+  winnerText: {
+    marginTop: 6,
+    fontSize: 12,
+    color: "#CA8A04",
   },
 });
