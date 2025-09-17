@@ -11,9 +11,8 @@ Have Newgame page finished 09-19-25 --> app needed reworking (building with type
 
 index for finding expo/vector-icons -->  https://icons.expo.fyi/Index
 
-Work on home page 09-16-25 
+Work to finish home page 09-17-25 
 
-Work starting with Stats Grid
 
 
 
