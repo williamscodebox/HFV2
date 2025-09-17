@@ -282,34 +282,34 @@ export default function HomeScreen() {
               </View>
 
               {/* Content */}
-              {/* {topPlayer ? (
-                  <View style={{ marginTop: 16, marginBottom: 10, gap: 5 }}>
-                    <Text
-                      style={{
-                        fontSize: 28,
-                        fontWeight: "bold",
-                      }}
-                      className="text-purple-500"
-                    >
-                      {topPlayer.name}
-                    </Text>
-                    <Text style={{ color: "#9F7AEA", fontSize: 14 }}>
-                      {topPlayer.games_won} wins
-                    </Text>
-                  </View>
-                ) : (
-                  <View style={{ marginTop: 16, marginBottom: 10, gap: 5 }}>
-                    <Text style={{ color: "#9F7AEA", fontSize: 16 }}>
-                      No games yet
-                    </Text>
-                  </View>
-                )}*/}
+              {topPlayer ? (
+                <View style={{ marginTop: 16, marginBottom: 10 }}>
+                  <Text
+                    style={{
+                      fontSize: 28,
+                      fontWeight: "bold",
+                      color: "#9333ea", // purple-500
+                    }}
+                  >
+                    {topPlayer.name}
+                  </Text>
+                  <Text style={{ color: "#9F7AEA", fontSize: 14 }}>
+                    {topPlayer.games_won} wins
+                  </Text>
+                </View>
+              ) : (
+                <View style={{ marginTop: 16, marginBottom: 10 }}>
+                  <Text style={{ color: "#9F7AEA", fontSize: 16 }}>
+                    No games yet
+                  </Text>
+                </View>
+              )}
             </LinearGradient>
           </View>
 
-          {/*  {/* Recent Games 
+          {/* Recent Games */}
 
-            <View className="flex flex-col gap-8 mb-8">
+          {/*    <View className="flex flex-col gap-8 mb-8">
               <View className="shadow-xl border-2 border-gray-200 rounded-xl bg-slate-50 p-10 pb-2">
                 <View>
                   <CardTitle className="flex flex-row items-center gap-4 text-lg font-bold">
@@ -665,11 +665,13 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: "bold",
     color: "#2563eb",
+    marginTop: 10,
   },
   blueCount: {
     fontSize: 28,
     fontWeight: "bold",
     color: "#2563eb",
+    marginTop: 6,
   },
   blueSubtext: {
     fontSize: 14,
