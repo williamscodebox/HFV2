@@ -1,3 +1,8 @@
+import Card from "@/components/Card";
+import CardContent from "@/components/CardContent";
+import CardHeader from "@/components/CardHeader";
+import CardTitle from "@/components/CardTitle";
+import { format } from "date-fns";
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useState } from "react";
@@ -9,6 +14,7 @@ import {
   Text,
   View,
 } from "react-native";
+import Badge from "@/components/Badge";
 //   Award,
 //   Calendar,
 //   Clock,
@@ -142,7 +148,210 @@ export default function history() {
             </LinearGradient>
           </View>
 
-          {/* ************************************************ */}
+          {/* Work from below here .....  ************************************************  ---> Work from below here */}
+          <View className="grid lg:grid-cols-3 gap-8">
+            {/* Games List */}
+            <View className="lg:col-span-2">
+              <Card className="shadow-lg">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    {/* <Calendar className="w-5 h-5 text-blue-600" /> */}
+                    Recent Games
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {games.length === 0 ? (
+                    <View className="text-center py-12">
+                      {/* <Trophy className="w-16 h-16 text-gray-400 mx-auto mb-4" /> */}
+                      <Text className="text-xl font-semibold text-gray-600 mb-2">
+                        No Games Yet
+                      </Text>
+                      <Text className="text-gray-500">
+                        Start your first Hand & Foot game to see history here!
+                      </Text>
+                    </View>
+                  ) : (
+                    <View className="space-y-4">
+                      {games.map((game) => (
+                        <View
+                          key={game.id}
+                          onClick={() => setSelectedGame(game)}
+                          className="p-4 border border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 cursor-pointer transition-all"
+                        >
+                          <View className="flex justify-between items-start mb-2">
+                            <Text className="font-semibold text-lg">
+                              {game.name}
+                            </Text>
+                            {/* <Badge
+                              className={
+                                game.status === "completed"
+                                  ? "bg-green-100 text-green-800 border-green-300"
+                                  : "bg-orange-100 text-orange-800 border-orange-300"
+                              }
+                            >
+                              {game.status === "completed"
+                                ? "Completed"
+                                : "Active"}
+                            </Badge> */}
+                          </View>
+
+                          <View className="flex justify-between items-center text-sm text-gray-600">
+                            <View className="flex items-center gap-4">
+                              <Text className="flex items-center gap-1">
+                                {/* <Users className="w-4 h-4" /> */}
+                                {game.players.length} players
+                              </Text>
+                              <Text>Round {game.current_round}</Text>
+                              <Text>
+                                {format(
+                                  new Date(game.created_date),
+                                  "MMM d, yyyy"
+                                )}
+                              </Text>
+                            </View>
+
+                            {game.status === "completed" && game.winner_id && (
+                              <View className="flex items-center gap-1 text-yellow-600">
+                                {/* <Crown className="w-4 h-4" /> */}
+                                <Text className="font-medium">
+                                  {
+                                    game.players.find(
+                                      (p) => p.player_id === game.winner_id
+                                    )?.name
+                                  }
+                                </Text>
+                              </View>
+                            )}
+                          </View>
+                        </View>
+                      ))}
+                    </View>
+                  )}
+                </CardContent>
+              </Card>
+            </View>
+
+            {/* Player Leaderboard */}
+            <View>
+              <Card className="shadow-lg">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    {/* <TrendingUp className="w-5 h-5 text-purple-600" /> */}
+                    Player Leaderboard
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {players.length === 0 ? (
+                    <View className="text-center py-8">
+                      {/* <Award className="w-12 h-12 text-gray-400 mx-auto mb-3" /> */}
+                      <Text className="text-gray-500">No players yet</Text>
+                    </View>
+                  ) : (
+                    <View className="space-y-4">
+                      {players.slice(0, 10).map((player, index) => (
+                        <View
+                          key={player.id}
+                          className="flex items-center justify-between"
+                        >
+                          <View className="flex items-center gap-3">
+                            <View
+                              className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
+                                index === 0
+                                  ? "bg-yellow-100 text-yellow-800"
+                                  : index === 1
+                                  ? "bg-gray-100 text-gray-700"
+                                  : index === 2
+                                  ? "bg-orange-100 text-orange-800"
+                                  : "bg-blue-50 text-blue-700"
+                              }`}
+                            >
+                              {index + 1}
+                            </View>
+                            <View>
+                              <Text className="font-semibold">{player.name}</Text>
+                              <View className="flex gap-2 text-xs text-gray-500">
+                                <Text>{player.games_played || 0} games</Text>
+                                <Text>{player.games_won || 0} wins</Text>
+                              </View>
+                            </View>
+                          </View>
+                          <View className="text-right">
+                            <Text className="font-bold">
+                              {player.total_score || 0}
+                            </Text>
+                            <Text className="text-xs text-gray-500">points</Text>
+                          </View>
+                        </View>
+                      ))}
+                    </View>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Game Details Modal-like section */}
+              {selectedGame && (
+                <Card className="shadow-lg mt-6">
+                  <CardHeader>
+                    <CardTitle className="flex items-center justify-between">
+                      <Text>Game Details</Text>
+                      {/* <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setSelectedGame(null)}
+                      >
+                        ✕
+                      </Button> */}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <View className="space-y-4">
+                      <View>
+                        <Text className="font-semibold mb-2">
+                          {selectedGame.name}
+                        </Text>
+                        <View className="text-sm text-gray-600">
+                          <Text>
+                            Created:{" "}
+                            {format(new Date(selectedGame.created_date), "PPP")}
+                          </Text>
+                          <Text>Status: {selectedGame.status}</Text>
+                          <Text>Current Round: {selectedGame.current_round}</Text>
+                        </View>
+                      </View>
+
+                      <View>
+                        <Text className="font-semibold mb-2">Final Scores</Text>
+                        <View className="space-y-2">
+                          {selectedGame.players
+                            .sort(
+                              (a, b) =>
+                                (b.total_score || 0) - (a.total_score || 0)
+                            )
+                            .map((player, index) => (
+                              <View
+                                key={player.player_id}
+                                className="flex justify-between items-center"
+                              >
+                                <View className="flex items-center gap-2">
+                                  {index === 0 &&
+                                    selectedGame.status === "completed" && (
+                                      // <Crown className="w-4 h-4 text-yellow-500" />
+                                    )}
+                                  <Text>{player.name}</Text>
+                                </View>
+                                <Text className="font-semibold">
+                                  {player.total_score || 0}
+                                </Text>
+                              </View>
+                            ))}
+                        </View>
+                      </View>
+                    </View>
+                  </CardContent>
+                </Card>
+              )}
+            </View>
+          </View>
         </View>
       </LinearGradient>
     </ScrollView>
