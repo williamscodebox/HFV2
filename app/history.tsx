@@ -160,7 +160,7 @@ export default function history() {
                 <Text style={styles.cardTitleGreen}>Total Games</Text>
                 <MaterialCommunityIcons
                   name="trophy-outline"
-                  size={44}
+                  size={26}
                   color="#047857"
                 />
               </View>
@@ -388,7 +388,9 @@ export default function history() {
                                 selectedGame.status === "completed" && (
                                   <Text style={styles.crown3}>👑</Text>
                                 )}
-                              <Text>{player.name}</Text>
+                              <Text style={{ fontSize: 16 }}>
+                                {player.name}
+                              </Text>
                             </View>
                             <Text style={styles.scoreText3}>
                               {player.total_score || 0}
@@ -709,7 +711,7 @@ const styles = StyleSheet.create({
   card3: {
     backgroundColor: "#fff",
     borderRadius: 12,
-    padding: 16,
+    padding: 26,
     marginTop: 24,
     shadowColor: "#000",
     shadowOpacity: 0.1,
@@ -717,7 +719,8 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   cardHeader3: {
-    marginBottom: 12,
+    marginTop: 4,
+    marginBottom: 22,
   },
   cardTitleRow3: {
     flexDirection: "row",
@@ -725,7 +728,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   cardTitle3: {
-    fontSize: 18,
+    fontSize: 28,
     fontWeight: "bold",
   },
   closeButton3: {
@@ -739,7 +742,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   sectionTitle3: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "bold",
     marginBottom: 8,
   },
@@ -747,7 +750,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   metaText3: {
-    fontSize: 14,
+    fontSize: 16,
     color: "#4B5563",
   },
   scoreRow3: {
@@ -762,12 +765,12 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   crown3: {
-    fontSize: 16,
+    fontSize: 18,
     color: "#CA8A04", // yellow-600
     marginRight: 4,
   },
   scoreText3: {
     fontWeight: "bold",
-    fontSize: 16,
+    fontSize: 18,
   },
 });
