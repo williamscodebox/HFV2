@@ -287,9 +287,6 @@ export default function history() {
               </View>
             </View>
 
-            {/* Work from below here .....  ************************************************  ---> Work from below here */}
-            {/* PLayer Leaderboard  and Game Details Modal-like section need to be finished */}
-
             {/* Player Leaderboard */}
             <View style={{ flex: 1, marginTop: -16, marginBottom: 32 }}>
               <View style={styles.leaderboardContainer}>
@@ -344,15 +341,16 @@ export default function history() {
                 )}
               </View>
 
-              {/* Do aboove section first and then work on this section */}
+              {/* Work from below here .....  ************************************************  ---> Work from below here */}
+            {/* Game Details Modal-like section needs to be finished */}
 
               {/* Game Details Modal-like section */}
-              {/* {selectedGame && (
+               {selectedGame && (
                 <Card className="shadow-lg mt-6">
                   <CardHeader>
                     <CardTitle className="flex items-center justify-between">
                       <Text>Game Details</Text>
-                      {/* <Button
+                       <Button
                         variant="ghost"
                         size="sm"
                         onClick={() => setSelectedGame(null)}
@@ -407,7 +405,7 @@ export default function history() {
                     </View>
                   </CardContent>
                 </Card>
-              )} */}
+              )} 
             </View>
           </View>
         </View>
