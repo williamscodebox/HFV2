@@ -342,70 +342,63 @@ export default function history() {
               </View>
 
               {/* Work from below here .....  ************************************************  ---> Work from below here */}
-            {/* Game Details Modal-like section needs to be finished */}
+              {/* Game Details Modal-like section needs to be finished */}
 
               {/* Game Details Modal-like section */}
-               {selectedGame && (
-                <Card className="shadow-lg mt-6">
-                  <CardHeader>
-                    <CardTitle className="flex items-center justify-between">
-                      <Text>Game Details</Text>
-                       <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => setSelectedGame(null)}
-                      >
-                        ✕
-                      </Button> 
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <View className="space-y-4">
-                      <View>
-                        <Text className="font-semibold mb-2">
-                          {selectedGame.name}
-                        </Text>
-                        <View className="text-sm text-gray-600">
-                          <Text>
-                            Created:{" "}
-                            {format(new Date(selectedGame.created_date), "PPP")}
-                          </Text>
-                          <Text>Status: {selectedGame.status}</Text>
-                          <Text>Current Round: {selectedGame.current_round}</Text>
-                        </View>
-                      </View>
+              {selectedGame && (
+                <View style={styles.card3}>
+                  <View style={styles.cardHeader3}>
+                    <View style={styles.cardTitleRow3}>
+                      <Text style={styles.cardTitle3}>Game Details</Text>
+                      <TouchableOpacity onPress={() => setSelectedGame(null)}>
+                        <Text style={styles.closeButton3}>✕</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
 
-                      <View>
-                        <Text className="font-semibold mb-2">Final Scores</Text>
-                        <View className="space-y-2">
-                          {selectedGame.players
-                            .sort(
-                              (a, b) =>
-                                (b.total_score || 0) - (a.total_score || 0)
-                            )
-                            .map((player, index) => (
-                              <View
-                                key={player.player_id}
-                                className="flex justify-between items-center"
-                              >
-                                <View className="flex items-center gap-2">
-                                  {index === 0 &&
-                                    selectedGame.status === "completed" && (
-                                      // <Crown className="w-4 h-4 text-yellow-500" />
-                                    )}
-                                  <Text>{player.name}</Text>
-                                </View>
-                                <Text className="font-semibold">
-                                  {player.total_score || 0}
-                                </Text>
-                              </View>
-                            ))}
-                        </View>
+                  <View style={styles.cardContent3}>
+                    <View style={styles.section3}>
+                      <Text style={styles.sectionTitle3}>
+                        {selectedGame.name}
+                      </Text>
+                      <View style={styles.metaBlock3}>
+                        <Text style={styles.metaText3}>
+                          Created:{" "}
+                          {format(new Date(selectedGame.created_date), "PPP")}
+                        </Text>
+                        <Text style={styles.metaText3}>
+                          Status: {selectedGame.status}
+                        </Text>
+                        <Text style={styles.metaText3}>
+                          Current Round: {selectedGame.current_round}
+                        </Text>
                       </View>
                     </View>
-                  </CardContent>
-                </Card>
-              )} 
+
+                    <View style={styles.section3}>
+                      <Text style={styles.sectionTitle3}>Final Scores</Text>
+                      {selectedGame.players
+                        .sort(
+                          (a, b) => (b.total_score || 0) - (a.total_score || 0)
+                        )
+                        .map((player, index) => (
+                          <View key={player.player_id} style={styles.scoreRow3}>
+                            <View style={styles.playerInfo3}>
+                              {index === 0 &&
+                                selectedGame.status === "completed" && (
+                                  <Text style={styles.crown3}>👑</Text>
+                                )}
+                              <Text>{player.name}</Text>
+                            </View>
+                            <Text style={styles.scoreText3}>
+                              {player.total_score || 0}
+                            </Text>
+                          </View>
+                        ))}
+                    </View>
+                  </View>
+                </View>
+              )}
             </View>
           </View>
         </View>
@@ -714,11 +707,11 @@ const styles = StyleSheet.create({
     color: "#1F2937", // Tailwind's gray-900
   },
   card3: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 12,
     padding: 16,
     marginTop: 24,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowRadius: 6,
     elevation: 4,
@@ -727,17 +720,17 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   cardTitleRow3: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   cardTitle3: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   closeButton3: {
     fontSize: 18,
-    color: '#6B7280',
+    color: "#6B7280",
   },
   cardContent3: {
     gap: 16,
@@ -747,7 +740,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle3: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 8,
   },
   metaBlock3: {
@@ -755,26 +748,26 @@ const styles = StyleSheet.create({
   },
   metaText3: {
     fontSize: 14,
-    color: '#4B5563',
+    color: "#4B5563",
   },
   scoreRow3: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 8,
   },
   playerInfo3: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 6,
   },
   crown3: {
     fontSize: 16,
-    color: '#CA8A04', // yellow-600
+    color: "#CA8A04", // yellow-600
     marginRight: 4,
   },
   scoreText3: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
     fontSize: 16,
   },
 });
