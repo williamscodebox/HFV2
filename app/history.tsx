@@ -713,4 +713,68 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#1F2937", // Tailwind's gray-900
   },
+  card3: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 16,
+    marginTop: 24,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 4,
+  },
+  cardHeader3: {
+    marginBottom: 12,
+  },
+  cardTitleRow3: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  cardTitle3: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  closeButton3: {
+    fontSize: 18,
+    color: '#6B7280',
+  },
+  cardContent3: {
+    gap: 16,
+  },
+  section3: {
+    marginBottom: 16,
+  },
+  sectionTitle3: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 8,
+  },
+  metaBlock3: {
+    gap: 4,
+  },
+  metaText3: {
+    fontSize: 14,
+    color: '#4B5563',
+  },
+  scoreRow3: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  playerInfo3: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  crown3: {
+    fontSize: 16,
+    color: '#CA8A04', // yellow-600
+    marginRight: 4,
+  },
+  scoreText3: {
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
 });
