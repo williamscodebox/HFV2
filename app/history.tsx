@@ -12,14 +12,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-//   Award,
-//   Calendar,
-//   Clock,
-//   Crown,
-//   Target,
-//   TrendingUp,
-//   Trophy,
-//   Users,
 
 type Game = {
   id: string;
@@ -298,6 +290,7 @@ export default function history() {
                 </CardHeader>
                 {players.length === 0 ? (
                   <View style={styles.emptyState}>
+                    <Feather name="award" size={54} color="#A9A9A9" />
                     <Text style={styles.emptyText}>No players yet</Text>
                   </View>
                 ) : (
@@ -340,9 +333,6 @@ export default function history() {
                   })
                 )}
               </View>
-
-              {/* Work from below here .....  ************************************************  ---> Work from below here */}
-              {/* Game Details Modal-like section needs to be finished */}
 
               {/* Game Details Modal-like section */}
               {selectedGame && (
@@ -641,6 +631,7 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 16,
     color: "#6B7280",
+    marginTop: 32,
   },
   playerRow: {
     flexDirection: "row",
