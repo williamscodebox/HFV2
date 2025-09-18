@@ -1,3 +1,4 @@
+import CardHeader from "@/components/CardHeader";
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { format } from "date-fns";
 import { LinearGradient } from "expo-linear-gradient";
@@ -290,65 +291,58 @@ export default function history() {
             {/* PLayer Leaderboard  and Game Details Modal-like section need to be finished */}
 
             {/* Player Leaderboard */}
-            <View>
-              {/* <Card className="shadow-lg">
+            <View style={{ flex: 1, marginTop: -16, marginBottom: 32 }}>
+              <View style={styles.leaderboardContainer}>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    {/* <TrendingUp className="w-5 h-5 text-purple-600" /> 
-                    <Text>Player Leaderboard</Text>
-                  </CardTitle>
+                  <View style={styles.cardTitleContainer}>
+                    <Feather name="trending-up" size={24} color="#000000ff" />
+                    <Text style={styles.cardTitleText}>Player Leaderboard</Text>
+                  </View>
                 </CardHeader>
-                <CardContent>
-                  {players.length === 0 ? (
-                    <View className="text-center py-8">
-                      {/* <Award className="w-12 h-12 text-gray-400 mx-auto mb-3" />  
-                      <Text className="text-gray-500">No players yet</Text>
-                    </View>
-                  ) : (
-                    <View className="space-y-4">
-                      {players.slice(0, 10).map((player, index) => (
-                        <View
-                          key={player.player_id}
-                          className="flex items-center justify-between"
-                        >
-                          <View className="flex items-center gap-3">
-                            <View
-                              className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
-                                index === 0
-                                  ? "bg-yellow-100 text-yellow-800"
-                                  : index === 1
-                                  ? "bg-gray-100 text-gray-700"
-                                  : index === 2
-                                  ? "bg-orange-100 text-orange-800"
-                                  : "bg-blue-50 text-blue-700"
-                              }`}
-                            >
-                              {index + 1}
-                            </View>
-                            <View>
-                              <Text className="font-semibold">
-                                {player.name}
-                              </Text>
-                              <View className="flex gap-2 text-xs text-gray-500">
-                                <Text>{player.games_played || 0} games</Text>
-                                <Text>{player.games_won || 0} wins</Text>
-                              </View>
-                            </View>
+                {players.length === 0 ? (
+                  <View style={styles.emptyState}>
+                    <Text style={styles.emptyText}>No players yet</Text>
+                  </View>
+                ) : (
+                  players.slice(0, 10).map((player, index) => {
+                    const badgeStyle =
+                      index === 0
+                        ? styles.badgeGold
+                        : index === 1
+                        ? styles.badgeSilver
+                        : index === 2
+                        ? styles.badgeBronze
+                        : styles.badgeDefault;
+
+                    return (
+                      <View key={player.player_id} style={styles.playerRow}>
+                        <View style={styles.playerInfo}>
+                          <View style={[styles.rankBadge, badgeStyle]}>
+                            <Text style={styles.rankText}>{index + 1}</Text>
                           </View>
-                          <View className="text-right">
-                            <Text className="font-bold">
-                              {player.total_score || 0}
-                            </Text>
-                            <Text className="text-xs text-gray-500">
-                              points
-                            </Text>
+                          <View>
+                            <Text style={styles.playerName}>{player.name}</Text>
+                            <View style={styles.playerStats}>
+                              <Text style={styles.statText}>
+                                {player.games_played || 0} games
+                              </Text>
+                              <Text style={styles.statText}>
+                                {player.games_won || 0} wins
+                              </Text>
+                            </View>
                           </View>
                         </View>
-                      ))}
-                    </View>
-                  )}
-                </CardContent>
-              </Card> */}
+                        <View style={styles.scoreBlock}>
+                          <Text style={styles.scoreText}>
+                            {player.total_score || 0}
+                          </Text>
+                          <Text style={styles.statText}>points</Text>
+                        </View>
+                      </View>
+                    );
+                  })
+                )}
+              </View>
 
               {/* Do aboove section first and then work on this section */}
 
@@ -639,7 +633,7 @@ const styles = StyleSheet.create({
     color: "#CA8A04",
   },
   leaderboardContainer: {
-    padding: 16,
+    padding: 26,
     backgroundColor: "#fff",
     borderRadius: 12,
     shadowColor: "#000",
@@ -708,5 +702,17 @@ const styles = StyleSheet.create({
   scoreText: {
     fontWeight: "bold",
     fontSize: 16,
+  },
+  cardTitleContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12, // If gap doesn't work, use marginRight on the icon
+    marginTop: 5,
+    marginBottom: 22,
+  },
+  cardTitleText: {
+    fontSize: 28,
+    fontWeight: "bold",
+    color: "#1F2937", // Tailwind's gray-900
   },
 });
