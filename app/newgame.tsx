@@ -1,14 +1,12 @@
-import Badge from "@/components/Badge";
 // import { Button } from "@/components/ui/button";
-import Card from "@/components/Card";
-import CardContent from "@/components/CardContent";
-import CardHeader from "@/components/CardHeader";
-import CardTitle from "@/components/CardTitle";
 // import { Input } from "@/components/ui/input";
 // import { Label } from "@/components/ui/label";
 import { Player } from "@/entities/all";
+import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 // import { createPageUrl } from "@/utils";
 
 // Users,
@@ -23,8 +21,29 @@ export default function newgame() {
   const [gameName, setGameName] = useState("");
   const [selectedPlayers, setSelectedPlayers] = useState([]);
   const [newPlayerName, setNewPlayerName] = useState("");
-  const [existingPlayers, setExistingPlayers] = useState([]);
+  const [existingPlayers, setExistingPlayers] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+
+  const players: Player[] = [
+    {
+      name: "Alice",
+      total_score: 1200,
+      games_played: 15,
+      games_won: 5,
+    },
+    {
+      name: "Bob",
+      total_score: 950,
+      games_played: 12,
+      games_won: 3,
+    },
+    {
+      name: "Charlie",
+      total_score: 800,
+      games_played: 10,
+      games_won: 2,
+    },
+  ];
 
   useEffect(() => {
     loadExistingPlayers();
@@ -32,8 +51,9 @@ export default function newgame() {
 
   const loadExistingPlayers = async () => {
     try {
-      const players = await Player.list("name");
-      setExistingPlayers(players);
+      // const players = await Player.list("name");
+      const playerNames = players.map((player) => player.name);
+      setExistingPlayers(playerNames);
     } catch (error) {
       console.error("Error loading players:", error);
     }
@@ -89,24 +109,38 @@ export default function newgame() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 p-4 md:p-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-3 mb-4">
-            <div className="w-12 h-12 bg-gradient-to-br from-green-600 to-blue-600 rounded-xl flex items-center justify-center">
-              <Gamepad2 className="w-6 h-6 text-white" />
-            </div>
-          </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Start New Game
-          </h1>
-          <p className="text-lg text-gray-600">
-            Set up your Hand & Foot game with players and begin scoring
-          </p>
-        </div>
+    <ScrollView keyboardShouldPersistTaps="handled">
+      <LinearGradient
+        colors={["#f0fdf4", "#ffffff", "#eff6ff"]} // green-50 → white → blue-50
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.screen}
+      >
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <View style={styles.iconWrapper}>
+              <LinearGradient
+                colors={["#059669", "#2563eb"]} // green-600 → blue-600
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.iconBackground}
+              >
+                <Ionicons
+                  name="game-controller-outline"
+                  size={24}
+                  color="#fff"
+                />
+              </LinearGradient>
+            </View>
 
-        <div className="grid lg:grid-cols-2 gap-8">
-          {/* Game Setup */}
+            <Text style={styles.title}>Start New Game</Text>
+            <Text style={styles.subtitle}>
+              Set up your Hand & Foot game with players and begin scoring
+            </Text>
+          </View>
+
+          {/* <div className="grid lg:grid-cols-2 gap-8">
+          {/* Game Setup 
           <Card className="shadow-lg">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -184,7 +218,7 @@ export default function newgame() {
             </CardContent>
           </Card>
 
-          {/* Player Selection */}
+          {/* Player Selection 
           <Card className="shadow-lg">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -193,7 +227,7 @@ export default function newgame() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
-              {/* Add New Player */}
+              {/* Add New Player 
               <div>
                 <Label htmlFor="newPlayer">Create New Player</Label>
                 <div className="flex gap-2 mt-2">
@@ -214,7 +248,7 @@ export default function newgame() {
                 </div>
               </div>
 
-              {/* Existing Players */}
+              {/* Existing Players 
               <div>
                 <Label className="text-base font-semibold">
                   Choose Existing Players
@@ -265,8 +299,45 @@ export default function newgame() {
               </div>
             </CardContent>
           </Card>
-        </div>
-      </div>
-    </div>
+        </div> */}
+        </View>
+      </LinearGradient>
+    </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  screen: {
+    minHeight: "100%",
+    padding: 16,
+  },
+  container: {
+    maxWidth: 768,
+    alignSelf: "center",
+  },
+  header: {
+    alignItems: "center",
+    marginBottom: 32,
+  },
+  iconWrapper: {
+    marginBottom: 16,
+  },
+  iconBackground: {
+    width: 48,
+    height: 48,
+    borderRadius: 12,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  title: {
+    fontSize: 32,
+    fontWeight: "bold",
+    color: "#111827", // gray-900
+    marginBottom: 16,
+  },
+  subtitle: {
+    fontSize: 18,
+    color: "#4B5563", // gray-600
+    textAlign: "center",
+  },
+});
