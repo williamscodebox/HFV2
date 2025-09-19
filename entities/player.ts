@@ -1,4 +1,5 @@
 export interface Player {
+  id: string;
   name: string;
   total_score?: number; // Defaults to 0
   games_played?: number; // Defaults to 0

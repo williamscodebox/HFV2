@@ -6,7 +6,14 @@ import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 // import { createPageUrl } from "@/utils";
 
 // Users,
@@ -19,25 +26,28 @@ import { ScrollView, StyleSheet, Text, View } from "react-native";
 export default function newgame() {
   const router = useRouter();
   const [gameName, setGameName] = useState("");
-  const [selectedPlayers, setSelectedPlayers] = useState([]);
+  const [selectedPlayers, setSelectedPlayers] = useState<Player[]>([]);
   const [newPlayerName, setNewPlayerName] = useState("");
   const [existingPlayers, setExistingPlayers] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
 
   const players: Player[] = [
     {
+      id: "1",
       name: "Alice",
       total_score: 1200,
       games_played: 15,
       games_won: 5,
     },
     {
+      id: "2",
       name: "Bob",
       total_score: 950,
       games_played: 12,
       games_won: 3,
     },
     {
+      id: "3",
       name: "Charlie",
       total_score: 800,
       games_played: 10,
@@ -80,9 +90,9 @@ export default function newgame() {
   //   }
   // };
 
-  // const removeSelectedPlayer = (playerId) => {
-  //   setSelectedPlayers(selectedPlayers.filter((p) => p.id !== playerId));
-  // };
+  const removeSelectedPlayer = (playerId: string) => {
+    setSelectedPlayers(selectedPlayers.filter((p) => p.id !== playerId));
+  };
 
   const startGame = async () => {
     // if (!gameName.trim() || selectedPlayers.length < 2) return;
@@ -139,86 +149,88 @@ export default function newgame() {
             </Text>
           </View>
 
-          {/* <div className="grid lg:grid-cols-2 gap-8">
-          {/* Game Setup 
-          <Card className="shadow-lg">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Play className="w-5 h-5 text-green-600" />
-                Game Details
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div>
-                <Label htmlFor="gameName">Game Name</Label>
-                <Input
-                  id="gameName"
-                  value={gameName}
-                  onChange={(e) => setGameName(e.target.value)}
-                  placeholder="Enter game name (e.g., 'Friday Night Game')"
-                  className="mt-2"
-                />
-              </div>
+          <View style={styles.grid}>
+            {/* Game Setup */}
+            <View style={styles.card}>
+              <View style={styles.cardHeader}>
+                <View style={styles.cardTitleRow}>
+                  {/* <Play width={20} height={20} color="#059669" /> */}
+                  <Text style={styles.cardTitle}>Game Details</Text>
+                </View>
+              </View>
 
-              <div>
-                <Label className="text-lg font-semibold">
-                  Selected Players ({selectedPlayers.length})
-                </Label>
-                <div className="mt-3 space-y-2">
-                  {selectedPlayers.length === 0 ? (
-                    <div className="text-gray-500 text-center py-4 border-2 border-dashed border-gray-200 rounded-lg">
-                      No players selected yet
-                    </div>
-                  ) : (
-                    selectedPlayers.map((player) => (
-                      <div
-                        key={player.id}
-                        className="flex items-center justify-between bg-green-50 p-3 rounded-lg border border-green-200"
-                      >
-                        <span className="font-medium text-green-800">
-                          {player.name}
-                        </span>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => removeSelectedPlayer(player.id)}
-                          className="text-red-600 hover:text-red-800 hover:bg-red-50"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    ))
+              <View style={styles.cardContent}>
+                {/* Game Name Input */}
+                <View>
+                  <Text style={styles.label}>Game Name</Text>
+                  <TextInput
+                    style={styles.input}
+                    value={gameName}
+                    onChangeText={(text) => setGameName(text)}
+                    placeholder="Enter game name (e.g., 'Friday Night Game')"
+                  />
+                </View>
+
+                {/* Selected Players */}
+                <View>
+                  <Text style={styles.playerLabel}>
+                    Selected Players ({selectedPlayers.length})
+                  </Text>
+                  <View style={styles.playerList}>
+                    {selectedPlayers.length === 0 ? (
+                      <View style={styles.emptyPlayerBox}>
+                        <Text style={styles.emptyPlayerText}>
+                          No players selected yet
+                        </Text>
+                      </View>
+                    ) : (
+                      selectedPlayers.map((player) => (
+                        <View key={player.id} style={styles.playerCard}>
+                          <Text style={styles.playerName}>{player.name}</Text>
+                          <TouchableOpacity
+                            onPress={() => removeSelectedPlayer(player.id)}
+                          >
+                            {/* <Trash2 width={16} height={16} color="#DC2626" /> */}
+                          </TouchableOpacity>
+                        </View>
+                      ))
+                    )}
+                  </View>
+
+                  {selectedPlayers.length < 2 && (
+                    <Text style={styles.warningText}>
+                      You need at least 2 players to start a game
+                    </Text>
                   )}
-                </div>
+                </View>
 
-                {selectedPlayers.length < 2 && (
-                  <p className="text-sm text-orange-600 mt-2">
-                    You need at least 2 players to start a game
-                  </p>
-                )}
-              </div>
+                {/* Start Game Button */}
+                <TouchableOpacity
+                  style={[
+                    styles.startButton,
+                    {
+                      backgroundColor:
+                        !gameName.trim() ||
+                        selectedPlayers.length < 2 ||
+                        loading
+                          ? "#A7F3D0"
+                          : "#059669",
+                    },
+                  ]}
+                  disabled={
+                    !gameName.trim() || selectedPlayers.length < 2 || loading
+                  }
+                  onPress={startGame}
+                >
+                  <Text style={styles.startButtonText}>
+                    {loading ? "Starting Game..." : "Start Game"}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
 
-              <Button
-                onClick={startGame}
-                disabled={
-                  !gameName.trim() || selectedPlayers.length < 2 || loading
-                }
-                className="w-full bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white py-6 text-lg"
-                size="lg"
-              >
-                {loading ? (
-                  <>Starting Game...</>
-                ) : (
-                  <>
-                    <Play className="w-5 h-5 mr-2" />
-                    Start Game
-                  </>
-                )}
-              </Button>
-            </CardContent>
-          </Card>
-
-          {/* Player Selection 
+            {/* Player Selection */}
+            {/*
           <Card className="shadow-lg">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -298,8 +310,8 @@ export default function newgame() {
                 </div>
               </div>
             </CardContent>
-          </Card>
-        </div> */}
+          </Card> */}
+          </View>
         </View>
       </LinearGradient>
     </ScrollView>
@@ -341,5 +353,96 @@ const styles = StyleSheet.create({
     color: "#4B5563", // gray-600
     textAlign: "center",
     lineHeight: 28,
+  },
+  grid: {
+    flexDirection: "column",
+    gap: 32,
+  },
+  card: {
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    padding: 16,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 4,
+  },
+  cardHeader: {
+    marginBottom: 12,
+  },
+  cardTitleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  cardTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#059669",
+  },
+  cardContent: {
+    gap: 24,
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#374151",
+  },
+  input: {
+    marginTop: 8,
+    borderWidth: 1,
+    borderColor: "#D1D5DB",
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 16,
+  },
+  playerLabel: {
+    fontSize: 16,
+    fontWeight: "600",
+    marginBottom: 8,
+  },
+  playerList: {
+    gap: 12,
+  },
+  emptyPlayerBox: {
+    borderWidth: 2,
+    borderStyle: "dashed",
+    borderColor: "#E5E7EB",
+    borderRadius: 12,
+    padding: 16,
+    alignItems: "center",
+  },
+  emptyPlayerText: {
+    color: "#6B7280",
+    fontSize: 14,
+  },
+  playerCard: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "#ECFDF5",
+    borderColor: "#A7F3D0",
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 12,
+  },
+  playerName: {
+    fontWeight: "500",
+    color: "#065F46",
+  },
+  warningText: {
+    fontSize: 12,
+    color: "#EA580C",
+    marginTop: 8,
+  },
+  startButton: {
+    paddingVertical: 16,
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  startButtonText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#FFFFFF",
   },
 });
