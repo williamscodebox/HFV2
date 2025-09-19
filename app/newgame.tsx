@@ -1,6 +1,3 @@
-// import { Button } from "@/components/ui/button";
-// import { Input } from "@/components/ui/input";
-// import { Label } from "@/components/ui/label";
 import { Player } from "@/entities/all";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
@@ -16,19 +13,15 @@ import {
 } from "react-native";
 // import { createPageUrl } from "@/utils";
 
-// Users,
 // Plus,
-// Trash2,
-// Play,
 // UserPlus,
-// Gamepad2
 
 export default function newgame() {
   const router = useRouter();
   const [gameName, setGameName] = useState("");
   const [selectedPlayers, setSelectedPlayers] = useState<Player[]>([]);
   const [newPlayerName, setNewPlayerName] = useState("");
-  const [existingPlayers, setExistingPlayers] = useState<string[]>([]);
+  const [existingPlayers, setExistingPlayers] = useState<Player[]>([]);
   const [loading, setLoading] = useState(false);
 
   const players: Player[] = [
@@ -62,7 +55,7 @@ export default function newgame() {
   const loadExistingPlayers = async () => {
     try {
       // const players = await Player.list("name");
-      const playerNames = players.map((player) => player.name);
+      const playerNames = players.map((player) => player);
       setExistingPlayers(playerNames);
     } catch (error) {
       console.error("Error loading players:", error);
@@ -82,13 +75,13 @@ export default function newgame() {
     }
   };
 
-  // const togglePlayerSelection = (player) => {
-  //   if (selectedPlayers.find((p) => p.id === player.id)) {
-  //     setSelectedPlayers(selectedPlayers.filter((p) => p.id !== player.id));
-  //   } else {
-  //     setSelectedPlayers([...selectedPlayers, player]);
-  //   }
-  // };
+  const togglePlayerSelection = (player: Player) => {
+    if (selectedPlayers.find((p) => p.id === player.id)) {
+      setSelectedPlayers(selectedPlayers.filter((p) => p.id !== player.id));
+    } else {
+      setSelectedPlayers([...selectedPlayers, player]);
+    }
+  };
 
   const removeSelectedPlayer = (playerId: string) => {
     setSelectedPlayers(selectedPlayers.filter((p) => p.id !== playerId));
@@ -231,87 +224,99 @@ export default function newgame() {
             </View>
 
             {/* Player Selection */}
-            {/*
-          <Card className="shadow-lg">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Users className="w-5 h-5 text-blue-600" />
-                Add Players
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              {/* Add New Player 
-              <div>
-                <Label htmlFor="newPlayer">Create New Player</Label>
-                <div className="flex gap-2 mt-2">
-                  <Input
-                    id="newPlayer"
-                    value={newPlayerName}
-                    onChange={(e) => setNewPlayerName(e.target.value)}
-                    placeholder="Enter player name"
-                    onKeyPress={(e) => e.key === "Enter" && addNewPlayer()}
-                  />
-                  <Button
-                    onClick={addNewPlayer}
-                    disabled={!newPlayerName.trim()}
-                    className="bg-blue-600 hover:bg-blue-700"
-                  >
-                    <UserPlus className="w-4 h-4" />
-                  </Button>
-                </div>
-              </div>
 
-              {/* Existing Players 
-              <div>
-                <Label className="text-base font-semibold">
-                  Choose Existing Players
-                </Label>
-                <div className="mt-3 max-h-80 overflow-y-auto space-y-2">
-                  {existingPlayers.length === 0 ? (
-                    <div className="text-gray-500 text-center py-8 border-2 border-dashed border-gray-200 rounded-lg">
-                      <Users className="w-8 h-8 mx-auto mb-2 text-gray-400" />
-                      <p>No existing players</p>
-                      <p className="text-sm">Create your first player above</p>
-                    </div>
-                  ) : (
-                    existingPlayers.map((player) => {
-                      const isSelected = selectedPlayers.find(
-                        (p) => p.id === player.id
-                      );
-                      return (
-                        <div
-                          key={player.id}
-                          onClick={() => togglePlayerSelection(player)}
-                          className={`p-3 rounded-lg border cursor-pointer transition-all ${
-                            isSelected
-                              ? "bg-green-100 border-green-300 text-green-800"
-                              : "bg-white border-gray-200 hover:border-blue-300 hover:bg-blue-50"
-                          }`}
-                        >
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <p className="font-medium">{player.name}</p>
-                              <div className="flex gap-2 mt-1">
-                                <Badge variant="outline" className="text-xs">
-                                  {player.games_played || 0} games
-                                </Badge>
-                                <Badge variant="outline" className="text-xs">
-                                  {player.games_won || 0} wins
-                                </Badge>
-                              </div>
-                            </div>
-                            {isSelected && (
-                              <Badge className="bg-green-600">Selected</Badge>
-                            )}
-                          </div>
-                        </div>
-                      );
-                    })
-                  )}
-                </div>
-              </div>
-            </CardContent>
-          </Card> */}
+            {/* ************************************Working on this part***************************************** */}
+
+            <View style={styles.card2}>
+              <View style={styles.cardHeader2}>
+                <View style={styles.cardTitleRow2}>
+                  <Feather name="users" size={24} color="#2563eb" />
+                  <Text style={styles.cardTitle2}>Add Players</Text>
+                </View>
+              </View>
+
+              <View style={styles.cardContent2}>
+                {/* Add New Player */}
+                <View>
+                  <Text style={styles.label2}>Create New Player</Text>
+                  <View style={styles.inputRow2}>
+                    <TextInput
+                      style={styles.input2}
+                      value={newPlayerName}
+                      onChangeText={setNewPlayerName}
+                      placeholder="Enter player name"
+                      onSubmitEditing={addNewPlayer}
+                    />
+                    <TouchableOpacity
+                      onPress={addNewPlayer}
+                      disabled={!newPlayerName.trim()}
+                      style={styles.addButton2}
+                    >
+                      {/* <UserPlus width={16} height={16} color="#fff" /> */}
+                    </TouchableOpacity>
+                  </View>
+                </View>
+
+                {/* Existing Players */}
+                <View>
+                  <Text style={styles.label2}>Choose Existing Players</Text>
+                  <ScrollView style={styles.playerList2}>
+                    {existingPlayers.length === 0 ? (
+                      <View style={styles.emptyBox2}>
+                        <Feather name="users" size={24} color="#9CA3AF" />
+                        <Text style={styles.emptyText2}>
+                          No existing players
+                        </Text>
+                        <Text style={styles.emptySubtext2}>
+                          Create your first player above
+                        </Text>
+                      </View>
+                    ) : (
+                      existingPlayers.map((player) => {
+                        const isSelected = selectedPlayers.some(
+                          (p) => p.id === player.id
+                        );
+                        return (
+                          <TouchableOpacity
+                            key={player.id}
+                            onPress={() => togglePlayerSelection(player)}
+                            style={[
+                              styles.playerCard2,
+                              isSelected
+                                ? styles.playerCardSelected2
+                                : styles.playerCardDefault2,
+                            ]}
+                          >
+                            <View style={styles.playerRow2}>
+                              <View>
+                                <Text style={styles.playerName2}>
+                                  {player.name}
+                                </Text>
+                                <View style={styles.badgeRow2}>
+                                  <Text style={styles.badge2}>
+                                    {player.games_played || 0} games
+                                  </Text>
+                                  <Text style={styles.badge2}>
+                                    {player.games_won || 0} wins
+                                  </Text>
+                                </View>
+                              </View>
+                              {isSelected && (
+                                <View style={styles.selectedBadge2}>
+                                  <Text style={styles.selectedBadgeText2}>
+                                    Selected
+                                  </Text>
+                                </View>
+                              )}
+                            </View>
+                          </TouchableOpacity>
+                        );
+                      })
+                    )}
+                  </ScrollView>
+                </View>
+              </View>
+            </View>
           </View>
         </View>
       </LinearGradient>
@@ -451,5 +456,120 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     color: "#FFFFFF",
+  },
+  card2: {
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    padding: 16,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 4,
+  },
+  cardHeader2: {
+    marginBottom: 12,
+  },
+  cardTitleRow2: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  cardTitle2: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#2563eb",
+  },
+  cardContent2: {
+    gap: 24,
+  },
+  label2: {
+    fontSize: 16,
+    fontWeight: "600",
+    marginBottom: 8,
+  },
+  inputRow2: {
+    flexDirection: "row",
+    gap: 8,
+    marginTop: 8,
+  },
+  input2: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: "#D1D5DB",
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 16,
+  },
+  addButton2: {
+    backgroundColor: "#2563eb",
+    padding: 12,
+    borderRadius: 8,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  playerList2: {
+    maxHeight: 320,
+  },
+  emptyBox2: {
+    borderWidth: 2,
+    borderStyle: "dashed",
+    borderColor: "#E5E7EB",
+    borderRadius: 12,
+    padding: 24,
+    alignItems: "center",
+  },
+  emptyText2: {
+    fontSize: 16,
+    color: "#6B7280",
+    marginTop: 8,
+  },
+  emptySubtext2: {
+    fontSize: 14,
+    color: "#9CA3AF",
+  },
+  playerCard2: {
+    padding: 12,
+    borderRadius: 10,
+    marginBottom: 12,
+  },
+  playerCardDefault2: {
+    backgroundColor: "#fff",
+    borderColor: "#E5E7EB",
+    borderWidth: 1,
+  },
+  playerCardSelected2: {
+    backgroundColor: "#D1FAE5",
+    borderColor: "#86EFAC",
+    borderWidth: 1,
+  },
+  playerRow2: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  playerName2: {
+    fontWeight: "500",
+    fontSize: 16,
+    color: "#065F46",
+  },
+  badgeRow2: {
+    flexDirection: "row",
+    gap: 8,
+    marginTop: 4,
+  },
+  badge2: {
+    fontSize: 12,
+    color: "#6B7280",
+  },
+  selectedBadge2: {
+    backgroundColor: "#059669",
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 6,
+  },
+  selectedBadgeText2: {
+    color: "#fff",
+    fontSize: 12,
+    fontWeight: "600",
   },
 });
