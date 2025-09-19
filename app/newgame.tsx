@@ -2,7 +2,7 @@
 // import { Input } from "@/components/ui/input";
 // import { Label } from "@/components/ui/label";
 import { Player } from "@/entities/all";
-import { Ionicons } from "@expo/vector-icons";
+import { Feather, Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
@@ -154,7 +154,7 @@ export default function newgame() {
             <View style={styles.card}>
               <View style={styles.cardHeader}>
                 <View style={styles.cardTitleRow}>
-                  {/* <Play width={20} height={20} color="#059669" /> */}
+                  <Feather name="play" size={24} color="#059669" />
                   <Text style={styles.cardTitle}>Game Details</Text>
                 </View>
               </View>
@@ -321,14 +321,14 @@ export default function newgame() {
 const styles = StyleSheet.create({
   screen: {
     minHeight: "100%",
-    padding: 16,
+    padding: 26,
   },
   container: {
     maxWidth: 768,
     alignSelf: "center",
   },
   header: {
-    marginTop: 28,
+    marginTop: 18,
     alignItems: "center",
     marginBottom: 32,
   },
@@ -376,12 +376,14 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   cardTitle: {
-    fontSize: 18,
+    fontSize: 28,
     fontWeight: "bold",
-    color: "#059669",
+    color: "black",
+    marginTop: 8,
+    marginBottom: 12,
   },
   cardContent: {
-    gap: 24,
+    gap: 28,
   },
   label: {
     fontSize: 14,
@@ -414,7 +416,7 @@ const styles = StyleSheet.create({
   },
   emptyPlayerText: {
     color: "#6B7280",
-    fontSize: 14,
+    fontSize: 16,
   },
   playerCard: {
     flexDirection: "row",
@@ -439,6 +441,7 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     borderRadius: 10,
     alignItems: "center",
+    marginBottom: 12,
   },
   startButtonText: {
     fontSize: 18,
