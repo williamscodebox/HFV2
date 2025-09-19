@@ -1,4 +1,4 @@
-import { Player } from "@/entities/all";
+import { Game, Player } from "@/entities/all";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
@@ -112,27 +112,32 @@ export default function newgame() {
   };
 
   const startGame = async () => {
-    // if (!gameName.trim() || selectedPlayers.length < 2) return;
-    // setLoading(true);
-    // try {
-    //   const gameData = {
-    //     name: gameName,
-    //     players: selectedPlayers.map((player) => ({
-    //       player_id: player.id,
-    //       name: player.name,
-    //       total_score: 0,
-    //       rounds: [],
-    //     })),
-    //     current_round: 1,
-    //     status: "active",
-    //   };
-    //   const game = await Game.create(gameData);
-    //   navigate(createPageUrl(`Game?id=${game.id}`));
-    // } catch (error) {
-    //   console.error("Error starting game:", error);
-    // } finally {
-    //   setLoading(false);
-    // }
+    if (!gameName.trim() || selectedPlayers.length < 2) return;
+    setLoading(true);
+    try {
+      const gameData = {
+        id: uuidv4(),
+        name: gameName,
+        players: selectedPlayers.map((player) => ({
+          player_id: player.id,
+          name: player.name,
+          total_score: 0,
+          rounds: [],
+        })),
+        current_round: 1,
+        status: "active",
+      };
+      // const game = await Game.create(gameData);
+      const game: Game = gameData as Game;
+      router.push({
+        pathname: "/game/[id]",
+        params: { id: game.id },
+      });
+    } catch (error) {
+      console.error("Error starting game:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

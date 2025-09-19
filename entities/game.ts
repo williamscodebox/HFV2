@@ -18,6 +18,7 @@ export interface GamePlayer {
 }
 
 export interface Game {
+  id: string;
   name: string;
   players: GamePlayer[];
   current_round?: number;

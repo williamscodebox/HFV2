@@ -72,6 +72,13 @@ export default function RootLayout() {
             ),
           }}
         />
+        <Drawer.Screen
+          name="game/[id]"
+          options={{
+            title: "Current Game",
+            drawerItemStyle: { display: "none" }, // 👈 Hides from drawer
+          }}
+        />
       </Drawer>
     </SafeAreaProvider>
   );
