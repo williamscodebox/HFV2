@@ -190,7 +190,7 @@ export default function newgame() {
                           <TouchableOpacity
                             onPress={() => removeSelectedPlayer(player.id)}
                           >
-                            {/* <Trash2 width={16} height={16} color="#DC2626" /> */}
+                            <Feather name="trash-2" size={24} color="#DC2626" />
                           </TouchableOpacity>
                         </View>
                       ))
@@ -222,6 +222,7 @@ export default function newgame() {
                   }
                   onPress={startGame}
                 >
+                  <Feather name="play" size={24} color="white" />
                   <Text style={styles.startButtonText}>
                     {loading ? "Starting Game..." : "Start Game"}
                   </Text>
@@ -438,12 +439,15 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   startButton: {
+    flexDirection: "row",
+    justifyContent: "center",
     paddingVertical: 16,
     borderRadius: 10,
     alignItems: "center",
     marginBottom: 12,
   },
   startButtonText: {
+    marginLeft: 16,
     fontSize: 18,
     fontWeight: "bold",
     color: "#FFFFFF",
