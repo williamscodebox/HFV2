@@ -11,10 +11,9 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import "react-native-get-random-values";
+import { v4 as uuidv4 } from "uuid";
 // import { createPageUrl } from "@/utils";
-
-// Plus,
-// UserPlus,
 
 export default function newgame() {
   const router = useRouter();
@@ -88,9 +87,13 @@ export default function newgame() {
 
     try {
       // const player = await Player.create({ name: newPlayerName.trim() });
-      // setExistingPlayers([...existingPlayers, player]);
-      // setSelectedPlayers([...selectedPlayers, player]);
-      // setNewPlayerName("");
+      const player: Player = {
+        id: uuidv4(),
+        name: newPlayerName.trim(),
+      };
+      setExistingPlayers([...existingPlayers, player]);
+      setSelectedPlayers([...selectedPlayers, player]);
+      setNewPlayerName("");
     } catch (error) {
       console.error("Error creating player:", error);
     }
