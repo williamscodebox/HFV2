@@ -127,7 +127,7 @@ export default function newgame() {
               >
                 <Ionicons
                   name="game-controller-outline"
-                  size={24}
+                  size={32}
                   color="#fff"
                 />
               </LinearGradient>
@@ -316,6 +316,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   header: {
+    marginTop: 28,
     alignItems: "center",
     marginBottom: 32,
   },
@@ -323,8 +324,8 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   iconBackground: {
-    width: 48,
-    height: 48,
+    width: 60,
+    height: 60,
     borderRadius: 12,
     justifyContent: "center",
     alignItems: "center",
@@ -339,5 +340,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "#4B5563", // gray-600
     textAlign: "center",
+    lineHeight: 28,
   },
 });
