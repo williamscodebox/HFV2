@@ -231,7 +231,7 @@ export default function newgame() {
               <View style={styles.cardHeader2}>
                 <View style={styles.cardTitleRow2}>
                   <Feather name="users" size={24} color="#2563eb" />
-                  <Text style={styles.cardTitle2}>Add Players</Text>
+                  <Text style={styles.cardTitle}>Add Players</Text>
                 </View>
               </View>
 
@@ -252,7 +252,7 @@ export default function newgame() {
                       disabled={!newPlayerName.trim()}
                       style={styles.addButton2}
                     >
-                      {/* <UserPlus width={16} height={16} color="#fff" /> */}
+                      <Feather name="user-plus" size={24} color="#fff" />
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -332,6 +332,7 @@ const styles = StyleSheet.create({
   container: {
     maxWidth: 768,
     alignSelf: "center",
+    marginBottom: 36,
   },
   header: {
     marginTop: 18,
@@ -392,7 +393,7 @@ const styles = StyleSheet.create({
     gap: 28,
   },
   label: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: "600",
     color: "#374151",
   },
@@ -435,6 +436,7 @@ const styles = StyleSheet.create({
     padding: 12,
   },
   playerName: {
+    fontSize: 16,
     fontWeight: "500",
     color: "#065F46",
   },
@@ -472,12 +474,7 @@ const styles = StyleSheet.create({
   cardTitleRow2: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 8,
-  },
-  cardTitle2: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#2563eb",
+    gap: 12,
   },
   cardContent2: {
     gap: 24,
@@ -485,12 +482,13 @@ const styles = StyleSheet.create({
   label2: {
     fontSize: 16,
     fontWeight: "600",
-    marginBottom: 8,
+    marginBottom: 12,
   },
   inputRow2: {
     flexDirection: "row",
     gap: 8,
-    marginTop: 8,
+    marginTop: 0,
+    marginBottom: 12,
   },
   input2: {
     flex: 1,
