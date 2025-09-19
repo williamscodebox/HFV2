@@ -25,27 +25,27 @@ export default function newgame() {
   const [loading, setLoading] = useState(false);
 
   const players: Player[] = [
-    {
-      id: "1",
-      name: "Alice",
-      total_score: 1200,
-      games_played: 15,
-      games_won: 5,
-    },
-    {
-      id: "2",
-      name: "Bob",
-      total_score: 950,
-      games_played: 12,
-      games_won: 3,
-    },
-    {
-      id: "3",
-      name: "Charlie",
-      total_score: 800,
-      games_played: 10,
-      games_won: 2,
-    },
+    // {
+    //   id: "1",
+    //   name: "Alice",
+    //   total_score: 1200,
+    //   games_played: 15,
+    //   games_won: 5,
+    // },
+    // {
+    //   id: "2",
+    //   name: "Bob",
+    //   total_score: 950,
+    //   games_played: 12,
+    //   games_won: 3,
+    // },
+    // {
+    //   id: "3",
+    //   name: "Charlie",
+    //   total_score: 800,
+    //   games_played: 10,
+    //   games_won: 2,
+    // },
   ];
 
   useEffect(() => {
@@ -515,6 +515,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 24,
     alignItems: "center",
+    marginBottom: 16,
   },
   emptyText2: {
     fontSize: 16,
