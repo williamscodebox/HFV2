@@ -1,9 +1,15 @@
 import { Game, Player } from "@/entities/all";
+import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import "react-native-get-random-values";
-import { v4 as uuidv4 } from "uuid";
 
 // import { createPageUrl } from "@/utils";
 // import {
@@ -34,7 +40,7 @@ export default function GamePage() {
   const router = useRouter();
   const { id: gameId } = useLocalSearchParams();
 
-  const [game, setGame] = useState(null);
+  const [game, setGame] = useState<Game | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [roundScores, setRoundScores] = useState<Record<string, RoundScore>>(
@@ -87,7 +93,7 @@ export default function GamePage() {
   ];
 
   const gameData: Game = {
-    id: uuidv4(),
+    id: gameId as string,
     name: "Test",
     players: players.map((player) => ({
       id: player.id,
@@ -131,6 +137,7 @@ export default function GamePage() {
     // if (gameId) {
     //   loadGame();
     // }
+    setGame(gameData);
   }, [gameId]); // gameId is the only dependency here, as loadGame is defined inside
 
   const updateScore = (
@@ -175,193 +182,204 @@ export default function GamePage() {
   };
 
   const saveRound = async () => {
-    setSaving(true);
-    try {
-      const updatedPlayers = game.players.map((player: Player) => {
-        const playerScores = roundScores[player.id] || {};
-        const roundTotal = calculateRoundTotal(player.id);
-
-        const newRound = {
-          round_number: game.current_round,
-          ...playerScores,
-          round_total: roundTotal,
-        };
-
-        return {
-          ...player,
-          rounds: [...(player.rounds || []), newRound],
-          total_score: (player.total_score || 0) + roundTotal,
-        };
-      });
-
-      await Game.update(game.id, {
-        players: updatedPlayers,
-        current_round: game.current_round + 1,
-      });
-
-      // Update player stats
-      for (const player of updatedPlayers) {
-        const playerData = await Player.filter({ id: player.player_id });
-        if (playerData.length > 0) {
-          await Player.update(player.player_id, {
-            total_score:
-              (playerData[0].total_score || 0) +
-              calculateRoundTotal(player.player_id), // Use the latest total_score from DB
-            games_played:
-              (playerData[0].games_played || 0) +
-              (game.current_round === 1 ? 1 : 0),
-          });
-        }
-      }
-
-      // Reload game data to get the most updated state for UI and next round scores reset
-      const gameData = await Game.filter({ id: gameId });
-      if (gameData.length > 0) {
-        const currentGame = gameData[0];
-        setGame(currentGame);
-
-        // Reset round scores for the newly loaded game state
-        const newRoundScores = {};
-        currentGame.players.forEach((player) => {
-          newRoundScores[player.player_id] = {
-            melds_score: 0,
-            cards_score: 0,
-            bonus_clean_books: 0,
-            bonus_dirty_books: 0,
-            bonus_red_threes: 0,
-            penalty_cards_left: 0,
-            went_out: false,
-          };
-        });
-        setRoundScores(newRoundScores);
-      }
-    } catch (error) {
-      console.error("Error saving round:", error);
-    } finally {
-      setSaving(false);
-    }
+    // setSaving(true);
+    // try {
+    //   const updatedPlayers = game.players.map((player: Player) => {
+    //     const playerScores = roundScores[player.id] || {};
+    //     const roundTotal = calculateRoundTotal(player.id);
+    //     const newRound = {
+    //       round_number: game.current_round,
+    //       ...playerScores,
+    //       round_total: roundTotal,
+    //     };
+    //     return {
+    //       ...player,
+    //       rounds: [...(player.rounds || []), newRound],
+    //       total_score: (player.total_score || 0) + roundTotal,
+    //     };
+    //   });
+    //   await Game.update(game.id, {
+    //     players: updatedPlayers,
+    //     current_round: game.current_round + 1,
+    //   });
+    //   // Update player stats
+    //   for (const player of updatedPlayers) {
+    //     const playerData = await Player.filter({ id: player.player_id });
+    //     if (playerData.length > 0) {
+    //       await Player.update(player.player_id, {
+    //         total_score:
+    //           (playerData[0].total_score || 0) +
+    //           calculateRoundTotal(player.player_id), // Use the latest total_score from DB
+    //         games_played:
+    //           (playerData[0].games_played || 0) +
+    //           (game.current_round === 1 ? 1 : 0),
+    //       });
+    //     }
+    //   }
+    //   // Reload game data to get the most updated state for UI and next round scores reset
+    //   const gameData = await Game.filter({ id: gameId });
+    //   if (gameData.length > 0) {
+    //     const currentGame = gameData[0];
+    //     setGame(currentGame);
+    //     // Reset round scores for the newly loaded game state
+    //     const newRoundScores = {};
+    //     currentGame.players.forEach((player) => {
+    //       newRoundScores[player.player_id] = {
+    //         melds_score: 0,
+    //         cards_score: 0,
+    //         bonus_clean_books: 0,
+    //         bonus_dirty_books: 0,
+    //         bonus_red_threes: 0,
+    //         penalty_cards_left: 0,
+    //         went_out: false,
+    //       };
+    //     });
+    //     setRoundScores(newRoundScores);
+    //   }
+    // } catch (error) {
+    //   console.error("Error saving round:", error);
+    // } finally {
+    //   setSaving(false);
+    // }
   };
 
   const endGame = async () => {
-    try {
-      const winner = game.players.reduce((prev, current) =>
-        current.total_score > prev.total_score ? current : prev
-      );
-
-      await Game.update(game.id, {
-        status: "completed",
-        winner_id: winner.player_id,
-      });
-
-      // Update winner stats
-      const winnerData = await Player.filter({ id: winner.player_id });
-      if (winnerData.length > 0) {
-        await Player.update(winner.player_id, {
-          games_won: (winnerData[0].games_won || 0) + 1,
-        });
-      }
-
-      navigate(createPageUrl("History"));
-    } catch (error) {
-      console.error("Error ending game:", error);
-    }
+    // try {
+    //   const winner = game.players.reduce((prev, current) =>
+    //     current.total_score > prev.total_score ? current : prev
+    //   );
+    //   await Game.update(game.id, {
+    //     status: "completed",
+    //     winner_id: winner.player_id,
+    //   });
+    //   // Update winner stats
+    //   const winnerData = await Player.filter({ id: winner.player_id });
+    //   if (winnerData.length > 0) {
+    //     await Player.update(winner.player_id, {
+    //       games_won: (winnerData[0].games_won || 0) + 1,
+    //     });
+    //   }
+    //   navigate(createPageUrl("History"));
+    // } catch (error) {
+    //   console.error("Error ending game:", error);
+    // }
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 p-8 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading game...</p>
-        </div>
-      </div>
+      <LinearGradient
+        colors={["#faf5ff", "#eff6ff"]} // purple-50 to blue-50
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={{
+          flex: 1,
+          padding: 32,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <View className="text-center">
+          <ActivityIndicator
+            size="large"
+            color="#9333ea"
+            style={{ marginBottom: 16 }}
+          />
+
+          <Text className="text-gray-600">Loading game...</Text>
+        </View>
+      </LinearGradient>
     );
   }
 
   if (!game) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-red-50 to-pink-50 p-8 flex items-center justify-center">
-        <div className="text-center">
-          <Trophy className="w-16 h-16 text-red-500 mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
-            Game Not Found
-          </h1>
-          <p className="text-gray-600 mb-4">
-            The game you're looking for doesn't exist.
-          </p>
-          <Button onClick={() => navigate(createPageUrl("Home"))}>
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Home
-          </Button>
-        </div>
-      </div>
+      <View style={styles.screen}>
+        <Text style={styles.gameId}>Game ID: {gameId}</Text>
+      </View>
+      // <div className="min-h-screen bg-gradient-to-br from-red-50 to-pink-50 p-8 flex items-center justify-center">
+      //   <div className="text-center">
+      //     <Trophy className="w-16 h-16 text-red-500 mx-auto mb-4" />
+      //     <h1 className="text-2xl font-bold text-gray-900 mb-2">
+      //       Game Not Found
+      //     </h1>
+      //     <p className="text-gray-600 mb-4">
+      //       The game you're looking for doesn't exist.
+      //     </p>
+      //     <Button onClick={() => navigate(createPageUrl("Home"))}>
+      //       <ArrowLeft className="w-4 h-4 mr-2" />
+      //       Back to Home
+      //     </Button>
+      //   </div>
+      // </div>
     );
   }
 
-  const currentLeader = game.players.reduce((prev, current) =>
-    current.total_score > prev.total_score ? current : prev
-  );
+  // const currentLeader = game.players.reduce((prev, current) =>
+  //   current.total_score > prev.total_score ? current : prev
+  // );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 p-4 md:p-8">
-      <div className="max-w-6xl mx-auto">
-        <View>
-          <Text>Game ID: {id}</Text>
-          {/* Load game data with this ID */}
-        </View>
-        {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-          <div className="flex items-center gap-4">
-            <Button
-              variant="outline"
-              onClick={() => navigate(createPageUrl("Home"))}
-              className="flex items-center gap-2"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Back
-            </Button>
-            <div>
-              <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
-                {game.name}
-              </h1>
-              <div className="flex items-center gap-4 mt-1">
-                <Badge className="bg-blue-100 text-blue-800">
-                  Round {game.current_round}
-                </Badge>
-                <Badge variant="outline" className="flex items-center gap-1">
-                  <Users className="w-3 h-3" />
-                  {game.players.length} players
-                </Badge>
-              </div>
-            </div>
-          </div>
+    <View style={styles.screen}>
+      <View style={styles.container}>
+        <Text style={styles.gameId}>Game ID: {gameId}</Text>
 
-          <div className="flex gap-2">
-            <Button
-              onClick={saveRound}
+        {/* Header */}
+        <View style={styles.header}>
+          {/* Back Button + Title */}
+          <View style={styles.titleRow}>
+            <TouchableOpacity
+              onPress={() => router.push("/")}
+              style={styles.backButton}
+            >
+              {/* <ArrowLeft size={16} color="#1E3A8A" /> */}
+              <Text style={styles.backText}>Back</Text>
+            </TouchableOpacity>
+
+            <View>
+              <Text style={styles.gameName}>{game.name}</Text>
+              <View style={styles.badgeRow}>
+                <View style={styles.roundBadge}>
+                  <Text style={styles.roundText}>
+                    Round {game.current_round}
+                  </Text>
+                </View>
+                <View style={styles.playerBadge}>
+                  {/* <Users size={12} color="#1E3A8A" /> */}
+                  <Text style={styles.playerText}>
+                    {game.players.length} players
+                  </Text>
+                </View>
+              </View>
+            </View>
+          </View>
+
+          {/* Action Buttons */}
+          <View style={styles.buttonRow}>
+            <TouchableOpacity
+              onPress={saveRound}
               disabled={saving}
-              className="bg-green-600 hover:bg-green-700"
+              style={[
+                styles.saveButton,
+                saving && { backgroundColor: "#A7F3D0" },
+              ]}
             >
               {saving ? (
-                <>Saving...</>
+                <ActivityIndicator color="#fff" />
               ) : (
                 <>
-                  <Save className="w-4 h-4 mr-2" />
-                  Save Round
+                  {/* <Save size={16} color="#fff" style={{ marginRight: 6 }} /> */}
+                  <Text style={styles.saveText}>Save Round</Text>
                 </>
               )}
-            </Button>
-            <Button
-              onClick={endGame}
-              variant="outline"
-              className="border-red-300 text-red-600 hover:bg-red-50"
-            >
-              End Game
-            </Button>
-          </div>
-        </div>
+            </TouchableOpacity>
 
-        {/* Current Standings */}
+            <TouchableOpacity onPress={endGame} style={styles.endButton}>
+              <Text style={styles.endText}>End Game</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {/* Current Standings
         <Card className="mb-8 shadow-lg">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -405,7 +423,7 @@ export default function GamePage() {
           </CardContent>
         </Card>
 
-        {/* Round Scoring */}
+        {/* Round Scoring 
         <Card className="shadow-lg">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -431,7 +449,7 @@ export default function GamePage() {
                   </div>
 
                   <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {/* Basic Scores */}
+                    {/* Basic Scores 
                     <div className="space-y-4">
                       <h4 className="font-semibold text-gray-700">
                         Basic Scores
@@ -474,7 +492,7 @@ export default function GamePage() {
                       </div>
                     </div>
 
-                    {/* Bonuses */}
+                    {/* Bonuses 
                     <div className="space-y-4">
                       <h4 className="font-semibold text-gray-700">Bonuses</h4>
 
@@ -601,7 +619,7 @@ export default function GamePage() {
                       </div>
                     </div>
 
-                    {/* Penalties & Special */}
+                    {/* Penalties & Special 
                     <div className="space-y-4">
                       <h4 className="font-semibold text-gray-700">
                         Penalties & Special
@@ -646,8 +664,110 @@ export default function GamePage() {
               ))}
             </div>
           </CardContent>
-        </Card>
-      </div>
-    </div>
+        </Card> */}
+      </View>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    backgroundColor: "#ECFDF5", // from-green-50
+    padding: 16,
+  },
+  container: {
+    maxWidth: 960,
+    alignSelf: "center",
+  },
+  gameId: {
+    fontSize: 14,
+    color: "#4B5563",
+    marginBottom: 12,
+  },
+  header: {
+    flexDirection: "column",
+    gap: 16,
+    marginBottom: 24,
+  },
+  titleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 16,
+  },
+  backButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 8,
+    borderWidth: 1,
+    borderColor: "#D1D5DB",
+    borderRadius: 8,
+  },
+  backText: {
+    marginLeft: 6,
+    color: "#1E3A8A",
+    fontWeight: "500",
+  },
+  gameName: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#111827",
+  },
+  badgeRow: {
+    flexDirection: "row",
+    gap: 12,
+    marginTop: 4,
+  },
+  roundBadge: {
+    backgroundColor: "#DBEAFE",
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderRadius: 6,
+  },
+  roundText: {
+    color: "#1E3A8A",
+    fontWeight: "600",
+  },
+  playerBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#D1D5DB",
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderRadius: 6,
+    gap: 4,
+  },
+  playerText: {
+    color: "#1E3A8A",
+    fontSize: 12,
+  },
+  buttonRow: {
+    flexDirection: "row",
+    gap: 12,
+    marginTop: 12,
+  },
+  saveButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#059669",
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+  },
+  saveText: {
+    color: "#fff",
+    fontWeight: "600",
+  },
+  endButton: {
+    borderWidth: 1,
+    borderColor: "#FCA5A5",
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+  },
+  endText: {
+    color: "#DC2626",
+    fontWeight: "600",
+  },
+});
