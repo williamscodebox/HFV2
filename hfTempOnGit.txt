@@ -4,6 +4,9 @@ Game Page needs completion
 newgame page needs reworking to fix issue with fields not being cleared when page is reloaded
 database needs to be worked on --- looking into using expo SQLite
 update the CustomDrawer to have a better Logo for the drawer sidebar
+update tutorial to include 4 rounds in game and starting points (50, 75, 120, 150)
+update newgame page to have ability to delete players from the app
+update home page to have the ability to delete games from the app
 
 create marketing video 5 min length -- current at 0:03:06
 
