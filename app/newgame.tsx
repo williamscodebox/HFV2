@@ -119,10 +119,12 @@ export default function newgame() {
         id: uuidv4(),
         name: gameName,
         players: selectedPlayers.map((player) => ({
-          player_id: player.id,
+          id: player.id,
           name: player.name,
           total_score: 0,
           rounds: [],
+          games_played: player.games_played,
+          games_won: player.games_won,
         })),
         current_round: 1,
         status: "active",

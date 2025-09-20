@@ -1,6 +1,9 @@
+import { Game, Player } from "@/entities/all";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Text, View } from "react-native";
+import "react-native-get-random-values";
+import { v4 as uuidv4 } from "uuid";
 
 // import { createPageUrl } from "@/utils";
 // import {
@@ -14,62 +17,138 @@ import { Text, View } from "react-native";
 //   Users,
 //   RotateCcw
 // } from "lucide-react";
+//
+interface RoundScore {
+  melds_score: number;
+  cards_score: number;
+  bonus_clean_books: number;
+  bonus_dirty_books: number;
+  bonus_red_threes: number;
+  penalty_cards_left: number;
+  went_out: boolean;
+}
+
+type NumericScoreField = Exclude<keyof RoundScore, "went_out">;
 
 export default function GamePage() {
   const router = useRouter();
-  const { id } = useLocalSearchParams();
+  const { id: gameId } = useLocalSearchParams();
 
   const [game, setGame] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [roundScores, setRoundScores] = useState({});
+  const [roundScores, setRoundScores] = useState<Record<string, RoundScore>>(
+    {}
+  );
+
+  const players: Player[] = [
+    {
+      id: "1",
+      name: "Alice",
+      total_score: 1200,
+      games_played: 15,
+      games_won: 5,
+    },
+    {
+      id: "2",
+      name: "Bob",
+      total_score: 950,
+      games_played: 12,
+      games_won: 3,
+    },
+    {
+      id: "3",
+      name: "Charlie",
+      total_score: 800,
+      games_played: 10,
+      games_won: 2,
+    },
+    {
+      id: "4",
+      name: "Alice",
+      total_score: 1200,
+      games_played: 15,
+      games_won: 5,
+    },
+    {
+      id: "5",
+      name: "Bob",
+      total_score: 950,
+      games_played: 12,
+      games_won: 3,
+    },
+    {
+      id: "6",
+      name: "Charlie",
+      total_score: 800,
+      games_played: 10,
+      games_won: 2,
+    },
+  ];
+
+  const gameData: Game = {
+    id: uuidv4(),
+    name: "Test",
+    players: players.map((player) => ({
+      id: player.id,
+      name: player.name,
+      total_score: 0,
+      rounds: [],
+    })),
+    current_round: 1,
+    status: "active",
+  };
 
   useEffect(() => {
     const loadGame = async () => {
-      try {
-        const gameData = await Game.filter({ id: gameId });
-        if (gameData.length > 0) {
-          const currentGame = gameData[0];
-          setGame(currentGame);
-
-          // Initialize round scores for current round
-          const scores = {};
-          currentGame.players.forEach((player) => {
-            scores[player.player_id] = {
-              melds_score: 0,
-              cards_score: 0,
-              bonus_clean_books: 0,
-              bonus_dirty_books: 0,
-              bonus_red_threes: 0,
-              penalty_cards_left: 0,
-              went_out: false,
-            };
-          });
-          setRoundScores(scores);
-        }
-      } catch (error) {
-        console.error("Error loading game:", error);
-      } finally {
-        setLoading(false);
-      }
+      // try {
+      //   const gameData = await Game.filter({ id: gameId });
+      //   if (gameData.length > 0) {
+      //     const currentGame = gameData[0];
+      //     setGame(currentGame);
+      //     // Initialize round scores for current round
+      //     const scores = {};
+      //     currentGame.players.forEach((player) => {
+      //       scores[player.player_id] = {
+      //         melds_score: 0,
+      //         cards_score: 0,
+      //         bonus_clean_books: 0,
+      //         bonus_dirty_books: 0,
+      //         bonus_red_threes: 0,
+      //         penalty_cards_left: 0,
+      //         went_out: false,
+      //       };
+      //     });
+      //     setRoundScores(scores);
+      //   }
+      // } catch (error) {
+      //   console.error("Error loading game:", error);
+      // } finally {
+      //   setLoading(false);
+      // }
     };
 
-    if (gameId) {
-      loadGame();
-    }
+    // if (gameId) {
+    //   loadGame();
+    // }
   }, [gameId]); // gameId is the only dependency here, as loadGame is defined inside
 
-  const updateScore = (playerId, field, value) => {
+  const updateScore = (
+    playerId: string,
+    field: NumericScoreField,
+    value: string
+  ) => {
+    const parsed = parseInt(value);
     setRoundScores((prev) => ({
       ...prev,
       [playerId]: {
         ...prev[playerId],
-        [field]: parseInt(value) || 0,
+        [field]: isNaN(parsed) ? 0 : parsed,
       },
     }));
   };
 
-  const toggleWentOut = (playerId) => {
+  const toggleWentOut = (playerId: string) => {
     setRoundScores((prev) => ({
       ...prev,
       [playerId]: {
@@ -79,7 +158,7 @@ export default function GamePage() {
     }));
   };
 
-  const calculateRoundTotal = (playerId) => {
+  const calculateRoundTotal = (playerId: string) => {
     const scores = roundScores[playerId] || {};
     const bonuses =
       scores.bonus_clean_books * 500 +
@@ -98,9 +177,9 @@ export default function GamePage() {
   const saveRound = async () => {
     setSaving(true);
     try {
-      const updatedPlayers = game.players.map((player) => {
-        const playerScores = roundScores[player.player_id] || {};
-        const roundTotal = calculateRoundTotal(player.player_id);
+      const updatedPlayers = game.players.map((player: Player) => {
+        const playerScores = roundScores[player.id] || {};
+        const roundTotal = calculateRoundTotal(player.id);
 
         const newRound = {
           round_number: game.current_round,

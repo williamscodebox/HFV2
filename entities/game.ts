@@ -11,10 +11,12 @@ export interface Round {
 }
 
 export interface GamePlayer {
-  player_id: string;
+  id: string;
   name: string;
   total_score?: number;
   rounds?: Round[];
+  games_played?: number; // Defaults to 0
+  games_won?: number; // Defaults to 0
 }
 
 export interface Game {
