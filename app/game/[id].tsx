@@ -7,6 +7,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -431,76 +432,64 @@ export default function GamePage() {
 
           {/* Round Scoring */}
 
-          <Card className="shadow-lg">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Target className="w-5 h-5 text-green-600" />
-                Round {game.current_round} Scoring
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-8">
-                {game.players.map((player) => (
-                  <div
-                    key={player.player_id}
-                    className="border border-gray-200 rounded-lg p-6 bg-white"
-                  >
-                    <div className="flex items-center justify-between mb-6">
-                      <h3 className="text-xl font-semibold">{player.name}</h3>
-                      <div className="text-right">
-                        <p className="text-2xl font-bold text-green-600">
-                          {calculateRoundTotal(player.player_id)}
-                        </p>
-                        <p className="text-sm text-gray-500">Round Total</p>
-                      </div>
-                    </div>
+          <View style={styles.card2}>
+            <View style={styles.cardHeader2}>
+              <View style={styles.titleRow2}>
+                {/* <Target size={20} color="#059669" /> */}
+                <Text style={styles.cardTitle2}>
+                  Round {game.current_round} Scoring
+                </Text>
+              </View>
+            </View>
 
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                      {/* Basic Scores  */}
+            <View style={styles.cardContent2}>
+              {game.players.map((player) => (
+                <View key={player.id} style={styles.playerCard2}>
+                  <View style={styles.playerHeader2}>
+                    <Text style={styles.playerName2}>{player.name}</Text>
+                    <View style={styles.totalBox2}>
+                      <Text style={styles.totalScore2}>
+                        {calculateRoundTotal(player.id)}
+                      </Text>
+                      <Text style={styles.totalLabel2}>Round Total</Text>
+                    </View>
+                  </View>
 
-                      <div className="space-y-4">
-                        <h4 className="font-semibold text-gray-700">
-                          Basic Scores
-                        </h4>
+                  <View style={styles.scoreGrid2}>
+                    {/* Basic Scores */}
+                    <View style={styles.scoreSection2}>
+                      <Text style={styles.sectionTitle2}>Basic Scores</Text>
 
-                        <div>
-                          <Label>Melds Score</Label>
-                          <Input
-                            type="number"
-                            value={
-                              roundScores[player.player_id]?.melds_score || 0
-                            }
-                            onChange={(e) =>
-                              updateScore(
-                                player.player_id,
-                                "melds_score",
-                                e.target.value
-                              )
-                            }
-                            className="mt-1"
-                          />
-                        </div>
+                      <View style={styles.inputGroup2}>
+                        <Text style={styles.label2}>Melds Score</Text>
+                        <TextInput
+                          keyboardType="numeric"
+                          value={String(
+                            roundScores[player.id]?.melds_score || 0
+                          )}
+                          onChangeText={(value) =>
+                            updateScore(player.id, "melds_score", value)
+                          }
+                          style={styles.input2}
+                        />
+                      </View>
 
-                        <div>
-                          <Label>Cards Score</Label>
-                          <Input
-                            type="number"
-                            value={
-                              roundScores[player.player_id]?.cards_score || 0
-                            }
-                            onChange={(e) =>
-                              updateScore(
-                                player.player_id,
-                                "cards_score",
-                                e.target.value
-                              )
-                            }
-                            className="mt-1"
-                          />
-                        </div>
-                      </div>
+                      <View style={styles.inputGroup2}>
+                        <Text style={styles.label2}>Cards Score</Text>
+                        <TextInput
+                          keyboardType="numeric"
+                          value={String(
+                            roundScores[player.id]?.cards_score || 0
+                          )}
+                          onChangeText={(value) =>
+                            updateScore(player.id, "cards_score", value)
+                          }
+                          style={styles.input2}
+                        />
+                      </View>
+                    </View>
 
-                      {/* Bonuses 
+                    {/* Bonuses 
                     <div className="space-y-4">
                       <h4 className="font-semibold text-gray-700">Bonuses</h4>
 
@@ -627,7 +616,7 @@ export default function GamePage() {
                       </div>
                     </div> */}
 
-                      {/* Penalties & Special 
+                    {/* Penalties & Special 
                     <div className="space-y-4">
                       <h4 className="font-semibold text-gray-700">
                         Penalties & Special
@@ -667,12 +656,11 @@ export default function GamePage() {
                         </Label>
                       </div>
                     </div> */}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+                  </View>
+                </View>
+              ))}
+            </View>
+          </View>
         </View>
       </LinearGradient>
     </ScrollView>
@@ -844,5 +832,87 @@ const styles = StyleSheet.create({
   pointsLabel: {
     fontSize: 10,
     color: "#6B7280",
+  },
+  card2: {
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    elevation: 4,
+    padding: 16,
+    marginBottom: 24,
+  },
+  cardHeader2: {
+    marginBottom: 12,
+  },
+  titleRow2: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  cardTitle2: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#111827",
+    marginLeft: 8,
+  },
+  cardContent2: {
+    gap: 16,
+  },
+  playerCard2: {
+    borderWidth: 1,
+    borderColor: "#E5E7EB",
+    borderRadius: 10,
+    backgroundColor: "#fff",
+    padding: 16,
+  },
+  playerHeader2: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 12,
+  },
+  playerName2: {
+    fontSize: 18,
+    fontWeight: "600",
+  },
+  totalBox2: {
+    alignItems: "flex-end",
+  },
+  totalScore2: {
+    fontSize: 22,
+    fontWeight: "bold",
+    color: "#059669",
+  },
+  totalLabel2: {
+    fontSize: 12,
+    color: "#6B7280",
+  },
+  scoreGrid2: {
+    flexDirection: "row",
+    gap: 16,
+    flexWrap: "wrap",
+  },
+  scoreSection2: {
+    flex: 1,
+    gap: 12,
+  },
+  sectionTitle2: {
+    fontWeight: "600",
+    color: "#374151",
+    marginBottom: 8,
+  },
+  inputGroup2: {
+    marginBottom: 12,
+  },
+  label2: {
+    fontSize: 14,
+    color: "#374151",
+    marginBottom: 4,
+  },
+  input2: {
+    borderWidth: 1,
+    borderColor: "#D1D5DB",
+    borderRadius: 6,
+    padding: 8,
+    fontSize: 16,
+    backgroundColor: "#F9FAFB",
   },
 });
