@@ -138,6 +138,7 @@ export default function GamePage() {
     //   loadGame();
     // }
     setGame(gameData);
+    setLoading(false);
   }, [gameId]); // gameId is the only dependency here, as loadGame is defined inside
 
   const updateScore = (
