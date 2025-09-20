@@ -489,132 +489,128 @@ export default function GamePage() {
                       </View>
                     </View>
 
-                    {/* Bonuses 
-                    <div className="space-y-4">
-                      <h4 className="font-semibold text-gray-700">Bonuses</h4>
+                    {/* Bonuses */}
+                    <View style={styles.section}>
+                      <Text style={styles.sectionTitle}>Bonuses</Text>
 
-                      <div>
-                        <Label>Clean Books (+500 each)</Label>
-                        <div className="flex items-center gap-2 mt-1">
-                          <Button
-                            variant="outline"
-                            size="icon"
-                            onClick={() =>
+                      {/* Clean Books */}
+                      <View style={styles.inputBlock}>
+                        <Text style={styles.label}>
+                          Clean Books (+500 each)
+                        </Text>
+                        <View style={styles.row}>
+                          <TouchableOpacity
+                            style={styles.iconButton}
+                            onPress={() =>
                               updateScore(
-                                player.player_id,
+                                player.id,
                                 "bonus_clean_books",
-                                Math.max(
-                                  0,
-                                  (roundScores[player.player_id]
-                                    ?.bonus_clean_books || 0) - 1
+                                String(
+                                  Math.max(
+                                    0,
+                                    (roundScores[player.id]
+                                      ?.bonus_clean_books || 0) - 1
+                                  )
                                 )
                               )
                             }
                           >
-                            <Minus className="w-4 h-4" />
-                          </Button>
-                          <Input
-                            type="number"
-                            value={
-                              roundScores[player.player_id]
-                                ?.bonus_clean_books || 0
+                            {/* <Minus size={16} color="#374151" /> */}
+                          </TouchableOpacity>
+                          <TextInput
+                            keyboardType="numeric"
+                            value={String(
+                              roundScores[player.id]?.bonus_clean_books || 0
+                            )}
+                            onChangeText={(value) =>
+                              updateScore(player.id, "bonus_clean_books", value)
                             }
-                            onChange={(e) =>
-                              updateScore(
-                                player.player_id,
-                                "bonus_clean_books",
-                                e.target.value
-                              )
-                            }
-                            className="text-center"
+                            style={styles.input}
                           />
-                          <Button
-                            variant="outline"
-                            size="icon"
-                            onClick={() =>
+                          <TouchableOpacity
+                            style={styles.iconButton}
+                            onPress={() =>
                               updateScore(
-                                player.player_id,
+                                player.id,
                                 "bonus_clean_books",
-                                (roundScores[player.player_id]
-                                  ?.bonus_clean_books || 0) + 1
-                              )
-                            }
-                          >
-                            <Plus className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      </div>
-
-                      <div>
-                        <Label>Dirty Books (+300 each)</Label>
-                        <div className="flex items-center gap-2 mt-1">
-                          <Button
-                            variant="outline"
-                            size="icon"
-                            onClick={() =>
-                              updateScore(
-                                player.player_id,
-                                "bonus_dirty_books",
-                                Math.max(
-                                  0,
-                                  (roundScores[player.player_id]
-                                    ?.bonus_dirty_books || 0) - 1
+                                String(
+                                  (roundScores[player.id]?.bonus_clean_books ||
+                                    0) + 1
                                 )
                               )
                             }
                           >
-                            <Minus className="w-4 h-4" />
-                          </Button>
-                          <Input
-                            type="number"
-                            value={
-                              roundScores[player.player_id]
-                                ?.bonus_dirty_books || 0
-                            }
-                            onChange={(e) =>
+                            {/* <Plus size={16} color="#374151" /> */}
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+
+                      {/* Dirty Books */}
+                      <View style={styles.inputBlock}>
+                        <Text style={styles.label}>
+                          Dirty Books (+300 each)
+                        </Text>
+                        <View style={styles.row}>
+                          <TouchableOpacity
+                            style={styles.iconButton}
+                            onPress={() =>
                               updateScore(
-                                player.player_id,
+                                player.id,
                                 "bonus_dirty_books",
-                                e.target.value
-                              )
-                            }
-                            className="text-center"
-                          />
-                          <Button
-                            variant="outline"
-                            size="icon"
-                            onClick={() =>
-                              updateScore(
-                                player.player_id,
-                                "bonus_dirty_books",
-                                (roundScores[player.player_id]
-                                  ?.bonus_dirty_books || 0) + 1
+                                String(
+                                  Math.max(
+                                    0,
+                                    (roundScores[player.id]
+                                      ?.bonus_dirty_books || 0) - 1
+                                  )
+                                )
                               )
                             }
                           >
-                            <Plus className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      </div>
+                            {/* <Minus size={16} color="#374151" /> */}
+                          </TouchableOpacity>
+                          <TextInput
+                            keyboardType="numeric"
+                            value={String(
+                              roundScores[player.id]?.bonus_dirty_books || 0
+                            )}
+                            onChangeText={(value) =>
+                              updateScore(player.id, "bonus_dirty_books", value)
+                            }
+                            style={styles.input}
+                          />
+                          <TouchableOpacity
+                            style={styles.iconButton}
+                            onPress={() =>
+                              updateScore(
+                                player.id,
+                                "bonus_dirty_books",
+                                String(
+                                  roundScores[player.id]?.bonus_dirty_books || 0
+                                ) + 1
+                              )
+                            }
+                          >
+                            {/* <Plus size={16} color="#374151" /> */}
+                          </TouchableOpacity>
+                        </View>
+                      </View>
 
-                      <div>
-                        <Label>Red Threes (+100 each)</Label>
-                        <Input
-                          type="number"
-                          value={
-                            roundScores[player.player_id]?.bonus_red_threes || 0
+                      {/* Red Threes */}
+                      <View style={styles.inputBlock}>
+                        <Text style={styles.label}>Red Threes (+100 each)</Text>
+                        <TextInput
+                          keyboardType="numeric"
+                          value={String(
+                            roundScores[player.id]?.bonus_red_threes || 0
+                          )}
+                          onChangeText={(value) =>
+                            updateScore(player.id, "bonus_red_threes", value)
                           }
-                          onChange={(e) =>
-                            updateScore(
-                              player.player_id,
-                              "bonus_red_threes",
-                              e.target.value
-                            )
-                          }
-                          className="mt-1"
+                          style={styles.input}
                         />
-                      </div>
-                    </div> */}
+                      </View>
+                    </View>
 
                     {/* Penalties & Special 
                     <div className="space-y-4">
@@ -914,5 +910,44 @@ const styles = StyleSheet.create({
     padding: 8,
     fontSize: 16,
     backgroundColor: "#F9FAFB",
+  },
+  section: {
+    marginBottom: 24,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#374151",
+    marginBottom: 12,
+  },
+  inputBlock: {
+    marginBottom: 16,
+  },
+  label: {
+    fontSize: 14,
+    color: "#374151",
+    marginBottom: 6,
+  },
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  iconButton: {
+    padding: 8,
+    borderWidth: 1,
+    borderColor: "#D1D5DB",
+    borderRadius: 6,
+    backgroundColor: "#F9FAFB",
+  },
+  input: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: "#D1D5DB",
+    borderRadius: 6,
+    padding: 8,
+    textAlign: "center",
+    backgroundColor: "#F9FAFB",
+    fontSize: 16,
   },
 });
