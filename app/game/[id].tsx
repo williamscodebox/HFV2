@@ -388,6 +388,7 @@ export default function GamePage() {
           </View>
 
           {/* Current Standings */}
+
           <View style={styles.card}>
             <View style={styles.cardHeader}>
               <View style={styles.cardTitleRow}>
@@ -428,76 +429,78 @@ export default function GamePage() {
             </View>
           </View>
 
-          {/* Round Scoring 
-        <Card className="shadow-lg">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Target className="w-5 h-5 text-green-600" />
-              Round {game.current_round} Scoring
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-8">
-              {game.players.map((player) => (
-                <div
-                  key={player.player_id}
-                  className="border border-gray-200 rounded-lg p-6 bg-white"
-                >
-                  <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-xl font-semibold">{player.name}</h3>
-                    <div className="text-right">
-                      <p className="text-2xl font-bold text-green-600">
-                        {calculateRoundTotal(player.player_id)}
-                      </p>
-                      <p className="text-sm text-gray-500">Round Total</p>
-                    </div>
-                  </div>
+          {/* Round Scoring */}
 
-                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {/* Basic Scores 
-                    <div className="space-y-4">
-                      <h4 className="font-semibold text-gray-700">
-                        Basic Scores
-                      </h4>
-
-                      <div>
-                        <Label>Melds Score</Label>
-                        <Input
-                          type="number"
-                          value={
-                            roundScores[player.player_id]?.melds_score || 0
-                          }
-                          onChange={(e) =>
-                            updateScore(
-                              player.player_id,
-                              "melds_score",
-                              e.target.value
-                            )
-                          }
-                          className="mt-1"
-                        />
-                      </div>
-
-                      <div>
-                        <Label>Cards Score</Label>
-                        <Input
-                          type="number"
-                          value={
-                            roundScores[player.player_id]?.cards_score || 0
-                          }
-                          onChange={(e) =>
-                            updateScore(
-                              player.player_id,
-                              "cards_score",
-                              e.target.value
-                            )
-                          }
-                          className="mt-1"
-                        />
+          <Card className="shadow-lg">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Target className="w-5 h-5 text-green-600" />
+                Round {game.current_round} Scoring
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-8">
+                {game.players.map((player) => (
+                  <div
+                    key={player.player_id}
+                    className="border border-gray-200 rounded-lg p-6 bg-white"
+                  >
+                    <div className="flex items-center justify-between mb-6">
+                      <h3 className="text-xl font-semibold">{player.name}</h3>
+                      <div className="text-right">
+                        <p className="text-2xl font-bold text-green-600">
+                          {calculateRoundTotal(player.player_id)}
+                        </p>
+                        <p className="text-sm text-gray-500">Round Total</p>
                       </div>
                     </div>
 
-                    {/* Bonuses 
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {/* Basic Scores  */}
+
+                      <div className="space-y-4">
+                        <h4 className="font-semibold text-gray-700">
+                          Basic Scores
+                        </h4>
+
+                        <div>
+                          <Label>Melds Score</Label>
+                          <Input
+                            type="number"
+                            value={
+                              roundScores[player.player_id]?.melds_score || 0
+                            }
+                            onChange={(e) =>
+                              updateScore(
+                                player.player_id,
+                                "melds_score",
+                                e.target.value
+                              )
+                            }
+                            className="mt-1"
+                          />
+                        </div>
+
+                        <div>
+                          <Label>Cards Score</Label>
+                          <Input
+                            type="number"
+                            value={
+                              roundScores[player.player_id]?.cards_score || 0
+                            }
+                            onChange={(e) =>
+                              updateScore(
+                                player.player_id,
+                                "cards_score",
+                                e.target.value
+                              )
+                            }
+                            className="mt-1"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Bonuses 
                     <div className="space-y-4">
                       <h4 className="font-semibold text-gray-700">Bonuses</h4>
 
@@ -622,9 +625,9 @@ export default function GamePage() {
                           className="mt-1"
                         />
                       </div>
-                    </div>
+                    </div> */}
 
-                    {/* Penalties & Special 
+                      {/* Penalties & Special 
                     <div className="space-y-4">
                       <h4 className="font-semibold text-gray-700">
                         Penalties & Special
@@ -663,13 +666,13 @@ export default function GamePage() {
                           Went Out (+100)
                         </Label>
                       </div>
+                    </div> */}
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card> */}
+                ))}
+              </div>
+            </CardContent>
+          </Card>
         </View>
       </LinearGradient>
     </ScrollView>
