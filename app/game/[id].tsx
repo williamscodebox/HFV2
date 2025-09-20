@@ -100,7 +100,7 @@ export default function GamePage() {
     players: players.map((player) => ({
       id: player.id,
       name: player.name,
-      total_score: 0,
+      total_score: player.total_score || 0,
       rounds: [],
     })),
     current_round: 1,
@@ -149,6 +149,7 @@ export default function GamePage() {
     value: string
   ) => {
     const parsed = parseInt(value);
+    console.log("Updating", playerId, field, parsed);
     setRoundScores((prev) => ({
       ...prev,
       [playerId]: {
@@ -156,6 +157,7 @@ export default function GamePage() {
         [field]: isNaN(parsed) ? 0 : parsed,
       },
     }));
+    console.log(roundScores);
   };
 
   const toggleWentOut = (playerId: string) => {
@@ -170,17 +172,19 @@ export default function GamePage() {
 
   const calculateRoundTotal = (playerId: string) => {
     const scores = roundScores[playerId] || {};
+    console.log("Calculating total for", playerId, scores);
     const bonuses =
-      scores.bonus_clean_books * 500 +
-      scores.bonus_dirty_books * 300 +
-      scores.bonus_red_threes * 100 +
+      (scores.bonus_clean_books ?? 0) * 500 +
+      (scores.bonus_dirty_books ?? 0) * 300 +
+      (scores.bonus_red_threes ?? 0) * 100 +
       (scores.went_out ? 100 : 0);
+    console.log("Bonuses:", bonuses);
 
     return (
-      scores.melds_score +
-      scores.cards_score +
+      (scores.melds_score ?? 0) +
+      (scores.cards_score ?? 0) +
       bonuses -
-      scores.penalty_cards_left
+      (scores.penalty_cards_left ?? 0)
     );
   };
 
