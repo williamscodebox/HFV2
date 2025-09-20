@@ -1,6 +1,8 @@
 Temp file used in brainstorming ideas
 
-Game Page needs set up
+Game Page needs completion
+newgame page needs reworking to fix issue with fields not being cleared when page is reloaded
+database needs to be worked on --- looking into using expo SQLite
 
 create marketing video 5 min length -- current at 0:03:06
 
