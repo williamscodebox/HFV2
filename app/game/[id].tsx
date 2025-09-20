@@ -4,6 +4,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -320,111 +321,114 @@ export default function GamePage() {
   // );
 
   return (
-    <View style={styles.screen}>
-      <View style={styles.container}>
-        <Text style={styles.gameId}>Game ID: {gameId}</Text>
+    <ScrollView keyboardShouldPersistTaps="handled">
+      <LinearGradient
+        colors={["#ECFDF5", "#EFF6FF"]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.screen}
+      >
+        <View style={styles.container}>
+          <Text style={styles.gameId}>Game ID: {gameId}</Text>
 
-        {/* Header */}
-        <View style={styles.header}>
-          {/* Back Button + Title */}
-          <View style={styles.titleRow}>
-            <TouchableOpacity
-              onPress={() => router.push("/")}
-              style={styles.backButton}
-            >
-              {/* <ArrowLeft size={16} color="#1E3A8A" /> */}
-              <Text style={styles.backText}>Back</Text>
-            </TouchableOpacity>
+          {/* Header */}
+          <View style={styles.header}>
+            {/* Back Button + Title */}
+            <View style={styles.titleRow}>
+              <TouchableOpacity
+                onPress={() => router.push("/")}
+                style={styles.backButton}
+              >
+                {/* <ArrowLeft size={16} color="#1E3A8A" /> */}
+                <Text style={styles.backText}>Back</Text>
+              </TouchableOpacity>
 
-            <View>
-              <Text style={styles.gameName}>{game.name}</Text>
-              <View style={styles.badgeRow}>
-                <View style={styles.roundBadge}>
-                  <Text style={styles.roundText}>
-                    Round {game.current_round}
-                  </Text>
-                </View>
-                <View style={styles.playerBadge}>
-                  {/* <Users size={12} color="#1E3A8A" /> */}
-                  <Text style={styles.playerText}>
-                    {game.players.length} players
-                  </Text>
+              <View>
+                <Text style={styles.gameName}>{game.name}</Text>
+                <View style={styles.badgeRow}>
+                  <View style={styles.roundBadge}>
+                    <Text style={styles.roundText}>
+                      Round {game.current_round}
+                    </Text>
+                  </View>
+                  <View style={styles.playerBadge}>
+                    {/* <Users size={12} color="#1E3A8A" /> */}
+                    <Text style={styles.playerText}>
+                      {game.players.length} players
+                    </Text>
+                  </View>
                 </View>
               </View>
             </View>
+
+            {/* Action Buttons */}
+            <View style={styles.buttonRow}>
+              <TouchableOpacity
+                onPress={saveRound}
+                disabled={saving}
+                style={[
+                  styles.saveButton,
+                  saving && { backgroundColor: "#A7F3D0" },
+                ]}
+              >
+                {saving ? (
+                  <ActivityIndicator color="#fff" />
+                ) : (
+                  <>
+                    {/* <Save size={16} color="#fff" style={{ marginRight: 6 }} /> */}
+                    <Text style={styles.saveText}>Save Round</Text>
+                  </>
+                )}
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={endGame} style={styles.endButton}>
+                <Text style={styles.endText}>End Game</Text>
+              </TouchableOpacity>
+            </View>
           </View>
 
-          {/* Action Buttons */}
-          <View style={styles.buttonRow}>
-            <TouchableOpacity
-              onPress={saveRound}
-              disabled={saving}
-              style={[
-                styles.saveButton,
-                saving && { backgroundColor: "#A7F3D0" },
-              ]}
-            >
-              {saving ? (
-                <ActivityIndicator color="#fff" />
-              ) : (
-                <>
-                  {/* <Save size={16} color="#fff" style={{ marginRight: 6 }} /> */}
-                  <Text style={styles.saveText}>Save Round</Text>
-                </>
-              )}
-            </TouchableOpacity>
-
-            <TouchableOpacity onPress={endGame} style={styles.endButton}>
-              <Text style={styles.endText}>End Game</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        {/* Current Standings
-        <Card className="mb-8 shadow-lg">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Trophy className="w-5 h-5 text-yellow-600" />
-              Current Standings
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid gap-3">
+          {/* Current Standings */}
+          <View style={styles.card}>
+            <View style={styles.cardHeader}>
+              <View style={styles.cardTitleRow}>
+                {/* <Trophy size={20} color="#CA8A04" /> */}
+                <Text style={styles.cardTitle}>Current Standings</Text>
+              </View>
+            </View>
+            <View style={styles.cardContent}>
               {game.players
                 .sort((a, b) => (b.total_score || 0) - (a.total_score || 0))
                 .map((player, index) => (
-                  <div
-                    key={player.player_id}
-                    className={`flex items-center justify-between p-3 rounded-lg ${
-                      index === 0
-                        ? "bg-yellow-50 border-2 border-yellow-300"
-                        : "bg-gray-50"
-                    }`}
+                  <View
+                    key={player.id}
+                    style={[
+                      styles.playerRow,
+                      index === 0 ? styles.leaderRow : styles.defaultRow,
+                    ]}
                   >
-                    <div className="flex items-center gap-3">
-                      {index === 0 && (
+                    <View style={styles.playerInfo}>
+                      {/* {index === 0 && (
                         <Crown className="w-5 h-5 text-yellow-600" />
-                      )}
-                      <div>
-                        <p className="font-semibold">{player.name}</p>
-                        <p className="text-sm text-gray-600">
+                      )} */}
+                      <View>
+                        <Text style={styles.playerName}>{player.name}</Text>
+                        <Text style={styles.roundsPlayed}>
                           {player.rounds?.length || 0} rounds played
-                        </p>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-xl font-bold">
+                        </Text>
+                      </View>
+                    </View>
+                    <View style={styles.scoreBox}>
+                      <Text style={styles.score}>
                         {player.total_score || 0}
-                      </p>
-                      <p className="text-xs text-gray-500">points</p>
-                    </div>
-                  </div>
+                      </Text>
+                      <Text style={styles.pointsLabel}>points</Text>
+                    </View>
+                  </View>
                 ))}
-            </div>
-          </CardContent>
-        </Card>
+            </View>
+          </View>
 
-        {/* Round Scoring 
+          {/* Round Scoring 
         <Card className="shadow-lg">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -666,15 +670,16 @@ export default function GamePage() {
             </div>
           </CardContent>
         </Card> */}
-      </View>
-    </View>
+        </View>
+      </LinearGradient>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: "#ECFDF5", // from-green-50
+    // backgroundColor: "#ECFDF5", // from-green-50
     padding: 16,
   },
   container: {
@@ -770,5 +775,71 @@ const styles = StyleSheet.create({
   endText: {
     color: "#DC2626",
     fontWeight: "600",
+  },
+  card: {
+    marginBottom: 24,
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    elevation: 4,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    padding: 16,
+  },
+  cardHeader: {
+    marginBottom: 12,
+  },
+  cardTitleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  cardTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#111827",
+  },
+  cardContent: {
+    gap: 12,
+  },
+  playerRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 12,
+    borderRadius: 8,
+  },
+  leaderRow: {
+    backgroundColor: "#FEF9C3",
+    borderWidth: 2,
+    borderColor: "#FACC15",
+  },
+  defaultRow: {
+    backgroundColor: "#F9FAFB",
+  },
+  playerInfo: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  playerName: {
+    fontWeight: "600",
+    fontSize: 16,
+  },
+  roundsPlayed: {
+    fontSize: 12,
+    color: "#6B7280",
+  },
+  scoreBox: {
+    alignItems: "flex-end",
+  },
+  score: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#111827",
+  },
+  pointsLabel: {
+    fontSize: 10,
+    color: "#6B7280",
   },
 });
