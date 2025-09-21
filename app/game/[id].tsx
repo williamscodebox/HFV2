@@ -1,4 +1,5 @@
 import { Game, Player } from "@/entities/all";
+import { EvilIcons, Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
@@ -6,6 +7,7 @@ import {
   ActivityIndicator,
   ScrollView,
   StyleSheet,
+  Switch,
   Text,
   TextInput,
   TouchableOpacity,
@@ -14,18 +16,9 @@ import {
 import "react-native-get-random-values";
 
 // import { createPageUrl } from "@/utils";
-// import {
-//   Trophy,
-//   Plus,
-//   Minus,
-//   Save,
-//   ArrowLeft,
-//   Crown,
-//   Target,
-//   Users,
+
 //   RotateCcw
-// } from "lucide-react";
-//
+
 interface RoundScore {
   melds_score: number;
   cards_score: number;
@@ -149,7 +142,6 @@ export default function GamePage() {
     value: string
   ) => {
     const parsed = parseInt(value);
-    console.log("Updating", playerId, field, parsed);
     setRoundScores((prev) => ({
       ...prev,
       [playerId]: {
@@ -157,28 +149,28 @@ export default function GamePage() {
         [field]: isNaN(parsed) ? 0 : parsed,
       },
     }));
-    console.log(roundScores);
   };
 
   const toggleWentOut = (playerId: string) => {
-    setRoundScores((prev) => ({
-      ...prev,
-      [playerId]: {
-        ...prev[playerId],
-        went_out: !prev[playerId].went_out,
-      },
-    }));
+    setRoundScores((prev) => {
+      const current = prev[playerId] ?? {};
+      return {
+        ...prev,
+        [playerId]: {
+          ...current,
+          went_out: !current.went_out,
+        },
+      };
+    });
   };
 
   const calculateRoundTotal = (playerId: string) => {
     const scores = roundScores[playerId] || {};
-    console.log("Calculating total for", playerId, scores);
     const bonuses =
       (scores.bonus_clean_books ?? 0) * 500 +
       (scores.bonus_dirty_books ?? 0) * 300 +
       (scores.bonus_red_threes ?? 0) * 100 +
       (scores.went_out ? 100 : 0);
-    console.log("Bonuses:", bonuses);
 
     return (
       (scores.melds_score ?? 0) +
@@ -248,6 +240,7 @@ export default function GamePage() {
     // } finally {
     //   setSaving(false);
     // }
+    console.log("Save round clicked");
   };
 
   const endGame = async () => {
@@ -270,6 +263,7 @@ export default function GamePage() {
     // } catch (error) {
     //   console.error("Error ending game:", error);
     // }
+    console.log("End game clicked");
   };
 
   if (loading) {
@@ -300,30 +294,38 @@ export default function GamePage() {
 
   if (!game) {
     return (
-      <View style={styles.screen}>
-        <Text style={styles.gameId}>Game ID: {gameId}</Text>
+      <View style={styles.ngscreen}>
+        <View style={styles.ngcenter}>
+          <EvilIcons
+            name="trophy"
+            size={64}
+            color="#EF4444"
+            style={styles.ngicon}
+          />
+          <Text style={styles.ngtitle}>Game Not Found</Text>
+          <Text style={styles.ngsubtitle}>
+            The game you're looking for doesn't exist.
+          </Text>
+          <TouchableOpacity
+            style={styles.ngbutton}
+            onPress={() => router.push("/")}
+          >
+            <Feather
+              name="arrow-left"
+              size={16}
+              color="white"
+              style={{ marginRight: 6 }}
+            />
+            <Text style={styles.ngbuttonText}>Back to Home</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-      // <div className="min-h-screen bg-gradient-to-br from-red-50 to-pink-50 p-8 flex items-center justify-center">
-      //   <div className="text-center">
-      //     <Trophy className="w-16 h-16 text-red-500 mx-auto mb-4" />
-      //     <h1 className="text-2xl font-bold text-gray-900 mb-2">
-      //       Game Not Found
-      //     </h1>
-      //     <p className="text-gray-600 mb-4">
-      //       The game you're looking for doesn't exist.
-      //     </p>
-      //     <Button onClick={() => navigate(createPageUrl("Home"))}>
-      //       <ArrowLeft className="w-4 h-4 mr-2" />
-      //       Back to Home
-      //     </Button>
-      //   </div>
-      // </div>
     );
   }
 
-  // const currentLeader = game.players.reduce((prev, current) =>
-  //   current.total_score > prev.total_score ? current : prev
-  // );
+  const currentLeader = game.players.reduce((prev, current) =>
+    (current.total_score ?? 0) > (prev.total_score ?? 0) ? current : prev
+  );
 
   return (
     <ScrollView keyboardShouldPersistTaps="handled">
@@ -344,7 +346,7 @@ export default function GamePage() {
                 onPress={() => router.push("/")}
                 style={styles.backButton}
               >
-                {/* <ArrowLeft size={16} color="#1E3A8A" /> */}
+                <Feather name="arrow-left" size={16} color="#1E3A8A" />
                 <Text style={styles.backText}>Back</Text>
               </TouchableOpacity>
 
@@ -357,7 +359,7 @@ export default function GamePage() {
                     </Text>
                   </View>
                   <View style={styles.playerBadge}>
-                    {/* <Users size={12} color="#1E3A8A" /> */}
+                    <Feather name="users" size={12} color="#1E3A8A" />
                     <Text style={styles.playerText}>
                       {game.players.length} players
                     </Text>
@@ -380,7 +382,12 @@ export default function GamePage() {
                   <ActivityIndicator color="#fff" />
                 ) : (
                   <>
-                    {/* <Save size={16} color="#fff" style={{ marginRight: 6 }} /> */}
+                    <Feather
+                      name="save"
+                      size={16}
+                      color="white"
+                      style={{ marginRight: 6 }}
+                    />
                     <Text style={styles.saveText}>Save Round</Text>
                   </>
                 )}
@@ -397,7 +404,7 @@ export default function GamePage() {
           <View style={styles.card}>
             <View style={styles.cardHeader}>
               <View style={styles.cardTitleRow}>
-                {/* <Trophy size={20} color="#CA8A04" /> */}
+                <EvilIcons name="trophy" size={28} color="#CA8A04" />
                 <Text style={styles.cardTitle}>Current Standings</Text>
               </View>
             </View>
@@ -413,9 +420,13 @@ export default function GamePage() {
                     ]}
                   >
                     <View style={styles.playerInfo}>
-                      {/* {index === 0 && (
-                        <Crown className="w-5 h-5 text-yellow-600" />
-                      )} */}
+                      {index === 0 && (
+                        <MaterialCommunityIcons
+                          name="crown-outline"
+                          size={28}
+                          color="#D69E2E"
+                        />
+                      )}
                       <View>
                         <Text style={styles.playerName}>{player.name}</Text>
                         <Text style={styles.roundsPlayed}>
@@ -439,7 +450,7 @@ export default function GamePage() {
           <View style={styles.card2}>
             <View style={styles.cardHeader2}>
               <View style={styles.titleRow2}>
-                {/* <Target size={20} color="#059669" /> */}
+                <Feather name="target" size={20} color="#059669" />
                 <Text style={styles.cardTitle2}>
                   Round {game.current_round} Scoring
                 </Text>
@@ -519,7 +530,7 @@ export default function GamePage() {
                               )
                             }
                           >
-                            {/* <Minus size={16} color="#374151" /> */}
+                            <Feather name="minus" size={16} color="#374151" />
                           </TouchableOpacity>
                           <TextInput
                             keyboardType="numeric"
@@ -544,7 +555,7 @@ export default function GamePage() {
                               )
                             }
                           >
-                            {/* <Plus size={16} color="#374151" /> */}
+                            <Feather name="plus" size={16} color="#374151" />
                           </TouchableOpacity>
                         </View>
                       </View>
@@ -571,7 +582,7 @@ export default function GamePage() {
                               )
                             }
                           >
-                            {/* <Minus size={16} color="#374151" /> */}
+                            <Feather name="minus" size={16} color="#374151" />
                           </TouchableOpacity>
                           <TextInput
                             keyboardType="numeric"
@@ -595,7 +606,7 @@ export default function GamePage() {
                               )
                             }
                           >
-                            {/* <Plus size={16} color="#374151" /> */}
+                            <Feather name="plus" size={16} color="#374151" />
                           </TouchableOpacity>
                         </View>
                       </View>
@@ -616,46 +627,39 @@ export default function GamePage() {
                       </View>
                     </View>
 
-                    {/* Penalties & Special 
-                    <div className="space-y-4">
-                      <h4 className="font-semibold text-gray-700">
+                    {/* Penalties & Special */}
+
+                    <View style={styles.pssection}>
+                      <Text style={styles.pssectionTitle}>
                         Penalties & Special
-                      </h4>
+                      </Text>
 
-                      <div>
-                        <Label>Cards Left (penalty)</Label>
-                        <Input
-                          type="number"
-                          value={
-                            roundScores[player.player_id]?.penalty_cards_left ||
-                            0
+                      {/* Cards Left (Penalty) */}
+                      <View style={styles.psinputBlock}>
+                        <Text style={styles.pslabel}>Cards Left (penalty)</Text>
+                        <TextInput
+                          keyboardType="numeric"
+                          value={String(
+                            roundScores[player.id]?.penalty_cards_left || 0
+                          )}
+                          onChangeText={(value) =>
+                            updateScore(player.id, "penalty_cards_left", value)
                           }
-                          onChange={(e) =>
-                            updateScore(
-                              player.player_id,
-                              "penalty_cards_left",
-                              e.target.value
-                            )
-                          }
-                          className="mt-1"
+                          style={styles.psinput}
                         />
-                      </div>
+                      </View>
 
-                      <div className="flex items-center space-x-2">
-                        <input
-                          type="checkbox"
-                          id={`went-out-${player.player_id}`}
-                          checked={
-                            roundScores[player.player_id]?.went_out || false
-                          }
-                          onChange={() => toggleWentOut(player.player_id)}
-                          className="w-4 h-4"
+                      {/* Went Out Toggle */}
+                      <View style={styles.pstoggleRow}>
+                        <Switch
+                          value={roundScores[player.id]?.went_out || false}
+                          onValueChange={() => toggleWentOut(player.id)}
                         />
-                        <Label htmlFor={`went-out-${player.player_id}`}>
+                        <Text style={styles.pstoggleLabel}>
                           Went Out (+100)
-                        </Label>
-                      </div>
-                    </div> */}
+                        </Text>
+                      </View>
+                    </View>
                   </View>
                 </View>
               ))}
@@ -668,6 +672,43 @@ export default function GamePage() {
 }
 
 const styles = StyleSheet.create({
+  ngscreen: {
+    flex: 1,
+    backgroundColor: "#FFE4E6", // from-red-50 to pink-50 gradient fallback
+    padding: 32,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  ngcenter: {
+    alignItems: "center",
+  },
+  ngicon: {
+    marginBottom: 16,
+  },
+  ngtitle: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#111827",
+    marginBottom: 8,
+  },
+  ngsubtitle: {
+    fontSize: 16,
+    color: "#4B5563",
+    marginBottom: 16,
+    textAlign: "center",
+  },
+  ngbutton: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#DC2626",
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+  },
+  ngbuttonText: {
+    color: "#fff",
+    fontWeight: "600",
+  },
   screen: {
     flex: 1,
     // backgroundColor: "#ECFDF5", // from-green-50
@@ -697,6 +738,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 8,
     borderWidth: 1,
+    backgroundColor: "#FFFF",
     borderColor: "#D1D5DB",
     borderRadius: 8,
   },
@@ -730,6 +772,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderWidth: 1,
     borderColor: "#D1D5DB",
+    backgroundColor: "#FFFF",
     paddingVertical: 4,
     paddingHorizontal: 8,
     borderRadius: 6,
@@ -762,6 +805,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 16,
     borderRadius: 8,
+    backgroundColor: "#FFFF",
   },
   endText: {
     color: "#DC2626",
@@ -855,9 +899,11 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   cardContent2: {
+    flexDirection: "column",
     gap: 16,
   },
   playerCard2: {
+    flexDirection: "column",
     borderWidth: 1,
     borderColor: "#E5E7EB",
     borderRadius: 10,
@@ -886,9 +932,8 @@ const styles = StyleSheet.create({
     color: "#6B7280",
   },
   scoreGrid2: {
-    flexDirection: "row",
+    flexDirection: "column",
     gap: 16,
-    flexWrap: "wrap",
   },
   scoreSection2: {
     flex: 1,
@@ -953,5 +998,39 @@ const styles = StyleSheet.create({
     textAlign: "center",
     backgroundColor: "#F9FAFB",
     fontSize: 16,
+  },
+  pssection: {
+    marginBottom: 24,
+  },
+  pssectionTitle: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#374151",
+    marginBottom: 12,
+  },
+  psinputBlock: {
+    marginBottom: 16,
+  },
+  pslabel: {
+    fontSize: 14,
+    color: "#374151",
+    marginBottom: 6,
+  },
+  psinput: {
+    borderWidth: 1,
+    borderColor: "#D1D5DB",
+    borderRadius: 6,
+    padding: 8,
+    fontSize: 16,
+    backgroundColor: "#F9FAFB",
+  },
+  pstoggleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+  },
+  pstoggleLabel: {
+    fontSize: 14,
+    color: "#374151",
   },
 });
