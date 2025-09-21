@@ -18,8 +18,6 @@ Have Newgame page finished 09-19-25 --> app needed reworking (building with type
 index for finding expo/vector-icons -->  https://icons.expo.fyi/Index
 
 Finish work on game page 09-30-25 
-Begin work on game page 
-
 
 Targets changed due to build issues with runtime failures
 Entire app being reworked into Typescript language and removing NativeWind from the apps styling
