@@ -29,5 +29,6 @@ Have Home Screen finished 09-18-25  --> completed on 09-17-25 one day earlier th
 Have History page finished 09-20-25  --> completed on 09-18-25 two days earlier than target
 Have Newgame page finished 09-25-25 --> completed on 09-19-25 six days earlier than target
 Have Game page finished 09-30-25 -->
+rework app from using dummy data to live data using expo SQLite
 
 
