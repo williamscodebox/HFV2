@@ -30,6 +30,8 @@ interface RoundScore {
   went_out: boolean;
 }
 export interface Round2 {
+  game_id: string;
+  player_id: string;
   round_number: number;
   melds_score?: number;
   cards_score?: number;
@@ -99,8 +101,33 @@ export default function GamePage() {
         };
       });
 
+      // ***** Work on calculating scores *****
+      // *******************************************
+
+      //     const scores = enrichedPlayers.map((player) => {
+      //       if (player.rounds && player.rounds.length > 0) {
+      //       player.rounds;
+      //       }
+      //       else {
+      //         player.rounds = [{
+      //        game_id: string;
+      // player_id: string;
+      // round_number: number;
+      // melds_score?: number;
+      // cards_score?: number;
+      // bonus_clean_books?: number;
+      // bonus_dirty_books?: number;
+      // bonus_red_threes?: number;
+      // penalty_cards_left?: number;
+      // went_out?: boolean;
+      // round_total?: number;
+      //      }];
+      //       }
+      //     });
+
       setPlayers(enrichedPlayers);
       console.log("Loaded players:", enrichedPlayers);
+      console.log("Loaded players scores", scores);
 
       // Step 5: Attach players to their respective games
       const gameWithPlayers: Game = {
