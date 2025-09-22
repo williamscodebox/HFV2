@@ -14,7 +14,7 @@ export default function RootLayout() {
     <SafeAreaProvider>
       <Suspense fallback={<Text>Loading database...</Text>}>
         <SQLiteProvider
-          databaseName="myGame.db"
+          databaseName="db1.db"
           onInit={openAndInitDatabase}
           useSuspense
         >

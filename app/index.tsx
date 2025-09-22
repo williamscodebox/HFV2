@@ -25,24 +25,7 @@ export default function HomeScreen() {
   const topPlayer = players[0];
   const db = useSQLiteContext();
 
-  // const loadData = async () => {
-  //   try {
-  //     const [playersResult, gamesResult] = await Promise.all([
-  //       db.getAllAsync<Player>("SELECT * FROM players ORDER BY name"),
-  //       db.getAllAsync<Game>("SELECT * FROM games ORDER BY name"),
-  //     ]);
-  //     setPlayers(playersResult);
-  //     setGames(gamesResult);
-  //     console.log("Players from DB:", playersResult);
-  //     console.log("Games from DB:", gamesResult);
-  //   } catch (error) {
-  //     console.error("Error loading data:", error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-  //
-  const loadGamesWithPlayers = async () => {
+  const loadData = async () => {
     setLoading(true);
     try {
       // Step 1: Get all games
@@ -51,10 +34,10 @@ export default function HomeScreen() {
       );
 
       // Step 2: Get all players
-      const players = await db.getAllAsync<Player>(
+      const allPlayers = await db.getAllAsync<Player>(
         "SELECT * FROM players ORDER BY name"
       );
-      setPlayers(players);
+      setPlayers(allPlayers);
 
       // Step 3: Get all gameplayers
       const rawGamePlayers = await db.getAllAsync<GamePlayer>(
@@ -68,7 +51,6 @@ export default function HomeScreen() {
       });
 
       setGames(gamesWithPlayers);
-      setPlayers(players);
 
       console.log("Loaded games with players:", gamesWithPlayers);
     } catch (error) {
@@ -80,8 +62,7 @@ export default function HomeScreen() {
 
   useFocusEffect(
     React.useCallback(() => {
-      // loadData();
-      loadGamesWithPlayers();
+      loadData();
     }, [])
   );
 
@@ -304,6 +285,7 @@ export default function HomeScreen() {
                               : prev
                           )
                         : null;
+                    console.log("Leader for game", game.id, "is", leader);
 
                     return (
                       <View key={game.id} style={styles.activeGameCard}>

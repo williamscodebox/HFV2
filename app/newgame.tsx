@@ -153,10 +153,11 @@ export default function newgame() {
 
       for (const player of gameData.players) {
         await db.runAsync(
-          `INSERT INTO gameplayers (id, game_id, player_id, total_score, games_played, games_won) VALUES (?, ?, ?, ?, ?, ?)`,
+          `INSERT INTO gameplayers (id, game_id, player_id, name, total_score, games_played, games_won) VALUES (?, ?, ?, ?, ?, ?, ?)`,
           uuidv4(),
           gameData.id,
           player.id,
+          player.name,
           0,
           player.games_played ?? 0,
           player.games_won ?? 0

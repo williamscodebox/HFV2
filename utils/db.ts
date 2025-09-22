@@ -24,6 +24,7 @@ export const openAndInitDatabase = async (db: SQLite.SQLiteDatabase) => {
     id TEXT PRIMARY KEY NOT NULL,
     game_id TEXT NOT NULL,
     player_id TEXT NOT NULL,
+    name TEXT NOT NULL,
     total_score INTEGER DEFAULT 0,
     games_played INTEGER DEFAULT 0,
     games_won INTEGER DEFAULT 0,
