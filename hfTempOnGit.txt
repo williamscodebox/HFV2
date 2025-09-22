@@ -14,6 +14,7 @@ Have Newgame page finished 09-19-25 --> app needed reworking (building with type
 
 index for finding expo/vector-icons -->  https://icons.expo.fyi/Index
 
+****** work on db integration on game page 09-22-25 until completed ******
 Finish work on game page 09-30-25 
 
 Targets changed due to build issues with runtime failures
