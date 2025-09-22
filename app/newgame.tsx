@@ -15,7 +15,6 @@ import {
 } from "react-native";
 import "react-native-get-random-values";
 import { v4 as uuidv4 } from "uuid";
-// import { createPageUrl } from "@/utils";
 
 export default function newgame() {
   const router = useRouter();
@@ -27,53 +26,9 @@ export default function newgame() {
 
   const db = useSQLiteContext();
 
-  const players: Player[] = [
-    {
-      id: "1",
-      name: "Alice",
-      total_score: 1200,
-      games_played: 15,
-      games_won: 5,
-    },
-    {
-      id: "2",
-      name: "Bob",
-      total_score: 950,
-      games_played: 12,
-      games_won: 3,
-    },
-    {
-      id: "3",
-      name: "Charlie",
-      total_score: 800,
-      games_played: 10,
-      games_won: 2,
-    },
-    {
-      id: "4",
-      name: "Alice",
-      total_score: 1200,
-      games_played: 15,
-      games_won: 5,
-    },
-    {
-      id: "5",
-      name: "Bob",
-      total_score: 950,
-      games_played: 12,
-      games_won: 3,
-    },
-    {
-      id: "6",
-      name: "Charlie",
-      total_score: 800,
-      games_played: 10,
-      games_won: 2,
-    },
-  ];
-
   useEffect(() => {
     loadExistingPlayers();
+    loadExistingGames();
   }, []);
 
   const loadExistingPlayers = async () => {
@@ -83,6 +38,20 @@ export default function newgame() {
       );
       setExistingPlayers(players);
       console.log("Players from DB:", players);
+    } catch (error) {
+      console.error("Error loading players:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadExistingGames = async () => {
+    setLoading(true);
+    try {
+      const games: Game[] = await db.getAllAsync(
+        "SELECT * FROM games ORDER BY name"
+      );
+      console.log("Gamess from DB:", games);
     } catch (error) {
       console.error("Error loading players:", error);
     } finally {
@@ -103,7 +72,6 @@ export default function newgame() {
     }
 
     try {
-      // const player = await Player.create({ name: newPlayerName.trim() });
       const player: Player = {
         id: uuidv4(),
         name,
@@ -152,8 +120,11 @@ export default function newgame() {
     if (!gameName.trim() || selectedPlayers.length < 2) return;
     setLoading(true);
     try {
-      const gameData = {
-        id: uuidv4(),
+      const gameId = uuidv4();
+      const timestamp = new Date().toISOString();
+
+      const gameData: Game = {
+        id: gameId,
         name: gameName,
         players: selectedPlayers.map((player) => ({
           id: player.id,
@@ -165,12 +136,35 @@ export default function newgame() {
         })),
         current_round: 1,
         status: "active",
+        created_at: timestamp,
+        updated_at: timestamp,
       };
       // const game = await Game.create(gameData);
-      const game: Game = gameData as Game;
+      await db.runAsync(
+        `INSERT INTO games (id, name, current_round, status, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)`,
+        gameData.id,
+        gameData.name,
+        gameData.current_round ?? 1,
+        gameData.status ?? "active",
+        gameData.created_at ?? new Date().toISOString(),
+        gameData.updated_at ?? new Date().toISOString()
+      );
+
+      for (const player of gameData.players) {
+        await db.runAsync(
+          `INSERT INTO gameplayers (id, game_id, player_id, total_score, games_played, games_won) VALUES (?, ?, ?, ?, ?, ?)`,
+          uuidv4(),
+          gameData.id,
+          player.id,
+          0,
+          player.games_played ?? 0,
+          player.games_won ?? 0
+        );
+      }
+      console.log("Game created with ID:", gameData.id);
       router.push({
         pathname: "/game/[id]",
-        params: { id: game.id },
+        params: { id: gameData.id },
       });
     } catch (error) {
       console.error("Error starting game:", error);
