@@ -118,66 +118,6 @@ export default function GamePage() {
     }
   };
 
-  // const players2: Player[] = [
-  //   {
-  //     id: "1",
-  //     name: "Alice",
-  //     total_score: 1200,
-  //     games_played: 15,
-  //     games_won: 5,
-  //   },
-  //   {
-  //     id: "2",
-  //     name: "Bob",
-  //     total_score: 950,
-  //     games_played: 12,
-  //     games_won: 3,
-  //   },
-  //   {
-  //     id: "3",
-  //     name: "Charlie",
-  //     total_score: 800,
-  //     games_played: 10,
-  //     games_won: 2,
-  //   },
-  //   {
-  //     id: "4",
-  //     name: "Alice",
-  //     total_score: 1200,
-  //     games_played: 15,
-  //     games_won: 5,
-  //   },
-  //   {
-  //     id: "5",
-  //     name: "Bob",
-  //     total_score: 950,
-  //     games_played: 12,
-  //     games_won: 3,
-  //   },
-  //   {
-  //     id: "6",
-  //     name: "Charlie",
-  //     total_score: 800,
-  //     games_played: 10,
-  //     games_won: 2,
-  //   },
-  // ];
-
-  // const gameData: Game = {
-  //   id: gameId as string,
-  //   name: "Test",
-  //   players: players.map((player) => ({
-  //     id: player.id,
-  //     game_id: gameId as string,
-  //     player_id: player.id,
-  //     name: player.name,
-  //     total_score: player.total_score || 0,
-  //     rounds: [],
-  //   })),
-  //   current_round: 1,
-  //   status: "active",
-  // };
-
   useFocusEffect(
     React.useCallback(() => {
       loadData();
