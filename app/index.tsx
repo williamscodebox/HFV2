@@ -14,25 +14,43 @@ import {
 } from "react-native";
 
 interface Player {
-  id: number;
+  id: string;
   name: string;
-  games_won: number;
+  total_score?: number; // Defaults to 0
+  games_played?: number; // Defaults to 0
+  games_won?: number; // Defaults to 0
+}
+
+interface Round {
+  round_number: number;
+  melds_score?: number;
+  cards_score?: number;
+  bonus_clean_books?: number;
+  bonus_dirty_books?: number;
+  bonus_red_threes?: number;
+  penalty_cards_left?: number;
+  went_out?: boolean;
+  round_total?: number;
 }
 
 interface GamePlayer {
-  player_id: number;
+  id: string;
   name: string;
-  total_score: number;
+  total_score?: number;
+  rounds?: Round[];
+  games_played?: number; // Defaults to 0
+  games_won?: number; // Defaults to 0
 }
 
 interface Game {
-  id: number;
+  id: string;
   name: string;
-  status: "active" | "completed";
-  current_round: number;
-  created_date: string;
-  winner_id?: number;
   players: GamePlayer[];
+  current_round?: number;
+  status?: "active" | "completed";
+  winner_id?: string;
+  created_at?: string; // ISO timestamp
+  updated_at?: string;
 }
 
 export default function HomeScreen() {
@@ -62,49 +80,49 @@ export default function HomeScreen() {
     setTimeout(() => {
       const mockGames: Game[] = [
         {
-          id: 1,
+          id: "1",
           name: "Game 1",
           status: "active",
           current_round: 2,
-          created_date: "2025-09-01T10:00:00Z",
+          created_at: "2025-09-01T10:00:00Z",
           players: [
-            { player_id: 1, name: "Alice", total_score: 120 },
-            { player_id: 2, name: "Bob", total_score: 95 },
+            { id: "1", name: "Alice", total_score: 120 },
+            { id: "2", name: "Bob", total_score: 95 },
           ],
         },
         {
-          id: 2,
+          id: "2",
           name: "Game 2",
           status: "completed",
           current_round: 4,
-          created_date: "2025-08-28T14:30:00Z",
-          winner_id: 3,
+          created_at: "2025-08-28T14:30:00Z",
+          winner_id: "3",
           players: [
-            { player_id: 3, name: "Charlie", total_score: 200 },
-            { player_id: 4, name: "Dana", total_score: 180 },
+            { id: "3", name: "Charlie", total_score: 200 },
+            { id: "4", name: "Dana", total_score: 180 },
           ],
         },
         {
-          id: 3,
+          id: "3",
           name: "Game 3",
           status: "completed",
           current_round: 3,
-          created_date: "2025-08-20T09:15:00Z",
-          winner_id: 5,
+          created_at: "2025-08-20T09:15:00Z",
+          winner_id: "5",
           players: [
-            { player_id: 5, name: "Eve", total_score: 150 },
-            { player_id: 6, name: "Frank", total_score: 140 },
+            { id: "5", name: "Eve", total_score: 150 },
+            { id: "6", name: "Frank", total_score: 140 },
           ],
         },
       ];
 
       const mockPlayers: Player[] = [
-        { id: 1, name: "Alice", games_won: 10 },
-        { id: 2, name: "Bob", games_won: 8 },
-        { id: 3, name: "Charlie", games_won: 12 },
-        { id: 4, name: "Dana", games_won: 7 },
-        { id: 5, name: "Eve", games_won: 15 },
-        { id: 6, name: "Frank", games_won: 5 },
+        { id: "1", name: "Alice", games_won: 10 },
+        { id: "2", name: "Bob", games_won: 8 },
+        { id: "3", name: "Charlie", games_won: 12 },
+        { id: "4", name: "Dana", games_won: 7 },
+        { id: "5", name: "Eve", games_won: 15 },
+        { id: "6", name: "Frank", games_won: 5 },
       ];
 
       setGames(mockGames);
@@ -323,7 +341,7 @@ export default function HomeScreen() {
                     const leader =
                       Array.isArray(game.players) && game.players.length > 0
                         ? game.players.reduce((prev, current) =>
-                            current.total_score > prev.total_score
+                            (current.total_score ?? 0) > (prev.total_score ?? 0)
                               ? current
                               : prev
                           )
@@ -352,7 +370,7 @@ export default function HomeScreen() {
                           <TouchableOpacity
                             style={styles.continueButton}
                             activeOpacity={0.8}
-                            onPress={() => router.push("/newgame")}
+                            onPress={() => router.push(`/game/${game.id}`)}
                           >
                             <Text style={styles.continueText}>Continue</Text>
                           </TouchableOpacity>
@@ -386,7 +404,7 @@ export default function HomeScreen() {
                 <View style={styles.resultList}>
                   {completedGames.map((game) => {
                     const winner = game.players?.find(
-                      (p) => p.player_id === game.winner_id
+                      (p) => p.id === game.winner_id
                     );
                     return (
                       <View key={game.id} style={styles.resultCard}>
@@ -394,12 +412,9 @@ export default function HomeScreen() {
                           <Text style={styles.gameName}>
                             {game.name || "Untitled Game"}
                           </Text>
-                          {game.created_date && (
+                          {game.created_at && (
                             <Text style={styles.gameMeta}>
-                              {format(
-                                new Date(game.created_date),
-                                "MMM d, yyyy"
-                              )}
+                              {format(new Date(game.created_at), "MMM d, yyyy")}
                             </Text>
                           )}
                         </View>

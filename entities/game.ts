@@ -26,4 +26,6 @@ export interface Game {
   current_round?: number;
   status?: "active" | "completed";
   winner_id?: string;
+  created_at?: string; // ISO timestamp
+  updated_at?: string;
 }
