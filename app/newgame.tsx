@@ -5,6 +5,7 @@ import { useRouter } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import React, { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   ScrollView,
   StyleSheet,
   Text,
@@ -22,17 +23,9 @@ export default function newgame() {
   const [selectedPlayers, setSelectedPlayers] = useState<Player[]>([]);
   const [newPlayerName, setNewPlayerName] = useState("");
   const [existingPlayers, setExistingPlayers] = useState<Player[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const db = useSQLiteContext();
-
-  useEffect(() => {
-    const loadPlayers = async () => {
-      const result = await db.getAllAsync("SELECT * FROM players");
-      console.log("Players from DB:", result);
-    };
-    loadPlayers();
-  }, []);
 
   const players: Player[] = [
     {
@@ -85,11 +78,15 @@ export default function newgame() {
 
   const loadExistingPlayers = async () => {
     try {
-      // const players = await Player.list("name");
-      const playerNames = players.map((player) => player);
-      setExistingPlayers(playerNames);
+      const players: Player[] = await db.getAllAsync(
+        "SELECT * FROM players ORDER BY name"
+      );
+      setExistingPlayers(players);
+      console.log("Players from DB:", players);
     } catch (error) {
       console.error("Error loading players:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -100,7 +97,10 @@ export default function newgame() {
     const isDuplicate = existingPlayers.some(
       (p) => p.name.toLowerCase() === name.toLowerCase()
     );
-    if (isDuplicate) return;
+    if (isDuplicate) {
+      console.warn("Player with this name already exists");
+      return;
+    }
 
     try {
       // const player = await Player.create({ name: newPlayerName.trim() });
@@ -123,6 +123,16 @@ export default function newgame() {
       setNewPlayerName("");
     } catch (error) {
       console.error("Error creating player:", error);
+    }
+  };
+
+  const deletePlayer = async (playerId: string) => {
+    try {
+      await db.runAsync("DELETE FROM players WHERE id = ?", playerId);
+      setExistingPlayers((prev) => prev.filter((p) => p.id !== playerId));
+      setSelectedPlayers((prev) => prev.filter((p) => p.id !== playerId));
+    } catch (error) {
+      console.error("Error deleting player:", error);
     }
   };
 
@@ -168,6 +178,32 @@ export default function newgame() {
       setLoading(false);
     }
   };
+
+  if (loading) {
+    return (
+      <LinearGradient
+        colors={["#faf5ff", "#eff6ff"]} // purple-50 to blue-50
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={{
+          flex: 1,
+          padding: 32,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <View className="text-center">
+          <ActivityIndicator
+            size="large"
+            color="#9333ea"
+            style={{ marginBottom: 16 }}
+          />
+
+          <Text className="text-gray-600">Loading...</Text>
+        </View>
+      </LinearGradient>
+    );
+  }
 
   return (
     <ScrollView keyboardShouldPersistTaps="handled">
@@ -238,6 +274,11 @@ export default function newgame() {
                       selectedPlayers.map((player) => (
                         <View key={player.id} style={styles.playerCard}>
                           <Text style={styles.playerName}>{player.name}</Text>
+                          <TouchableOpacity
+                            onPress={() => deletePlayer(player.id)}
+                          >
+                            <Feather name="trash-2" size={24} color="black" />
+                          </TouchableOpacity>
                           <TouchableOpacity
                             onPress={() => removeSelectedPlayer(player.id)}
                           >
