@@ -1,4 +1,6 @@
 export interface Round {
+  game_id: string;
+  player_id: string;
   round_number: number;
   melds_score?: number;
   cards_score?: number;
@@ -13,6 +15,7 @@ export interface Round {
 export interface GamePlayer {
   id: string;
   game_id: string;
+  player_id: string;
   name: string;
   total_score?: number;
   rounds?: Round[];

@@ -1,9 +1,9 @@
-import { Game, GamePlayer, Player } from "@/entities/all";
+import { Game, GamePlayer, Round } from "@/entities/all";
 import { EvilIcons, Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   ActivityIndicator,
   ScrollView,
@@ -50,7 +50,7 @@ export default function GamePage() {
   const [game, setGame] = useState<Game | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [players, setPlayers] = useState<Player[]>([]);
+  const [players, setPlayers] = useState<GamePlayer[]>([]);
   const [roundScores, setRoundScores] = useState<Record<string, RoundScore>>(
     {}
   );
@@ -59,132 +59,166 @@ export default function GamePage() {
   const loadData = async () => {
     setLoading(true);
     try {
-      // Step 1: Get all games
-      const rawGames = await db.getAllAsync<Game>(
-        "SELECT * FROM games ORDER BY created_at DESC"
+      // Step 1: Get the game by ID
+
+      const normalizedGameId = Array.isArray(gameId) ? gameId[0] : gameId;
+      if (!normalizedGameId) return;
+
+      const gameResult = await db.getFirstAsync<Game>(
+        "SELECT * FROM games WHERE id = ?",
+        normalizedGameId
       );
 
-      // Step 2: Get all players
-      const allPlayers = await db.getAllAsync<Player>(
-        "SELECT * FROM players ORDER BY name"
-      );
-      setPlayers(allPlayers);
+      if (!gameResult) {
+        console.warn("Game not found");
+        return;
+      }
 
-      // Step 3: Get all gameplayers
+      // Step 2: Get all gameplayers for this game
       const rawGamePlayers = await db.getAllAsync<GamePlayer>(
-        "SELECT * FROM gameplayers"
+        "SELECT * FROM gameplayers WHERE game_id = ?",
+        normalizedGameId
       );
 
-      // Step 4: Attach players to their respective games
-      const gamesWithPlayers = rawGames.map((game) => {
-        const players = rawGamePlayers.filter((gp) => gp.game_id === game.id);
-        return { ...game, players };
+      // const playerIds = gamePlayers.map((gp) => gp.player_id);
+
+      // Step 3: Get all rounds for these players
+      const allRounds = await db.getAllAsync<Round>(
+        "SELECT * FROM rounds WHERE game_id = ?",
+        normalizedGameId
+      );
+
+      // Step 4: Attach Rounds to their respective GamePlayers
+      const enrichedPlayers = rawGamePlayers.map((gp) => {
+        const playerRounds = allRounds.filter(
+          (r) => r.player_id === gp.player_id
+        );
+        return {
+          ...gp,
+          rounds: playerRounds,
+        };
       });
 
-      setGames(gamesWithPlayers);
+      setPlayers(enrichedPlayers);
+      console.log("Loaded players:", enrichedPlayers);
 
-      console.log("Loaded games with players:", gamesWithPlayers);
+      // Step 5: Attach players to their respective games
+      const gameWithPlayers: Game = {
+        ...gameResult,
+        players: enrichedPlayers,
+      };
+
+      setGame(gameWithPlayers);
+
+      console.log("Loaded game with players:", gameWithPlayers);
     } catch (error) {
-      console.error("Error loading games:", error);
+      console.error("Error loading game:", error);
     } finally {
       setLoading(false);
     }
   };
 
-  const players2: Player[] = [
-    {
-      id: "1",
-      name: "Alice",
-      total_score: 1200,
-      games_played: 15,
-      games_won: 5,
-    },
-    {
-      id: "2",
-      name: "Bob",
-      total_score: 950,
-      games_played: 12,
-      games_won: 3,
-    },
-    {
-      id: "3",
-      name: "Charlie",
-      total_score: 800,
-      games_played: 10,
-      games_won: 2,
-    },
-    {
-      id: "4",
-      name: "Alice",
-      total_score: 1200,
-      games_played: 15,
-      games_won: 5,
-    },
-    {
-      id: "5",
-      name: "Bob",
-      total_score: 950,
-      games_played: 12,
-      games_won: 3,
-    },
-    {
-      id: "6",
-      name: "Charlie",
-      total_score: 800,
-      games_played: 10,
-      games_won: 2,
-    },
-  ];
+  // const players2: Player[] = [
+  //   {
+  //     id: "1",
+  //     name: "Alice",
+  //     total_score: 1200,
+  //     games_played: 15,
+  //     games_won: 5,
+  //   },
+  //   {
+  //     id: "2",
+  //     name: "Bob",
+  //     total_score: 950,
+  //     games_played: 12,
+  //     games_won: 3,
+  //   },
+  //   {
+  //     id: "3",
+  //     name: "Charlie",
+  //     total_score: 800,
+  //     games_played: 10,
+  //     games_won: 2,
+  //   },
+  //   {
+  //     id: "4",
+  //     name: "Alice",
+  //     total_score: 1200,
+  //     games_played: 15,
+  //     games_won: 5,
+  //   },
+  //   {
+  //     id: "5",
+  //     name: "Bob",
+  //     total_score: 950,
+  //     games_played: 12,
+  //     games_won: 3,
+  //   },
+  //   {
+  //     id: "6",
+  //     name: "Charlie",
+  //     total_score: 800,
+  //     games_played: 10,
+  //     games_won: 2,
+  //   },
+  // ];
 
-  const gameData: Game = {
-    id: gameId as string,
-    name: "Test",
-    players: players.map((player) => ({
-      id: player.id,
-      game_id: gameId as string,
-      name: player.name,
-      total_score: player.total_score || 0,
-      rounds: [],
-    })),
-    current_round: 1,
-    status: "active",
-  };
+  // const gameData: Game = {
+  //   id: gameId as string,
+  //   name: "Test",
+  //   players: players.map((player) => ({
+  //     id: player.id,
+  //     game_id: gameId as string,
+  //     player_id: player.id,
+  //     name: player.name,
+  //     total_score: player.total_score || 0,
+  //     rounds: [],
+  //   })),
+  //   current_round: 1,
+  //   status: "active",
+  // };
 
-  useEffect(() => {
-    const loadGame = async () => {
-      // try {
-      //   const gameData = await Game.filter({ id: gameId });
-      //   if (gameData.length > 0) {
-      //     const currentGame = gameData[0];
-      //     setGame(currentGame);
-      //     // Initialize round scores for current round
-      //     const scores = {};
-      //     currentGame.players.forEach((player) => {
-      //       scores[player.player_id] = {
-      //         melds_score: 0,
-      //         cards_score: 0,
-      //         bonus_clean_books: 0,
-      //         bonus_dirty_books: 0,
-      //         bonus_red_threes: 0,
-      //         penalty_cards_left: 0,
-      //         went_out: false,
-      //       };
-      //     });
-      //     setRoundScores(scores);
-      //   }
-      // } catch (error) {
-      //   console.error("Error loading game:", error);
-      // } finally {
-      //   setLoading(false);
-      // }
-    };
+  useFocusEffect(
+    React.useCallback(() => {
+      loadData();
+    }, [])
+  );
 
-    // if (gameId) {
-    //   loadGame();
-    // }
-    setGame(gameData);
-    setLoading(false);
-  }, [gameId]); // gameId is the only dependency here, as loadGame is defined inside
+  // useEffect(() => {
+  //   const loadGame = async () => {
+  //     // try {
+  //     //   const gameData = await Game.filter({ id: gameId });
+  //     //   if (gameData.length > 0) {
+  //     //     const currentGame = gameData[0];
+  //     //     setGame(currentGame);
+  //     //     // Initialize round scores for current round
+  //     //     const scores = {};
+  //     //     currentGame.players.forEach((player) => {
+  //     //       scores[player.player_id] = {
+  //     //         melds_score: 0,
+  //     //         cards_score: 0,
+  //     //         bonus_clean_books: 0,
+  //     //         bonus_dirty_books: 0,
+  //     //         bonus_red_threes: 0,
+  //     //         penalty_cards_left: 0,
+  //     //         went_out: false,
+  //     //       };
+  //     //     });
+  //     //     setRoundScores(scores);
+  //     //   }
+  //     // } catch (error) {
+  //     //   console.error("Error loading game:", error);
+  //     // } finally {
+  //     //   setLoading(false);
+  //     // }
+  //   };
+
+  //   // if (gameId) {
+  //   //   loadGame();
+  //   // }
+  //   setGame(gameData);
+  //   setLoading(false);
+  // }, [gameId]); // gameId is the only dependency here, as loadGame is defined inside
 
   const updateScore = (
     playerId: string,
