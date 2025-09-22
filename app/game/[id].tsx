@@ -1,7 +1,8 @@
-import { Game, Player } from "@/entities/all";
+import { Game, GamePlayer, Player } from "@/entities/all";
 import { EvilIcons, Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { useSQLiteContext } from "expo-sqlite";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -28,6 +29,17 @@ interface RoundScore {
   penalty_cards_left: number;
   went_out: boolean;
 }
+export interface Round2 {
+  round_number: number;
+  melds_score?: number;
+  cards_score?: number;
+  bonus_clean_books?: number;
+  bonus_dirty_books?: number;
+  bonus_red_threes?: number;
+  penalty_cards_left?: number;
+  went_out?: boolean;
+  round_total?: number;
+}
 
 type NumericScoreField = Exclude<keyof RoundScore, "went_out">;
 
@@ -38,11 +50,48 @@ export default function GamePage() {
   const [game, setGame] = useState<Game | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [players, setPlayers] = useState<Player[]>([]);
   const [roundScores, setRoundScores] = useState<Record<string, RoundScore>>(
     {}
   );
+  const db = useSQLiteContext();
 
-  const players: Player[] = [
+  const loadData = async () => {
+    setLoading(true);
+    try {
+      // Step 1: Get all games
+      const rawGames = await db.getAllAsync<Game>(
+        "SELECT * FROM games ORDER BY created_at DESC"
+      );
+
+      // Step 2: Get all players
+      const allPlayers = await db.getAllAsync<Player>(
+        "SELECT * FROM players ORDER BY name"
+      );
+      setPlayers(allPlayers);
+
+      // Step 3: Get all gameplayers
+      const rawGamePlayers = await db.getAllAsync<GamePlayer>(
+        "SELECT * FROM gameplayers"
+      );
+
+      // Step 4: Attach players to their respective games
+      const gamesWithPlayers = rawGames.map((game) => {
+        const players = rawGamePlayers.filter((gp) => gp.game_id === game.id);
+        return { ...game, players };
+      });
+
+      setGames(gamesWithPlayers);
+
+      console.log("Loaded games with players:", gamesWithPlayers);
+    } catch (error) {
+      console.error("Error loading games:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const players2: Player[] = [
     {
       id: "1",
       name: "Alice",
