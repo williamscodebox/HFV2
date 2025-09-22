@@ -2,6 +2,7 @@ import { Game, Player } from "@/entities/all";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
+import { useSQLiteContext } from "expo-sqlite";
 import React, { useEffect, useState } from "react";
 import {
   ScrollView,
@@ -22,6 +23,16 @@ export default function newgame() {
   const [newPlayerName, setNewPlayerName] = useState("");
   const [existingPlayers, setExistingPlayers] = useState<Player[]>([]);
   const [loading, setLoading] = useState(false);
+
+  const db = useSQLiteContext();
+
+  useEffect(() => {
+    const loadPlayers = async () => {
+      const result = await db.getAllAsync("SELECT * FROM players");
+      console.log("Players from DB:", result);
+    };
+    loadPlayers();
+  }, []);
 
   const players: Player[] = [
     {
@@ -83,14 +94,30 @@ export default function newgame() {
   };
 
   const addNewPlayer = async () => {
-    if (!newPlayerName.trim()) return;
+    const name = newPlayerName.trim();
+    if (!name) return;
+
+    const isDuplicate = existingPlayers.some(
+      (p) => p.name.toLowerCase() === name.toLowerCase()
+    );
+    if (isDuplicate) return;
 
     try {
       // const player = await Player.create({ name: newPlayerName.trim() });
       const player: Player = {
         id: uuidv4(),
-        name: newPlayerName.trim(),
+        name,
       };
+
+      await db.runAsync(
+        "INSERT INTO players (id, name, total_score, games_played, games_won) VALUES (?, ?, ?, ?, ?)",
+        player.id,
+        player.name,
+        0,
+        0,
+        0
+      );
+
       setExistingPlayers([...existingPlayers, player]);
       setSelectedPlayers([...selectedPlayers, player]);
       setNewPlayerName("");
