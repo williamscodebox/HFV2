@@ -128,6 +128,7 @@ export default function newgame() {
         name: gameName,
         players: selectedPlayers.map((player) => ({
           id: player.id,
+          game_id: gameId,
           name: player.name,
           total_score: 0,
           rounds: [],

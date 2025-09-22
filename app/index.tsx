@@ -1,8 +1,10 @@
+import { Game, GamePlayer, Player } from "@/entities/all";
 import { EvilIcons, Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { format } from "date-fns";
 import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useFocusEffect, useRouter } from "expo-router";
+import { useSQLiteContext } from "expo-sqlite";
+import React, { useState } from "react";
 import {
   ActivityIndicator,
   Dimensions,
@@ -13,46 +15,6 @@ import {
   View,
 } from "react-native";
 
-interface Player {
-  id: string;
-  name: string;
-  total_score?: number; // Defaults to 0
-  games_played?: number; // Defaults to 0
-  games_won?: number; // Defaults to 0
-}
-
-interface Round {
-  round_number: number;
-  melds_score?: number;
-  cards_score?: number;
-  bonus_clean_books?: number;
-  bonus_dirty_books?: number;
-  bonus_red_threes?: number;
-  penalty_cards_left?: number;
-  went_out?: boolean;
-  round_total?: number;
-}
-
-interface GamePlayer {
-  id: string;
-  name: string;
-  total_score?: number;
-  rounds?: Round[];
-  games_played?: number; // Defaults to 0
-  games_won?: number; // Defaults to 0
-}
-
-interface Game {
-  id: string;
-  name: string;
-  players: GamePlayer[];
-  current_round?: number;
-  status?: "active" | "completed";
-  winner_id?: string;
-  created_at?: string; // ISO timestamp
-  updated_at?: string;
-}
-
 export default function HomeScreen() {
   const [games, setGames] = useState<Game[]>([]);
   const [players, setPlayers] = useState<Player[]>([]);
@@ -61,82 +23,78 @@ export default function HomeScreen() {
   const activeGames = games.filter((game) => game.status === "active");
   const completedGames = games.filter((game) => game.status === "completed");
   const topPlayer = players[0];
+  const db = useSQLiteContext();
 
-  const loadData = async () => {
-    // try {
-    //   const [gamesData, playersData] = await Promise.all([
-    //     Game.list("-created_date", 5),
-    //     Player.list("-games_won", 5),
-    //   ]);
-    //   setGames(gamesData);
-    //   setPlayers(playersData);
-    // } catch (error) {
-    //   console.error("Error loading data:", error);
-    // } finally {
-    // setLoading(false);
-    // }
+  // const loadData = async () => {
+  //   try {
+  //     const [playersResult, gamesResult] = await Promise.all([
+  //       db.getAllAsync<Player>("SELECT * FROM players ORDER BY name"),
+  //       db.getAllAsync<Game>("SELECT * FROM games ORDER BY name"),
+  //     ]);
+  //     setPlayers(playersResult);
+  //     setGames(gamesResult);
+  //     console.log("Players from DB:", playersResult);
+  //     console.log("Games from DB:", gamesResult);
+  //   } catch (error) {
+  //     console.error("Error loading data:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+  //
+  const loadGamesWithPlayers = async () => {
+    setLoading(true);
+    try {
+      // Step 1: Get all games
+      const rawGames = await db.getAllAsync<Game>(
+        "SELECT * FROM games ORDER BY created_at DESC"
+      );
 
-    // Simulate API delay
-    setTimeout(() => {
-      const mockGames: Game[] = [
-        {
-          id: "1",
-          name: "Game 1",
-          status: "active",
-          current_round: 2,
-          created_at: "2025-09-01T10:00:00Z",
-          players: [
-            { id: "1", name: "Alice", total_score: 120 },
-            { id: "2", name: "Bob", total_score: 95 },
-          ],
-        },
-        {
-          id: "2",
-          name: "Game 2",
-          status: "completed",
-          current_round: 4,
-          created_at: "2025-08-28T14:30:00Z",
-          winner_id: "3",
-          players: [
-            { id: "3", name: "Charlie", total_score: 200 },
-            { id: "4", name: "Dana", total_score: 180 },
-          ],
-        },
-        {
-          id: "3",
-          name: "Game 3",
-          status: "completed",
-          current_round: 3,
-          created_at: "2025-08-20T09:15:00Z",
-          winner_id: "5",
-          players: [
-            { id: "5", name: "Eve", total_score: 150 },
-            { id: "6", name: "Frank", total_score: 140 },
-          ],
-        },
-      ];
+      // Step 2: Get all players
+      const players = await db.getAllAsync<Player>(
+        "SELECT * FROM players ORDER BY name"
+      );
+      setPlayers(players);
 
-      const mockPlayers: Player[] = [
-        { id: "1", name: "Alice", games_won: 10 },
-        { id: "2", name: "Bob", games_won: 8 },
-        { id: "3", name: "Charlie", games_won: 12 },
-        { id: "4", name: "Dana", games_won: 7 },
-        { id: "5", name: "Eve", games_won: 15 },
-        { id: "6", name: "Frank", games_won: 5 },
-      ];
+      // Step 3: Get all gameplayers
+      const rawGamePlayers = await db.getAllAsync<GamePlayer>(
+        "SELECT * FROM gameplayers"
+      );
 
-      setGames(mockGames);
-      setPlayers(mockPlayers);
+      // Step 4: Attach players to their respective games
+      const gamesWithPlayers = rawGames.map((game) => {
+        const players = rawGamePlayers.filter((gp) => gp.game_id === game.id);
+        return { ...game, players };
+      });
+
+      setGames(gamesWithPlayers);
+      setPlayers(players);
+
+      console.log("Loaded games with players:", gamesWithPlayers);
+    } catch (error) {
+      console.error("Error loading games:", error);
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
-  useEffect(() => {
-    loadData();
-    // setLoading(false);
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      // loadData();
+      loadGamesWithPlayers();
+    }, [])
+  );
 
   console.log(activeGames.length);
+
+  const deleteGame = async (gameId: string) => {
+    try {
+      await db.runAsync("DELETE FROM games WHERE id = ?", gameId);
+      setGames((prev) => prev.filter((p) => p.id !== gameId));
+    } catch (error) {
+      console.error("Error deleting game:", error);
+    }
+  };
 
   if (loading) {
     return (
@@ -373,6 +331,16 @@ export default function HomeScreen() {
                             onPress={() => router.push(`/game/${game.id}`)}
                           >
                             <Text style={styles.continueText}>Continue</Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            style={[
+                              styles.continueButton,
+                              { backgroundColor: "#fef2f2" },
+                            ]}
+                            activeOpacity={0.8}
+                            onPress={() => deleteGame(game.id)}
+                          >
+                            <Text style={styles.continueText}>Delete</Text>
                           </TouchableOpacity>
                         </View>
                       </View>

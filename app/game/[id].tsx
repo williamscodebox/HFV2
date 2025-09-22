@@ -92,6 +92,7 @@ export default function GamePage() {
     name: "Test",
     players: players.map((player) => ({
       id: player.id,
+      game_id: gameId as string,
       name: player.name,
       total_score: player.total_score || 0,
       rounds: [],

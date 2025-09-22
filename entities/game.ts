@@ -12,6 +12,7 @@ export interface Round {
 
 export interface GamePlayer {
   id: string;
+  game_id: string;
   name: string;
   total_score?: number;
   rounds?: Round[];
