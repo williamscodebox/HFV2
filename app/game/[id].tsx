@@ -356,129 +356,97 @@ export default function GamePage() {
         style={styles.screen}
       >
         <View style={styles.container}>
-          <Text style={styles.gameId}>Game ID: {gameId}</Text>
+          <View style={{ marginBottom: 30 }}>
+            <View>
+              <Text style={styles.gameId}>Game ID: {gameId}</Text>
 
-          {/* Header */}
-          <View style={styles.header}>
-            {/* Back Button + Title */}
-            <View style={styles.titleRow}>
-              <TouchableOpacity
-                onPress={() => router.push("/")}
-                style={styles.backButton}
-              >
-                <Feather name="arrow-left" size={16} color="#1E3A8A" />
-                <Text style={styles.backText}>Back</Text>
-              </TouchableOpacity>
+              {/* Header */}
+              <View style={styles.header}>
+                {/* Back Button + Title */}
+                <View style={styles.titleRow}>
+                  <TouchableOpacity
+                    onPress={() => router.push("/")}
+                    style={styles.backButton}
+                  >
+                    <Feather name="arrow-left" size={16} color="#1E3A8A" />
+                    <Text style={styles.backText}>Back</Text>
+                  </TouchableOpacity>
 
-              <View>
-                <Text style={styles.gameName}>{game.name}</Text>
-                <View style={styles.badgeRow}>
-                  <View style={styles.roundBadge}>
-                    <Text style={styles.roundText}>
-                      Round {game.current_round}
-                    </Text>
-                  </View>
-                  <View style={styles.playerBadge}>
-                    <Feather name="users" size={12} color="#1E3A8A" />
-                    <Text style={styles.playerText}>
-                      {game.players.length} players
-                    </Text>
+                  <View>
+                    <Text style={styles.gameName}>{game.name}</Text>
+                    <View style={styles.badgeRow}>
+                      <View style={styles.roundBadge}>
+                        <Text style={styles.roundText}>
+                          Round {game.current_round}
+                        </Text>
+                      </View>
+                      <View style={styles.playerBadge}>
+                        <Feather name="users" size={12} color="#1E3A8A" />
+                        <Text style={styles.playerText}>
+                          {game.players.length} players
+                        </Text>
+                      </View>
+                    </View>
                   </View>
                 </View>
               </View>
             </View>
-
-            {/* Action Buttons */}
-            <View style={styles.buttonRow}>
-              <TouchableOpacity
-                onPress={saveRound}
-                disabled={saving}
-                style={[
-                  styles.saveButton,
-                  saving && { backgroundColor: "#A7F3D0" },
-                ]}
-              >
-                {saving ? (
-                  <ActivityIndicator color="#fff" />
-                ) : (
-                  <>
-                    <Feather
-                      name="save"
-                      size={16}
-                      color="white"
-                      style={{ marginRight: 6 }}
-                    />
-                    <Text style={styles.saveText}>Save Round</Text>
-                  </>
-                )}
-              </TouchableOpacity>
-
-              <TouchableOpacity onPress={endGame} style={styles.endButton}>
-                <Text style={styles.endText}>End Game</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          {/* Current Standings */}
-
-          <View style={styles.card}>
-            <View style={styles.cardHeader}>
-              <View style={styles.cardTitleRow}>
-                <EvilIcons name="trophy" size={28} color="#CA8A04" />
-                <Text style={styles.cardTitle}>Current Standings</Text>
+            {/* Current Standings */}
+            <View style={styles.card}>
+              <View style={styles.cardHeader}>
+                <View style={styles.cardTitleRow}>
+                  <EvilIcons name="trophy" size={28} color="#CA8A04" />
+                  <Text style={styles.cardTitle}>Current Standings</Text>
+                </View>
               </View>
-            </View>
-            <View style={styles.cardContent}>
-              {game.players
-                .sort((a, b) => (b.total_score || 0) - (a.total_score || 0))
-                .map((player, index) => (
-                  <View
-                    key={player.id}
-                    style={[
-                      styles.playerRow,
-                      index === 0 ? styles.leaderRow : styles.defaultRow,
-                    ]}
-                  >
-                    <View style={styles.playerInfo}>
-                      {index === 0 && (
-                        <MaterialCommunityIcons
-                          name="crown-outline"
-                          size={28}
-                          color="#D69E2E"
-                        />
-                      )}
-                      <View>
-                        <Text style={styles.playerName}>{player.name}</Text>
-                        <Text style={styles.roundsPlayed}>
-                          {player.rounds?.length || 0} rounds played
+              <View style={styles.cardContent}>
+                {game.players
+                  .sort((a, b) => (b.total_score || 0) - (a.total_score || 0))
+                  .map((player, index) => (
+                    <View
+                      key={player.id}
+                      style={[
+                        styles.playerRow,
+                        index === 0 ? styles.leaderRow : styles.defaultRow,
+                      ]}
+                    >
+                      <View style={styles.playerInfo}>
+                        {index === 0 && (
+                          <MaterialCommunityIcons
+                            name="crown-outline"
+                            size={28}
+                            color="#D69E2E"
+                          />
+                        )}
+                        <View>
+                          <Text style={styles.playerName}>{player.name}</Text>
+                          <Text style={styles.roundsPlayed}>
+                            {player.rounds?.length || 0} rounds played
+                          </Text>
+                        </View>
+                      </View>
+                      <View style={styles.scoreBox}>
+                        <Text style={styles.score}>
+                          {player.total_score || 0}
                         </Text>
+                        <Text style={styles.pointsLabel}>points</Text>
                       </View>
                     </View>
-                    <View style={styles.scoreBox}>
-                      <Text style={styles.score}>
-                        {player.total_score || 0}
-                      </Text>
-                      <Text style={styles.pointsLabel}>points</Text>
-                    </View>
-                  </View>
-                ))}
-            </View>
-          </View>
-
-          {/* Round Scoring */}
-
-          <View style={styles.card2}>
-            <View style={styles.cardHeader2}>
-              <View style={styles.titleRow2}>
-                <Feather name="target" size={20} color="#059669" />
-                <Text style={styles.cardTitle2}>
-                  Round {game.current_round} Scoring
-                </Text>
+                  ))}
               </View>
             </View>
+            {/* Round Scoring */}
+            <View style={styles.card2}>
+              <View style={styles.cardHeader2}>
+                <View style={styles.titleRow2}>
+                  <Feather name="target" size={20} color="#059669" />
+                  <Text style={styles.cardTitle2}>
+                    Round {game.current_round} Scoring
+                  </Text>
+                </View>
+              </View>
 
-            <View style={styles.cardContent2}>
-              <View style={{ borderWidth: 1 }}>
+              <View style={styles.cardContent2}>
                 {game.players.map((player) => (
                   <View key={player.id} style={styles.playerCard2}>
                     <View style={styles.playerHeader2}>
@@ -740,6 +708,35 @@ export default function GamePage() {
                 ))}
               </View>
             </View>
+            {/* Action Buttons */}
+            <View style={styles.buttonRow}>
+              <TouchableOpacity
+                onPress={saveRound}
+                disabled={saving}
+                style={[
+                  styles.saveButton,
+                  saving && { backgroundColor: "#A7F3D0" },
+                ]}
+              >
+                {saving ? (
+                  <ActivityIndicator color="#fff" />
+                ) : (
+                  <>
+                    <Feather
+                      name="save"
+                      size={16}
+                      color="white"
+                      style={{ marginRight: 6 }}
+                    />
+                    <Text style={styles.saveText}>Save Round</Text>
+                  </>
+                )}
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={endGame} style={styles.endButton}>
+                <Text style={styles.endText}>End Game</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </LinearGradient>
@@ -794,11 +791,10 @@ const styles = StyleSheet.create({
   },
   container: {
     height: "100%",
-    borderEndWidth: 5,
-    // maxWidth: 960,
+    width: "90%",
+    maxWidth: 960,
     alignSelf: "center",
-    marginBottom: 0,
-    borderWidth: 5,
+    marginBottom: 10,
   },
   gameId: {
     fontSize: 14,
@@ -866,8 +862,9 @@ const styles = StyleSheet.create({
   },
   buttonRow: {
     flexDirection: "row",
+    justifyContent: "space-around",
     gap: 12,
-    marginTop: 12,
+    marginTop: 22,
   },
   saveButton: {
     flexDirection: "row",
@@ -962,7 +959,6 @@ const styles = StyleSheet.create({
   card2: {
     flexShrink: 1,
     backgroundColor: "#fff",
-    borderWidth: 8,
     borderRadius: 12,
     elevation: 4,
     padding: 16,
@@ -988,10 +984,10 @@ const styles = StyleSheet.create({
   },
   playerCard2: {
     flexDirection: "column",
-    borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderWidth: 2,
+    borderColor: "#dbf7e4ff",
     borderRadius: 10,
-    backgroundColor: "#fff",
+    backgroundColor: "#F0FDF4",
     padding: 16,
   },
   playerHeader2: {
