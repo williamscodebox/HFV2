@@ -6,7 +6,7 @@ export interface Round {
   cards_score?: number;
   bonus_clean_books?: number;
   bonus_dirty_books?: number;
-  bonus_red_threes?: number;
+  penalty_red_threes?: number;
   penalty_cards_left?: number;
   went_out?: boolean;
   round_total?: number;

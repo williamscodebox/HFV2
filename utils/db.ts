@@ -40,7 +40,7 @@ export const openAndInitDatabase = async (db: SQLite.SQLiteDatabase) => {
     cards_score INTEGER DEFAULT 0,
     bonus_clean_books INTEGER DEFAULT 0,
     bonus_dirty_books INTEGER DEFAULT 0,
-    bonus_red_threes INTEGER DEFAULT 0,
+    penalty_red_threes INTEGER DEFAULT 0,
     penalty_cards_left INTEGER DEFAULT 0,
     went_out BOOLEAN DEFAULT 0,
     round_total INTEGER DEFAULT 0,

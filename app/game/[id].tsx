@@ -8,7 +8,6 @@ import {
   ActivityIndicator,
   ScrollView,
   StyleSheet,
-  Switch,
   Text,
   TextInput,
   TouchableOpacity,
@@ -25,7 +24,7 @@ interface RoundScore {
   cards_score: number;
   bonus_clean_books: number;
   bonus_dirty_books: number;
-  bonus_red_threes: number;
+  penalty_red_threes: number;
   penalty_cards_left: number;
   went_out: boolean;
 }
@@ -189,8 +188,8 @@ export default function GamePage() {
     const scores = roundScores[playerId] || {};
     const bonuses =
       (scores.bonus_clean_books ?? 0) * 500 +
-      (scores.bonus_dirty_books ?? 0) * 300 +
-      (scores.bonus_red_threes ?? 0) * 100 +
+      (scores.bonus_dirty_books ?? 0) * 300 -
+      (scores.penalty_red_threes ?? 0) * 500 +
       (scores.went_out ? 100 : 0);
 
     return (
@@ -479,24 +478,25 @@ export default function GamePage() {
             </View>
 
             <View style={styles.cardContent2}>
-              {game.players.map((player) => (
-                <View key={player.id} style={styles.playerCard2}>
-                  <View style={styles.playerHeader2}>
-                    <Text style={styles.playerName2}>{player.name}</Text>
-                    <View style={styles.totalBox2}>
-                      <Text style={styles.totalScore2}>
-                        {calculateRoundTotal(player.id)}
-                      </Text>
-                      <Text style={styles.totalLabel2}>Round Total</Text>
+              <View style={{ borderWidth: 1 }}>
+                {game.players.map((player) => (
+                  <View key={player.id} style={styles.playerCard2}>
+                    <View style={styles.playerHeader2}>
+                      <Text style={styles.playerName2}>{player.name}</Text>
+                      <View style={styles.totalBox2}>
+                        <Text style={styles.totalScore2}>
+                          {calculateRoundTotal(player.id)}
+                        </Text>
+                        <Text style={styles.totalLabel2}>Round Total</Text>
+                      </View>
                     </View>
-                  </View>
 
-                  <View style={styles.scoreGrid2}>
-                    {/* Basic Scores */}
-                    <View style={styles.scoreSection2}>
-                      <Text style={styles.sectionTitle2}>Basic Scores</Text>
+                    <View style={styles.scoreGrid2}>
+                      {/* Basic Scores */}
+                      <View style={styles.scoreSection2}>
+                        <Text style={styles.sectionTitle2}>Score</Text>
 
-                      {/* <View style={styles.inputGroup2}>
+                        {/* <View style={styles.inputGroup2}>
                         <Text style={styles.label2}>Melds Score</Text>
                         <TextInput
                           keyboardType="numeric"
@@ -510,168 +510,222 @@ export default function GamePage() {
                         />
                       </View> */}
 
-                      <View style={styles.inputGroup2}>
-                        <Text style={styles.label2}>Cards Score</Text>
-                        <TextInput
-                          keyboardType="numeric"
-                          value={String(
-                            roundScores[player.id]?.cards_score || 0
-                          )}
-                          onChangeText={(value) =>
-                            updateScore(player.id, "cards_score", value)
-                          }
-                          style={styles.input2}
-                        />
-                      </View>
-                    </View>
-
-                    {/* Bonuses */}
-                    <View style={styles.section}>
-                      <Text style={styles.sectionTitle}>Bonuses</Text>
-
-                      {/* Clean Books */}
-                      <View style={styles.inputBlock}>
-                        <Text style={styles.label}>
-                          Clean Books (+500 each)
-                        </Text>
-                        <View style={styles.row}>
-                          <TouchableOpacity
-                            style={styles.iconButton}
-                            onPress={() =>
-                              updateScore(
-                                player.id,
-                                "bonus_clean_books",
-                                String(
-                                  Math.max(
-                                    0,
-                                    (roundScores[player.id]
-                                      ?.bonus_clean_books || 0) - 1
-                                  )
-                                )
-                              )
-                            }
-                          >
-                            <Feather name="minus" size={16} color="#374151" />
-                          </TouchableOpacity>
+                        <View style={styles.inputGroup2}>
+                          <Text style={styles.label2}>
+                            Total Score From Cards
+                          </Text>
                           <TextInput
                             keyboardType="numeric"
                             value={String(
-                              roundScores[player.id]?.bonus_clean_books || 0
+                              roundScores[player.id]?.cards_score || 0
                             )}
                             onChangeText={(value) =>
-                              updateScore(player.id, "bonus_clean_books", value)
+                              updateScore(player.id, "cards_score", value)
                             }
-                            style={styles.input}
+                            style={styles.input2}
                           />
-                          <TouchableOpacity
-                            style={styles.iconButton}
-                            onPress={() =>
-                              updateScore(
-                                player.id,
-                                "bonus_clean_books",
-                                String(
-                                  (roundScores[player.id]?.bonus_clean_books ||
-                                    0) + 1
-                                )
-                              )
-                            }
-                          >
-                            <Feather name="plus" size={16} color="#374151" />
-                          </TouchableOpacity>
                         </View>
                       </View>
 
-                      {/* Dirty Books */}
-                      <View style={styles.inputBlock}>
-                        <Text style={styles.label}>
-                          Dirty Books (+300 each)
-                        </Text>
-                        <View style={styles.row}>
-                          <TouchableOpacity
-                            style={styles.iconButton}
-                            onPress={() =>
-                              updateScore(
-                                player.id,
-                                "bonus_dirty_books",
-                                String(
-                                  Math.max(
-                                    0,
-                                    (roundScores[player.id]
-                                      ?.bonus_dirty_books || 0) - 1
+                      {/* Bonuses */}
+                      <View style={styles.section}>
+                        <Text style={styles.sectionTitle}>Bonuses</Text>
+
+                        {/* Clean Books */}
+                        <View style={styles.inputBlock}>
+                          <Text style={styles.label}>
+                            Clean Books (+500 each)
+                          </Text>
+                          <View style={styles.row}>
+                            <TouchableOpacity
+                              style={styles.iconButton}
+                              onPress={() =>
+                                updateScore(
+                                  player.id,
+                                  "bonus_clean_books",
+                                  String(
+                                    Math.max(
+                                      0,
+                                      (roundScores[player.id]
+                                        ?.bonus_clean_books || 0) - 1
+                                    )
                                   )
                                 )
-                              )
-                            }
-                          >
-                            <Feather name="minus" size={16} color="#374151" />
-                          </TouchableOpacity>
+                              }
+                            >
+                              <Feather name="minus" size={16} color="#374151" />
+                            </TouchableOpacity>
+                            <TextInput
+                              keyboardType="numeric"
+                              value={String(
+                                roundScores[player.id]?.bonus_clean_books || 0
+                              )}
+                              onChangeText={(value) =>
+                                updateScore(
+                                  player.id,
+                                  "bonus_clean_books",
+                                  value
+                                )
+                              }
+                              style={styles.input}
+                            />
+                            <TouchableOpacity
+                              style={styles.iconButton}
+                              onPress={() =>
+                                updateScore(
+                                  player.id,
+                                  "bonus_clean_books",
+                                  String(
+                                    (roundScores[player.id]
+                                      ?.bonus_clean_books || 0) + 1
+                                  )
+                                )
+                              }
+                            >
+                              <Feather name="plus" size={16} color="#374151" />
+                            </TouchableOpacity>
+                          </View>
+                        </View>
+
+                        {/* Dirty Books */}
+                        <View style={styles.inputBlock}>
+                          <Text style={styles.label}>
+                            Dirty Books (+300 each)
+                          </Text>
+                          <View style={styles.row}>
+                            <TouchableOpacity
+                              style={styles.iconButton}
+                              onPress={() =>
+                                updateScore(
+                                  player.id,
+                                  "bonus_dirty_books",
+                                  String(
+                                    Math.max(
+                                      0,
+                                      (roundScores[player.id]
+                                        ?.bonus_dirty_books || 0) - 1
+                                    )
+                                  )
+                                )
+                              }
+                            >
+                              <Feather name="minus" size={16} color="#374151" />
+                            </TouchableOpacity>
+                            <TextInput
+                              keyboardType="numeric"
+                              value={String(
+                                roundScores[player.id]?.bonus_dirty_books || 0
+                              )}
+                              onChangeText={(value) =>
+                                updateScore(
+                                  player.id,
+                                  "bonus_dirty_books",
+                                  value
+                                )
+                              }
+                              style={styles.input}
+                            />
+                            <TouchableOpacity
+                              style={styles.iconButton}
+                              onPress={() =>
+                                updateScore(
+                                  player.id,
+                                  "bonus_dirty_books",
+                                  String(
+                                    (roundScores[player.id]
+                                      ?.bonus_dirty_books || 0) + 1
+                                  )
+                                )
+                              }
+                            >
+                              <Feather name="plus" size={16} color="#374151" />
+                            </TouchableOpacity>
+                          </View>
+                        </View>
+                      </View>
+
+                      {/* Penalties & Special */}
+
+                      <View style={styles.pssection}>
+                        <Text style={styles.pssectionTitle}>Penalties</Text>
+                        {/* Cards Left (Penalty) */}
+                        <View style={styles.psinputBlock}>
+                          <Text style={styles.pslabel}>
+                            Total Score From Cards Left (penalty)
+                          </Text>
                           <TextInput
                             keyboardType="numeric"
                             value={String(
-                              roundScores[player.id]?.bonus_dirty_books || 0
+                              roundScores[player.id]?.penalty_cards_left || 0
                             )}
                             onChangeText={(value) =>
-                              updateScore(player.id, "bonus_dirty_books", value)
-                            }
-                            style={styles.input}
-                          />
-                          <TouchableOpacity
-                            style={styles.iconButton}
-                            onPress={() =>
                               updateScore(
                                 player.id,
-                                "bonus_dirty_books",
-                                String(
-                                  roundScores[player.id]?.bonus_dirty_books || 0
-                                ) + 1
+                                "penalty_cards_left",
+                                value
                               )
                             }
-                          >
-                            <Feather name="plus" size={16} color="#374151" />
-                          </TouchableOpacity>
+                            style={styles.psinput}
+                          />
                         </View>
-                      </View>
+                        {/* Red Threes */}
+                        <View style={styles.inputBlock}>
+                          <Text style={styles.label}>
+                            Red Threes (-500 each)
+                          </Text>
+                          <View style={styles.row}>
+                            <TouchableOpacity
+                              style={styles.iconButton}
+                              onPress={() =>
+                                updateScore(
+                                  player.id,
+                                  "penalty_red_threes",
+                                  String(
+                                    Math.max(
+                                      0,
+                                      (roundScores[player.id]
+                                        ?.penalty_red_threes || 0) - 1
+                                    )
+                                  )
+                                )
+                              }
+                            >
+                              <Feather name="minus" size={16} color="#374151" />
+                            </TouchableOpacity>
+                            <TextInput
+                              keyboardType="numeric"
+                              value={String(
+                                roundScores[player.id]?.penalty_red_threes || 0
+                              )}
+                              onChangeText={(value) =>
+                                updateScore(
+                                  player.id,
+                                  "penalty_red_threes",
+                                  value
+                                )
+                              }
+                              style={styles.input}
+                            />
+                            <TouchableOpacity
+                              style={styles.iconButton}
+                              onPress={() =>
+                                updateScore(
+                                  player.id,
+                                  "penalty_red_threes",
+                                  String(
+                                    (roundScores[player.id]
+                                      ?.penalty_red_threes || 0) + 1
+                                  )
+                                )
+                              }
+                            >
+                              <Feather name="plus" size={16} color="#374151" />
+                            </TouchableOpacity>
+                          </View>
+                        </View>
 
-                      {/* Red Threes */}
-                      <View style={styles.inputBlock}>
-                        <Text style={styles.label}>Red Threes (+100 each)</Text>
-                        <TextInput
-                          keyboardType="numeric"
-                          value={String(
-                            roundScores[player.id]?.bonus_red_threes || 0
-                          )}
-                          onChangeText={(value) =>
-                            updateScore(player.id, "bonus_red_threes", value)
-                          }
-                          style={styles.input}
-                        />
-                      </View>
-                    </View>
-
-                    {/* Penalties & Special */}
-
-                    <View style={styles.pssection}>
-                      <Text style={styles.pssectionTitle}>
-                        Penalties & Special
-                      </Text>
-
-                      {/* Cards Left (Penalty) */}
-                      <View style={styles.psinputBlock}>
-                        <Text style={styles.pslabel}>Cards Left (penalty)</Text>
-                        <TextInput
-                          keyboardType="numeric"
-                          value={String(
-                            roundScores[player.id]?.penalty_cards_left || 0
-                          )}
-                          onChangeText={(value) =>
-                            updateScore(player.id, "penalty_cards_left", value)
-                          }
-                          style={styles.psinput}
-                        />
-                      </View>
-
-                      {/* Went Out Toggle */}
-                      <View style={styles.pstoggleRow}>
+                        {/* Went Out Toggle */}
+                        {/* <View style={styles.pstoggleRow}>
                         <Switch
                           value={roundScores[player.id]?.went_out || false}
                           onValueChange={() => toggleWentOut(player.id)}
@@ -679,11 +733,12 @@ export default function GamePage() {
                         <Text style={styles.pstoggleLabel}>
                           Went Out (+100)
                         </Text>
+                      </View> */}
                       </View>
                     </View>
                   </View>
-                </View>
-              ))}
+                ))}
+              </View>
             </View>
           </View>
         </View>
@@ -732,12 +787,18 @@ const styles = StyleSheet.create({
   },
   screen: {
     flex: 1,
-    // backgroundColor: "#ECFDF5", // from-green-50
     padding: 16,
+    justifyContent: "center",
+    alignItems: "center",
+    // backgroundColor: "#ECFDF5", // from-green-50
   },
   container: {
-    maxWidth: 960,
+    height: "100%",
+    borderEndWidth: 5,
+    // maxWidth: 960,
     alignSelf: "center",
+    marginBottom: 0,
+    borderWidth: 5,
   },
   gameId: {
     fontSize: 14,
@@ -899,11 +960,13 @@ const styles = StyleSheet.create({
     color: "#6B7280",
   },
   card2: {
+    flexShrink: 1,
     backgroundColor: "#fff",
+    borderWidth: 8,
     borderRadius: 12,
     elevation: 4,
     padding: 16,
-    marginBottom: 24,
+    marginBottom: 0,
   },
   cardHeader2: {
     marginBottom: 12,
@@ -955,15 +1018,17 @@ const styles = StyleSheet.create({
   scoreGrid2: {
     flexDirection: "column",
     gap: 16,
+    marginTop: 12,
   },
   scoreSection2: {
     flex: 1,
     gap: 12,
   },
   sectionTitle2: {
+    fontSize: 18,
     fontWeight: "600",
     color: "#374151",
-    marginBottom: 8,
+    marginBottom: 0,
   },
   inputGroup2: {
     marginBottom: 12,
@@ -982,10 +1047,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#F9FAFB",
   },
   section: {
-    marginBottom: 24,
+    marginBottom: 0,
   },
   sectionTitle: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "600",
     color: "#374151",
     marginBottom: 12,
@@ -1021,10 +1086,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   pssection: {
-    marginBottom: 24,
+    marginBottom: 4,
   },
   pssectionTitle: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "600",
     color: "#374151",
     marginBottom: 12,
