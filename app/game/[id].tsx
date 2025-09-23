@@ -104,30 +104,35 @@ export default function GamePage() {
       // ***** Work on calculating scores *****
       // *******************************************
 
-      //     const scores = enrichedPlayers.map((player) => {
-      //       if (player.rounds && player.rounds.length > 0) {
-      //       player.rounds;
-      //       }
-      //       else {
-      //         player.rounds = [{
-      //        game_id: string;
-      // player_id: string;
-      // round_number: number;
-      // melds_score?: number;
-      // cards_score?: number;
-      // bonus_clean_books?: number;
-      // bonus_dirty_books?: number;
-      // bonus_red_threes?: number;
-      // penalty_cards_left?: number;
-      // went_out?: boolean;
-      // round_total?: number;
-      //      }];
-      //       }
-      //     });
+      const scores = enrichedPlayers.map((player) => {
+        const rounds =
+          player.rounds && player.rounds.length > 0
+            ? player.rounds
+            : [
+                {
+                  game_id: normalizedGameId,
+                  player_id: player.id,
+                  round_number: 1,
+                  melds_score: 0,
+                  cards_score: 0,
+                  bonus_clean_books: 0,
+                  bonus_dirty_books: 0,
+                  bonus_red_threes: 0,
+                  penalty_cards_left: 0,
+                  went_out: false,
+                  round_total: 0,
+                },
+              ];
+        return {
+          ...player,
+          rounds,
+        };
+      });
 
       setPlayers(enrichedPlayers);
       console.log("Loaded players:", enrichedPlayers);
       console.log("Loaded players scores", scores);
+      console.log("Loaded players [1] scores", enrichedPlayers[1].rounds);
 
       // Step 5: Attach players to their respective games
       const gameWithPlayers: Game = {
