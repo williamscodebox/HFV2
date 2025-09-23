@@ -156,42 +156,6 @@ export default function GamePage() {
     }, [])
   );
 
-  // useEffect(() => {
-  //   const loadGame = async () => {
-  //     // try {
-  //     //   const gameData = await Game.filter({ id: gameId });
-  //     //   if (gameData.length > 0) {
-  //     //     const currentGame = gameData[0];
-  //     //     setGame(currentGame);
-  //     //     // Initialize round scores for current round
-  //     //     const scores = {};
-  //     //     currentGame.players.forEach((player) => {
-  //     //       scores[player.player_id] = {
-  //     //         melds_score: 0,
-  //     //         cards_score: 0,
-  //     //         bonus_clean_books: 0,
-  //     //         bonus_dirty_books: 0,
-  //     //         bonus_red_threes: 0,
-  //     //         penalty_cards_left: 0,
-  //     //         went_out: false,
-  //     //       };
-  //     //     });
-  //     //     setRoundScores(scores);
-  //     //   }
-  //     // } catch (error) {
-  //     //   console.error("Error loading game:", error);
-  //     // } finally {
-  //     //   setLoading(false);
-  //     // }
-  //   };
-
-  //   // if (gameId) {
-  //   //   loadGame();
-  //   // }
-  //   setGame(gameData);
-  //   setLoading(false);
-  // }, [gameId]); // gameId is the only dependency here, as loadGame is defined inside
-
   const updateScore = (
     playerId: string,
     field: NumericScoreField,
