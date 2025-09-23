@@ -15,6 +15,7 @@ Have Newgame page finished 09-19-25 --> app needed reworking (building with type
 index for finding expo/vector-icons -->  https://icons.expo.fyi/Index
 
 ****** work on db integration on game page 09-22-25 until completed ******
+****** work on adding rounds and saving rounds in game page 09-23-25 ***********
 work on setRoundScores implementation wit the db integration --> 09-22-25
 Finish work on game page 09-30-25 
 
