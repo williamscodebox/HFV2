@@ -133,6 +133,7 @@ export default function GamePage() {
       console.log("Loaded players:", enrichedPlayers);
       console.log("Loaded players scores", scores);
       console.log("Loaded players [1] scores", enrichedPlayers[1].rounds);
+      console.log("Round Scores: ", roundScores);
 
       // Step 5: Attach players to their respective games
       const gameWithPlayers: Game = {
@@ -495,7 +496,7 @@ export default function GamePage() {
                     <View style={styles.scoreSection2}>
                       <Text style={styles.sectionTitle2}>Basic Scores</Text>
 
-                      <View style={styles.inputGroup2}>
+                      {/* <View style={styles.inputGroup2}>
                         <Text style={styles.label2}>Melds Score</Text>
                         <TextInput
                           keyboardType="numeric"
@@ -507,7 +508,7 @@ export default function GamePage() {
                           }
                           style={styles.input2}
                         />
-                      </View>
+                      </View> */}
 
                       <View style={styles.inputGroup2}>
                         <Text style={styles.label2}>Cards Score</Text>
