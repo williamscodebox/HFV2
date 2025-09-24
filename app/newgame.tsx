@@ -264,7 +264,7 @@ export default function newgame() {
                     {selectedPlayers.length === 0 ? (
                       <View style={styles.emptyPlayerBox}>
                         <Text style={styles.emptyPlayerText}>
-                          No players selected yet
+                          No players or teams selected yet
                         </Text>
                       </View>
                     ) : (
@@ -288,7 +288,7 @@ export default function newgame() {
 
                   {selectedPlayers.length < 2 && (
                     <Text style={styles.warningText}>
-                      You need at least 2 players to start a game
+                      You need at least 2 players or teams to start a game
                     </Text>
                   )}
                 </View>
@@ -334,13 +334,13 @@ export default function newgame() {
               <View style={styles.cardContent2}>
                 {/* Add New Player */}
                 <View>
-                  <Text style={styles.label2}>Create New Player</Text>
+                  <Text style={styles.label2}>Create New Player or Team</Text>
                   <View style={styles.inputRow2}>
                     <TextInput
                       style={styles.input2}
                       value={newPlayerName}
                       onChangeText={setNewPlayerName}
-                      placeholder="Enter player name"
+                      placeholder="Enter player or team name"
                       onSubmitEditing={addNewPlayer}
                     />
                     <TouchableOpacity
@@ -355,7 +355,9 @@ export default function newgame() {
 
                 {/* Existing Players */}
                 <View>
-                  <Text style={styles.label2}>Choose Existing Players</Text>
+                  <Text style={styles.label2}>
+                    Choose Existing Players or Teams
+                  </Text>
                   <View style={styles.playerList2}>
                     {existingPlayers.length === 0 ? (
                       <View style={styles.emptyBox2}>
@@ -364,7 +366,7 @@ export default function newgame() {
                           No existing players
                         </Text>
                         <Text style={styles.emptySubtext2}>
-                          Create your first player above
+                          Create your first player or team above
                         </Text>
                       </View>
                     ) : (

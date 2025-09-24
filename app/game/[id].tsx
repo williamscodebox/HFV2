@@ -15,19 +15,6 @@ import {
 } from "react-native";
 import "react-native-get-random-values";
 
-// import { createPageUrl } from "@/utils";
-
-//   RotateCcw
-
-interface RoundScore {
-  melds_score: number;
-  cards_score: number;
-  bonus_clean_books: number;
-  bonus_dirty_books: number;
-  penalty_red_threes: number;
-  penalty_cards_left: number;
-  went_out: boolean;
-}
 export interface Round2 {
   game_id: string;
   player_id: string;
@@ -36,13 +23,13 @@ export interface Round2 {
   cards_score?: number;
   bonus_clean_books?: number;
   bonus_dirty_books?: number;
-  bonus_red_threes?: number;
+  penalty_red_threes?: number;
   penalty_cards_left?: number;
   went_out?: boolean;
   round_total?: number;
 }
 
-type NumericScoreField = Exclude<keyof RoundScore, "went_out">;
+type NumericScoreField = Exclude<keyof Round, "went_out">;
 
 export default function GamePage() {
   const router = useRouter();
@@ -52,9 +39,7 @@ export default function GamePage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [players, setPlayers] = useState<GamePlayer[]>([]);
-  const [roundScores, setRoundScores] = useState<Record<string, RoundScore>>(
-    {}
-  );
+  const [roundScores, setRoundScores] = useState<Record<string, Round>>({});
   const db = useSQLiteContext();
 
   const loadData = async () => {
@@ -116,7 +101,7 @@ export default function GamePage() {
                   cards_score: 0,
                   bonus_clean_books: 0,
                   bonus_dirty_books: 0,
-                  bonus_red_threes: 0,
+                  penalty_red_threes: 0,
                   penalty_cards_left: 0,
                   went_out: false,
                   round_total: 0,
@@ -201,65 +186,78 @@ export default function GamePage() {
   };
 
   const saveRound = async () => {
-    // setSaving(true);
-    // try {
-    //   const updatedPlayers = game.players.map((player: Player) => {
-    //     const playerScores = roundScores[player.id] || {};
-    //     const roundTotal = calculateRoundTotal(player.id);
-    //     const newRound = {
-    //       round_number: game.current_round,
-    //       ...playerScores,
-    //       round_total: roundTotal,
-    //     };
-    //     return {
-    //       ...player,
-    //       rounds: [...(player.rounds || []), newRound],
-    //       total_score: (player.total_score || 0) + roundTotal,
-    //     };
-    //   });
-    //   await Game.update(game.id, {
-    //     players: updatedPlayers,
-    //     current_round: game.current_round + 1,
-    //   });
-    //   // Update player stats
-    //   for (const player of updatedPlayers) {
-    //     const playerData = await Player.filter({ id: player.player_id });
-    //     if (playerData.length > 0) {
-    //       await Player.update(player.player_id, {
-    //         total_score:
-    //           (playerData[0].total_score || 0) +
-    //           calculateRoundTotal(player.player_id), // Use the latest total_score from DB
-    //         games_played:
-    //           (playerData[0].games_played || 0) +
-    //           (game.current_round === 1 ? 1 : 0),
-    //       });
-    //     }
-    //   }
-    //   // Reload game data to get the most updated state for UI and next round scores reset
-    //   const gameData = await Game.filter({ id: gameId });
-    //   if (gameData.length > 0) {
-    //     const currentGame = gameData[0];
-    //     setGame(currentGame);
-    //     // Reset round scores for the newly loaded game state
-    //     const newRoundScores = {};
-    //     currentGame.players.forEach((player) => {
-    //       newRoundScores[player.player_id] = {
-    //         melds_score: 0,
-    //         cards_score: 0,
-    //         bonus_clean_books: 0,
-    //         bonus_dirty_books: 0,
-    //         bonus_red_threes: 0,
-    //         penalty_cards_left: 0,
-    //         went_out: false,
-    //       };
-    //     });
-    //     setRoundScores(newRoundScores);
-    //   }
-    // } catch (error) {
-    //   console.error("Error saving round:", error);
-    // } finally {
-    //   setSaving(false);
-    // }
+    setSaving(true);
+    try {
+      if (game) {
+        const updatedPlayers = game.players.map((player: GamePlayer) => {
+          const playerScores = roundScores[player.id] || {};
+          const roundTotal = calculateRoundTotal(player.id);
+          const newRound = {
+            round_number: game.current_round ?? 1,
+            game_id: game.id,
+            player_id: player.player_id,
+            melds_score: playerScores.melds_score ?? 0,
+            cards_score: playerScores.cards_score ?? 0,
+            bonus_clean_books: playerScores.bonus_clean_books ?? 0,
+            bonus_dirty_books: playerScores.bonus_dirty_books ?? 0,
+            penalty_red_threes: playerScores.penalty_red_threes ?? 0,
+            penalty_cards_left: playerScores.penalty_cards_left ?? 0,
+            went_out: playerScores.went_out ?? false,
+            round_total: roundTotal,
+          };
+          return {
+            ...player,
+            rounds: [...(player.rounds || []), newRound],
+            total_score: (player.total_score || 0) + roundTotal,
+          };
+        });
+      }
+      //   await Game.update(game.id, {
+      //     players: updatedPlayers,
+      //     current_round: game.current_round + 1,
+      //   });
+      //   // Update player stats
+      //   for (const player of updatedPlayers) {
+      //     const playerData = await Player.filter({ id: player.player_id });
+      //     if (playerData.length > 0) {
+      //       await Player.update(player.player_id, {
+      //         total_score:
+      //           (playerData[0].total_score || 0) +
+      //           calculateRoundTotal(player.player_id), // Use the latest total_score from DB
+      //         games_played:
+      //           (playerData[0].games_played || 0) +
+      //           (game.current_round === 1 ? 1 : 0),
+      //       });
+      //     }
+      //   }
+
+      // Reload game data to get the most updated state for UI and next round scores reset
+      await loadData();
+      // Reset round scores for the newly loaded game state
+      const newRoundScores: Record<string, Round> = {};
+      if (game) {
+        game.players.forEach((player) => {
+          newRoundScores[player.player_id] = {
+            game_id: player.game_id,
+            player_id: player.id,
+            round_number: 1,
+            melds_score: 0,
+            cards_score: 0,
+            bonus_clean_books: 0,
+            bonus_dirty_books: 0,
+            penalty_red_threes: 0,
+            penalty_cards_left: 0,
+            went_out: false,
+            round_total: 0,
+          };
+        });
+      }
+      setRoundScores(newRoundScores);
+    } catch (error) {
+      console.error("Error saving round:", error);
+    } finally {
+      setSaving(false);
+    }
     console.log("Save round clicked");
   };
 
