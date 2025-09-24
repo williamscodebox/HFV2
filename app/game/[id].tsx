@@ -14,6 +14,7 @@ import {
   View,
 } from "react-native";
 import "react-native-get-random-values";
+import { v4 as uuidv4 } from "uuid";
 
 export interface Round2 {
   game_id: string;
@@ -189,11 +190,29 @@ export default function GamePage() {
     setSaving(true);
     try {
       if (!game) return;
-
-      // Step 1: Update players with new round
-      const updatedPlayers = game.players.map((player: GamePlayer) => {
+      const updatedPlayers: GamePlayer[] = [];
+      // Step 1: Update players with new round save round to db
+      for (const player of game.players) {
         const playerScores = roundScores[player.id] || {};
         const roundTotal = calculateRoundTotal(player.id);
+
+        await db.runAsync(
+          `INSERT INTO rounds (id, game_id, player_id, round_number, melds_score, cards_score, bonus_clean_books, 
+        bonus_dirty_books, penalty_red_threes, penalty_cards_left, went_out, round_total) VALUES (?, ?, ?, ?, ?,
+         ?, ?, ?, ?, ?, ?, ?)`,
+          uuidv4(),
+          game.current_round ?? 1,
+          game.id,
+          player.player_id,
+          playerScores.melds_score ?? 0,
+          playerScores.cards_score ?? 0,
+          playerScores.bonus_clean_books ?? 0,
+          playerScores.bonus_dirty_books ?? 0,
+          playerScores.penalty_red_threes ?? 0,
+          playerScores.penalty_cards_left ?? 0,
+          playerScores.went_out ?? false,
+          roundTotal
+        );
         const newRound = {
           round_number: game.current_round ?? 1,
           game_id: game.id,
@@ -207,12 +226,12 @@ export default function GamePage() {
           went_out: playerScores.went_out ?? false,
           round_total: roundTotal,
         };
-        return {
+        updatedPlayers.push({
           ...player,
-          rounds: [...(player.rounds || []), newRound],
-          total_score: (player.total_score || 0) + roundTotal,
-        };
-      });
+          rounds: [...(player.rounds ?? []), newRound],
+          total_score: (player.total_score ?? 0) + roundTotal,
+        });
+      }
 
       // Step 2: Update game round
       // Update the game
@@ -223,10 +242,6 @@ export default function GamePage() {
       );
 
       // Step 3: Update each player's global stats
-
-      // *******************************************need to update players in db and gamePlayers in db*******************
-      // *******************************************will also need to update rounds in db********************************
-      // fix the error in updating the points for round total whaen saving data
 
       for (const player of updatedPlayers) {
         const playerData = await db.getFirstAsync<GamePlayer>(
