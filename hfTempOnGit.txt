@@ -17,7 +17,7 @@ index for finding expo/vector-icons -->  https://icons.expo.fyi/Index
 ****** work on db integration on game page 09-22-25 until completed ******
 ****** work on adding rounds and saving rounds in game page 09-23-25 ***********
 work on setRoundScores implementation wit the db integration --> 09-22-25
-Finish work on game page 09-30-25 
+
 
 Targets changed due to build issues with runtime failures
 Entire app being reworked into Typescript language and removing NativeWind from the apps styling
@@ -27,7 +27,9 @@ Goal to have Tutorial finished 09-16-25  --> completed on 09-15-25 one day earli
 Have Home Screen finished 09-18-25  --> completed on 09-17-25 one day earlier than target
 Have History page finished 09-20-25  --> completed on 09-18-25 two days earlier than target
 Have Newgame page finished 09-25-25 --> completed on 09-19-25 six days earlier than target
-Have Game page finished 09-30-25 -->
-rework app from using dummy data to live data using expo SQLite
+Have Game page finished 09-30-25 --> completed on 09-24-25 six days earlier than target
+Rework app from using dummy data to live data using expo SQLite -->
+Complete all prep to have app ready for google play submission -->
+Goal is to Submit 10-01-25 -->
 
 
