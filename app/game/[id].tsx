@@ -371,22 +371,30 @@ export default function GamePage() {
                     <Feather name="arrow-left" size={16} color="#1E3A8A" />
                     <Text style={styles.backText}>Back</Text>
                   </TouchableOpacity>
+                </View>
 
-                  <View>
-                    <Text style={styles.gameName}>{game.name}</Text>
-                    <View style={styles.badgeRow}>
-                      <View style={styles.roundBadge}>
-                        <Text style={styles.roundText}>
-                          Round {game.current_round}
-                        </Text>
-                      </View>
-                      <View style={styles.playerBadge}>
-                        <Feather name="users" size={12} color="#1E3A8A" />
-                        <Text style={styles.playerText}>
-                          {game.players.length} players
-                        </Text>
-                      </View>
-                    </View>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    marginBottom: 6,
+                    marginTop: 4,
+                  }}
+                >
+                  <Text style={styles.gameName}>{game.name}</Text>
+                </View>
+
+                <View style={styles.badgeRow}>
+                  <View style={styles.roundBadge}>
+                    <Text style={styles.roundText}>
+                      Round {game.current_round}
+                    </Text>
+                  </View>
+                  <View style={styles.playerBadge}>
+                    <Feather name="users" size={12} color="#1E3A8A" />
+                    <Text style={styles.playerText}>
+                      {game.players.length} players
+                    </Text>
                   </View>
                 </View>
               </View>
@@ -395,7 +403,7 @@ export default function GamePage() {
             <View style={styles.card}>
               <View style={styles.cardHeader}>
                 <View style={styles.cardTitleRow}>
-                  <EvilIcons name="trophy" size={28} color="#CA8A04" />
+                  <EvilIcons name="trophy" size={32} color="#CA8A04" />
                   <Text style={styles.cardTitle}>Current Standings</Text>
                 </View>
               </View>
@@ -439,7 +447,12 @@ export default function GamePage() {
             <View style={styles.card2}>
               <View style={styles.cardHeader2}>
                 <View style={styles.titleRow2}>
-                  <Feather name="target" size={20} color="#059669" />
+                  <Feather
+                    name="target"
+                    size={24}
+                    color="#059669"
+                    style={{ marginLeft: 4 }}
+                  />
                   <Text style={styles.cardTitle2}>
                     Round {game.current_round} Scoring
                   </Text>
@@ -803,17 +816,18 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: "column",
-    gap: 16,
+    gap: 0,
     marginBottom: 24,
   },
   titleRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 16,
+    flexDirection: "column",
+    // alignItems: "center",
+    gap: 8,
   },
   backButton: {
     flexDirection: "row",
     alignItems: "center",
+    width: 80,
     padding: 8,
     borderWidth: 1,
     backgroundColor: "#FFFF",
@@ -826,13 +840,14 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   gameName: {
-    fontSize: 24,
+    fontSize: 30,
     fontWeight: "bold",
     color: "#111827",
   },
   badgeRow: {
     flexDirection: "row",
     gap: 12,
+    justifyContent: "center",
     marginTop: 4,
   },
   roundBadge: {
@@ -909,9 +924,9 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   cardTitle: {
-    fontSize: 18,
+    fontSize: 24,
     fontWeight: "600",
-    color: "#111827",
+    color: "#3c4456ff",
   },
   cardContent: {
     gap: 12,
@@ -973,9 +988,9 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   cardTitle2: {
-    fontSize: 18,
+    fontSize: 24,
     fontWeight: "600",
-    color: "#111827",
+    color: "#3c4456ff",
     marginLeft: 8,
   },
   cardContent2: {
