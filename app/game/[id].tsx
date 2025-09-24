@@ -188,48 +188,67 @@ export default function GamePage() {
   const saveRound = async () => {
     setSaving(true);
     try {
-      if (game) {
-        const updatedPlayers = game.players.map((player: GamePlayer) => {
-          const playerScores = roundScores[player.id] || {};
-          const roundTotal = calculateRoundTotal(player.id);
-          const newRound = {
-            round_number: game.current_round ?? 1,
-            game_id: game.id,
-            player_id: player.player_id,
-            melds_score: playerScores.melds_score ?? 0,
-            cards_score: playerScores.cards_score ?? 0,
-            bonus_clean_books: playerScores.bonus_clean_books ?? 0,
-            bonus_dirty_books: playerScores.bonus_dirty_books ?? 0,
-            penalty_red_threes: playerScores.penalty_red_threes ?? 0,
-            penalty_cards_left: playerScores.penalty_cards_left ?? 0,
-            went_out: playerScores.went_out ?? false,
-            round_total: roundTotal,
-          };
-          return {
-            ...player,
-            rounds: [...(player.rounds || []), newRound],
-            total_score: (player.total_score || 0) + roundTotal,
-          };
-        });
-      }
-      //   await Game.update(game.id, {
-      //     players: updatedPlayers,
-      //     current_round: game.current_round + 1,
-      //   });
-      //   // Update player stats
-      //   for (const player of updatedPlayers) {
-      //     const playerData = await Player.filter({ id: player.player_id });
-      //     if (playerData.length > 0) {
-      //       await Player.update(player.player_id, {
-      //         total_score:
-      //           (playerData[0].total_score || 0) +
-      //           calculateRoundTotal(player.player_id), // Use the latest total_score from DB
-      //         games_played:
-      //           (playerData[0].games_played || 0) +
-      //           (game.current_round === 1 ? 1 : 0),
-      //       });
-      //     }
+      if (!game) return;
+
+      // Step 1: Update players with new round
+      const updatedPlayers = game.players.map((player: GamePlayer) => {
+        const playerScores = roundScores[player.id] || {};
+        const roundTotal = calculateRoundTotal(player.id);
+        const newRound = {
+          round_number: game.current_round ?? 1,
+          game_id: game.id,
+          player_id: player.player_id,
+          melds_score: playerScores.melds_score ?? 0,
+          cards_score: playerScores.cards_score ?? 0,
+          bonus_clean_books: playerScores.bonus_clean_books ?? 0,
+          bonus_dirty_books: playerScores.bonus_dirty_books ?? 0,
+          penalty_red_threes: playerScores.penalty_red_threes ?? 0,
+          penalty_cards_left: playerScores.penalty_cards_left ?? 0,
+          went_out: playerScores.went_out ?? false,
+          round_total: roundTotal,
+        };
+        return {
+          ...player,
+          rounds: [...(player.rounds || []), newRound],
+          total_score: (player.total_score || 0) + roundTotal,
+        };
+      });
+
+      // Step 2: Update game round
+      // Update the game
+      await db.runAsync(
+        `UPDATE games SET current_round = ? WHERE id = ?`,
+        (game.current_round ?? 1) + 1,
+        game.id
+      );
+
+      // Step 3: Update each player's global stats
+
+      // *******************************************need to update players in db and gamePlayers in db*******************
+      // *******************************************will also need to update rounds in db********************************
+
+      // Update each player's stats
+      // for (const player of updatedPlayers) {
+      //   const playerData = await db.getFirstAsync<Player>(
+      //     "SELECT * FROM players WHERE id = ?",
+      //     player.player_id
+      //   );
+
+      //   if (playerData) {
+      //     const newTotalScore =
+      //       (playerData.total_score ?? 0) +
+      //       calculateRoundTotal(player.player_id);
+      //     const newGamesPlayed =
+      //       (playerData.games_played ?? 0) + (game.current_round === 1 ? 1 : 0);
+
+      //     await db.runAsync(
+      //       `UPDATE players SET total_score = ?, games_played = ? WHERE id = ?`,
+      //       newTotalScore,
+      //       newGamesPlayed,
+      //       player.player_id
+      //     );
       //   }
+      // }
 
       // Reload game data to get the most updated state for UI and next round scores reset
       await loadData();
@@ -240,7 +259,7 @@ export default function GamePage() {
           newRoundScores[player.player_id] = {
             game_id: player.game_id,
             player_id: player.id,
-            round_number: 1,
+            round_number: game.current_round ?? 1,
             melds_score: 0,
             cards_score: 0,
             bonus_clean_books: 0,
