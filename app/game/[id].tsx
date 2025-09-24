@@ -1050,6 +1050,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   input2: {
+    textAlign: "center",
     borderWidth: 1,
     borderColor: "#D1D5DB",
     borderRadius: 6,
@@ -1114,6 +1115,7 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   psinput: {
+    textAlign: "center",
     borderWidth: 1,
     borderColor: "#D1D5DB",
     borderRadius: 6,
