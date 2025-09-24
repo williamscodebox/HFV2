@@ -1,4 +1,4 @@
-import { Game, GamePlayer, Round } from "@/entities/all";
+import { Game, GamePlayer, Player, Round } from "@/entities/all";
 import { EvilIcons, Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
@@ -226,51 +226,77 @@ export default function GamePage() {
 
       // *******************************************need to update players in db and gamePlayers in db*******************
       // *******************************************will also need to update rounds in db********************************
+      // fix the error in updating the points for round total whaen saving data
 
-      // Update each player's stats
-      // for (const player of updatedPlayers) {
-      //   const playerData = await db.getFirstAsync<Player>(
-      //     "SELECT * FROM players WHERE id = ?",
-      //     player.player_id
-      //   );
+      for (const player of updatedPlayers) {
+        const playerData = await db.getFirstAsync<GamePlayer>(
+          "SELECT * FROM gameplayers WHERE id = ?",
+          player.id
+        );
+        if (!playerData) {
+          console.log("no data");
+        }
+        console.log("data data data data data");
 
-      //   if (playerData) {
-      //     const newTotalScore =
-      //       (playerData.total_score ?? 0) +
-      //       calculateRoundTotal(player.player_id);
-      //     const newGamesPlayed =
-      //       (playerData.games_played ?? 0) + (game.current_round === 1 ? 1 : 0);
+        if (playerData) {
+          const newTotalScore =
+            (playerData.total_score ?? 0) +
+            calculateRoundTotal(player.player_id);
+          console.log("round data:", calculateRoundTotal(player.player_id));
+          const newGamesPlayed =
+            (playerData.games_played ?? 0) + (game.current_round === 1 ? 1 : 0);
 
-      //     await db.runAsync(
-      //       `UPDATE players SET total_score = ?, games_played = ? WHERE id = ?`,
-      //       newTotalScore,
-      //       newGamesPlayed,
-      //       player.player_id
-      //     );
-      //   }
-      // }
+          await db.runAsync(
+            `UPDATE gameplayers SET total_score = ?, games_played = ? WHERE id = ?`,
+            newTotalScore,
+            newGamesPlayed,
+            player.id
+          );
+        }
+      }
+
+      for (const player of updatedPlayers) {
+        const playerData = await db.getFirstAsync<Player>(
+          "SELECT * FROM players WHERE id = ?",
+          player.player_id
+        );
+
+        if (playerData) {
+          const newTotalScore =
+            (playerData.total_score ?? 0) +
+            calculateRoundTotal(player.player_id);
+          const newGamesPlayed =
+            (playerData.games_played ?? 0) + (game.current_round === 1 ? 1 : 0);
+
+          await db.runAsync(
+            `UPDATE players SET total_score = ?, games_played = ? WHERE id = ?`,
+            newTotalScore,
+            newGamesPlayed,
+            player.player_id
+          );
+        }
+      }
 
       // Reload game data to get the most updated state for UI and next round scores reset
       await loadData();
       // Reset round scores for the newly loaded game state
       const newRoundScores: Record<string, Round> = {};
-      if (game) {
-        game.players.forEach((player) => {
-          newRoundScores[player.player_id] = {
-            game_id: player.game_id,
-            player_id: player.id,
-            round_number: game.current_round ?? 1,
-            melds_score: 0,
-            cards_score: 0,
-            bonus_clean_books: 0,
-            bonus_dirty_books: 0,
-            penalty_red_threes: 0,
-            penalty_cards_left: 0,
-            went_out: false,
-            round_total: 0,
-          };
-        });
-      }
+      game.players.forEach((player) => {
+        newRoundScores[player.player_id] = {
+          game_id: game.id,
+          player_id: player.id,
+          round_number: (game.current_round ?? 1) + 1,
+          melds_score: 0,
+          cards_score: 0,
+          bonus_clean_books: 0,
+          bonus_dirty_books: 0,
+          penalty_red_threes: 0,
+          penalty_cards_left: 0,
+          went_out: false,
+          round_total: 0,
+        };
+      });
+
       setRoundScores(newRoundScores);
     } catch (error) {
       console.error("Error saving round:", error);
