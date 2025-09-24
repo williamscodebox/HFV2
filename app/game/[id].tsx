@@ -239,10 +239,10 @@ export default function GamePage() {
         console.log("data data data data data");
 
         if (playerData) {
+          console.log("gameplayers data =======:", playerData);
           const newTotalScore =
-            (playerData.total_score ?? 0) +
-            calculateRoundTotal(player.player_id);
-          console.log("round data:", calculateRoundTotal(player.player_id));
+            (playerData.total_score ?? 0) + calculateRoundTotal(player.id);
+          console.log("round data:", calculateRoundTotal(player.id));
           const newGamesPlayed =
             (playerData.games_played ?? 0) + (game.current_round === 1 ? 1 : 0);
 
@@ -262,9 +262,9 @@ export default function GamePage() {
         );
 
         if (playerData) {
+          console.log("playerData ========= :", playerData);
           const newTotalScore =
-            (playerData.total_score ?? 0) +
-            calculateRoundTotal(player.player_id);
+            (playerData.total_score ?? 0) + calculateRoundTotal(player.id);
           const newGamesPlayed =
             (playerData.games_played ?? 0) + (game.current_round === 1 ? 1 : 0);
 
