@@ -76,6 +76,13 @@ export default function HomeScreen() {
       console.error("Error deleting game:", error);
     }
   };
+  const deleteAllRoundsFromGame = async (gameId: string) => {
+    try {
+      await db.runAsync("DELETE FROM rounds WHERE id = ?", gameId);
+    } catch (error) {
+      console.error("Error deleting rounds:", error);
+    }
+  };
 
   if (loading) {
     return (
@@ -310,7 +317,10 @@ export default function HomeScreen() {
                           <TouchableOpacity
                             style={styles.continueButton}
                             activeOpacity={0.8}
-                            onPress={() => router.push(`/game/${game.id}`)}
+                            onPress={() => {
+                              console.log("Navigating to game:", game.id);
+                              router.push(`/game/${game.id}`);
+                            }}
                           >
                             <Text style={styles.continueText}>Continue</Text>
                           </TouchableOpacity>
@@ -320,7 +330,10 @@ export default function HomeScreen() {
                               { backgroundColor: "#fef2f2" },
                             ]}
                             activeOpacity={0.8}
-                            onPress={() => deleteGame(game.id)}
+                            onPress={() => {
+                              deleteAllRoundsFromGame(game.id);
+                              deleteGame(game.id);
+                            }}
                           >
                             <Text style={styles.continueText}>Delete</Text>
                           </TouchableOpacity>

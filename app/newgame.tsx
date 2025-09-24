@@ -122,6 +122,7 @@ export default function newgame() {
     try {
       const gameId = uuidv4();
       const timestamp = new Date().toISOString();
+      console.log("game created id === ", gameId);
 
       const gameData: Game = {
         id: gameId,
@@ -165,10 +166,7 @@ export default function newgame() {
         );
       }
       console.log("Game created with ID:", gameData.id);
-      router.push({
-        pathname: "/game/[id]",
-        params: { id: gameData.id },
-      });
+      router.push(`/game/${gameData.id}`);
     } catch (error) {
       console.error("Error starting game:", error);
     } finally {

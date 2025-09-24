@@ -48,8 +48,11 @@ export default function GamePage() {
     try {
       // Step 1: Get the game by ID
 
+      console.log("gameId is ===", gameId);
       const normalizedGameId = Array.isArray(gameId) ? gameId[0] : gameId;
       if (!normalizedGameId) return;
+
+      console.log("loading game # :", normalizedGameId);
 
       const gameResult = await db.getFirstAsync<Game>(
         "SELECT * FROM games WHERE id = ?",
