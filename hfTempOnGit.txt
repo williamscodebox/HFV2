@@ -1,7 +1,6 @@
 Temp file used in brainstorming ideas
 
 newgame page needs reworking to fix issue with fields not being cleared when page is reloaded
-game page needs to be fixed for not loading the correct game info everytime when loading game info 
 
 update the CustomDrawer to have a better Logo for the drawer sidebar
 update tutorial to include 4 rounds in game and starting points (50, 75, 120, 150)
