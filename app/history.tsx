@@ -1,8 +1,12 @@
 import CardHeader from "@/components/CardHeader";
+import { Game, GamePlayer } from "@/entities/game";
+import { Player } from "@/entities/player";
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { format } from "date-fns";
 import { LinearGradient } from "expo-linear-gradient";
-import { useEffect, useState } from "react";
+import { useFocusEffect } from "expo-router";
+import { useSQLiteContext } from "expo-sqlite";
+import React, { useState } from "react";
 import {
   ActivityIndicator,
   Dimensions,
@@ -13,25 +17,8 @@ import {
   View,
 } from "react-native";
 
-type Game = {
-  id: string;
-  name: string;
-  status: "active" | "completed" | "pending";
-  players: Player[];
-  current_round: number;
-  created_date: string;
-  winner_id?: string;
-  // other fields...
-};
-type Player = {
-  player_id: string;
-  name: string;
-  total_score?: number;
-  games_played?: number;
-  games_won?: number;
-};
-
 export default function history() {
+  const db = useSQLiteContext();
   const [games, setGames] = useState<Game[]>([]);
   const [players, setPlayers] = useState<Player[]>([]);
   const [loading, setLoading] = useState(true);
@@ -44,64 +31,45 @@ export default function history() {
     : [[], []];
 
   const loadData = async () => {
-    setTimeout(() => {
-      const mockGames: Game[] = [
-        {
-          id: "1",
-          name: "Game 1",
-          status: "active",
-          current_round: 2,
-          created_date: "2025-09-01T10:00:00Z",
-          players: [
-            { player_id: "1", name: "Alice", total_score: 120 },
-            { player_id: "2", name: "Bob", total_score: 95 },
-          ],
-        },
-        {
-          id: "2",
-          name: "Game 2",
-          status: "completed",
-          current_round: 4,
-          created_date: "2025-08-28T14:30:00Z",
-          winner_id: "3",
-          players: [
-            { player_id: "3", name: "Charlie", total_score: 200 },
-            { player_id: "4", name: "Dana", total_score: 180 },
-          ],
-        },
-        {
-          id: "3",
-          name: "Game 3",
-          status: "completed",
-          current_round: 3,
-          created_date: "2025-08-20T09:15:00Z",
-          winner_id: "5",
-          players: [
-            { player_id: "5", name: "Eve", total_score: 150 },
-            { player_id: "6", name: "Frank", total_score: 140 },
-          ],
-        },
-      ];
+    setLoading(true);
+    try {
+      // Step 1: Get all games
+      const rawGames = await db.getAllAsync<Game>(
+        "SELECT * FROM games ORDER BY created_at DESC"
+      );
 
-      const mockPlayers: Player[] = [
-        { player_id: "1", name: "Alice", games_won: 10 },
-        { player_id: "2", name: "Bob", games_won: 8 },
-        { player_id: "3", name: "Charlie", games_won: 12 },
-        { player_id: "4", name: "Dana", games_won: 7 },
-        { player_id: "5", name: "Eve", games_won: 15 },
-        { player_id: "6", name: "Frank", games_won: 5 },
-      ];
+      // Step 2: Get all players
+      const allPlayers = await db.getAllAsync<Player>(
+        "SELECT * FROM players ORDER BY name"
+      );
+      setPlayers(allPlayers);
 
-      setGames(mockGames);
-      setPlayers(mockPlayers);
+      // Step 3: Get all gameplayers
+      const rawGamePlayers = await db.getAllAsync<GamePlayer>(
+        "SELECT * FROM gameplayers"
+      );
+
+      // Step 4: Attach players to their respective games
+      const gamesWithPlayers = rawGames.map((game) => {
+        const players = rawGamePlayers.filter((gp) => gp.game_id === game.id);
+        return { ...game, players };
+      });
+
+      setGames(gamesWithPlayers);
+
+      console.log("Loaded games with players:", gamesWithPlayers);
+    } catch (error) {
+      console.error("Error loading games:", error);
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
-  useEffect(() => {
-    loadData();
-    // setLoading(false);
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      loadData();
+    }, [])
+  );
 
   if (loading) {
     return (
@@ -249,7 +217,9 @@ export default function history() {
                           <Text>{game.players.length} players</Text>
                           <Text>Round {game.current_round}</Text>
                           <Text>
-                            {format(new Date(game.created_date), "MMM d, yyyy")}
+                            {game.created_at
+                              ? format(new Date(game.created_at), "MMM d, yyyy")
+                              : "Unknown"}
                           </Text>
                         </View>
                         {game.status === "completed" && game.winner_id && (
@@ -305,7 +275,7 @@ export default function history() {
                         : styles.badgeDefault;
 
                     return (
-                      <View key={player.player_id} style={styles.playerRow}>
+                      <View key={player.id} style={styles.playerRow}>
                         <View style={styles.playerInfo}>
                           <View style={[styles.rankBadge, badgeStyle]}>
                             <Text style={styles.rankText}>{index + 1}</Text>
@@ -354,7 +324,9 @@ export default function history() {
                       <View style={styles.metaBlock3}>
                         <Text style={styles.metaText3}>
                           Created:{" "}
-                          {format(new Date(selectedGame.created_date), "PPP")}
+                          {selectedGame.created_at
+                            ? format(new Date(selectedGame.created_at), "PPP")
+                            : "Unknown"}
                         </Text>
                         <Text style={styles.metaText3}>
                           Status: {selectedGame.status}
