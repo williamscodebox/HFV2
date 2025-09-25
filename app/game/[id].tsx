@@ -142,7 +142,7 @@ export default function GamePage() {
   useFocusEffect(
     React.useCallback(() => {
       loadData();
-    }, [])
+    }, [gameId])
   );
 
   const updateScore = (
