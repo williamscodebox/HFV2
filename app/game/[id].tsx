@@ -325,25 +325,32 @@ export default function GamePage() {
   };
 
   const endGame = async () => {
-    // try {
-    //   const winner = game.players.reduce((prev, current) =>
-    //     current.total_score > prev.total_score ? current : prev
-    //   );
-    //   await Game.update(game.id, {
-    //     status: "completed",
-    //     winner_id: winner.player_id,
-    //   });
-    //   // Update winner stats
-    //   const winnerData = await Player.filter({ id: winner.player_id });
-    //   if (winnerData.length > 0) {
-    //     await Player.update(winner.player_id, {
-    //       games_won: (winnerData[0].games_won || 0) + 1,
-    //     });
-    //   }
-    //   navigate(createPageUrl("History"));
-    // } catch (error) {
-    //   console.error("Error ending game:", error);
-    // }
+    try {
+      if (!game || !game.players || game.players.length === 0) {
+        console.warn("No game or players found");
+        return;
+      }
+      const topScore = Math.max(...game.players.map((p) => p.total_score ?? 0));
+      const winners = game.players.filter(
+        (p) => (p.total_score ?? 0) === topScore
+      );
+      const winner = winners[0]; // or handle multiple winners if needed
+
+      await db.runAsync(
+        `UPDATE games SET status = ?, winner_id = ? WHERE id = ?`,
+        "completed",
+        winner.player_id,
+        game.id
+      );
+      // Update winner stats
+      await db.runAsync(
+        `UPDATE players SET games_won = games_won + 1 WHERE id = ?`,
+        winner.player_id
+      );
+      router.push("/");
+    } catch (error) {
+      console.error("Error ending game:", error);
+    }
     console.log("End game clicked");
   };
 
