@@ -1,7 +1,7 @@
 import { Game, Player } from "@/entities/all";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import React, { useEffect, useState } from "react";
 import {
@@ -30,6 +30,13 @@ export default function newgame() {
     loadExistingPlayers();
     loadExistingGames();
   }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setGameName("");
+      setSelectedPlayers([]);
+    }, [])
+  );
 
   const loadExistingPlayers = async () => {
     try {
