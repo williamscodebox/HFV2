@@ -10,38 +10,59 @@ import { StyleSheet, Text, View } from "react-native";
 
 export default function CustomDrawer(props: any) {
   return (
-    <DrawerContentScrollView {...props} contentContainerStyle={{ flex: 1 }}>
-      <View style={styles.logoContainer}>
-        <LinearGradient
-          colors={["#DC2626", "#2563EB"]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={styles.iconWrapper}
-        >
-          <View style={styles.iconBackground}>
-            <MaterialCommunityIcons
-              name="cards-spade-outline"
-              size={50}
-              color="white"
-            />
+    <DrawerContentScrollView
+      {...props}
+      contentContainerStyle={{ flex: 1, backgroundColor: "#eff6ff" }}
+    >
+      <LinearGradient
+        // pointerEvents={"none"}
+        style={{ flex: 1, marginVertical: -60, marginHorizontal: -30 }}
+        start={{ x: 0, y: 1 }}
+        end={{ x: 0, y: 0 }}
+        colors={["#fef2f2", "#eff6ff"]}
+      >
+        <View style={{ marginTop: 60, flex: 1, marginHorizontal: 30 }}>
+          <View style={styles.logoContainer}>
+            <LinearGradient
+              colors={["#DC2626", "#2563EB"]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.iconWrapper}
+            >
+              <View style={styles.iconBackground}>
+                <MaterialCommunityIcons
+                  name="cards-spade-outline"
+                  size={50}
+                  color="white"
+                />
+              </View>
+            </LinearGradient>
+            <View style={styles.textContainer}>
+              <Text style={styles.title}>Hand & Foot</Text>
+              <Text style={styles.subTitle}>Shuffle, Score, Repeat</Text>
+            </View>
           </View>
-        </LinearGradient>
-        <Text style={styles.title}>Hand & Foot</Text>
-      </View>
 
-      <View style={{ flex: 1 }}>
-        <DrawerItemList {...props} />
-      </View>
+          <View style={{ flex: 1 }}>
+            <DrawerItemList {...props} />
+          </View>
+        </View>
+      </LinearGradient>
     </DrawerContentScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   logoContainer: {
+    flexDirection: "row",
+    gap: 25,
     alignItems: "center",
     paddingVertical: 24,
+    paddingLeft: 12,
     borderBottomWidth: 1,
     borderBottomColor: "#f4f4f4",
+    marginBottom: 10,
+    marginTop: 10,
   },
   iconWrapper: {
     width: 78,
@@ -65,9 +86,18 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     elevation: 6,
   },
+  textContainer: {
+    flexDirection: "column",
+    justifyContent: "center",
+    gap: 4,
+  },
   title: {
-    fontSize: 20,
+    fontSize: 26,
     fontWeight: "bold",
     color: "#b91c1c",
+  },
+  subTitle: {
+    fontSize: 18,
+    fontWeight: "semibold",
   },
 });
