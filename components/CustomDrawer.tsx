@@ -12,16 +12,26 @@ export default function CustomDrawer(props: any) {
   return (
     <DrawerContentScrollView
       {...props}
-      contentContainerStyle={{ flex: 1, backgroundColor: "#eff6ff" }}
+      contentContainerStyle={{
+        flex: 1,
+        backgroundColor: "#eff6ff",
+        borderRadius: 20,
+      }}
     >
       <LinearGradient
         // pointerEvents={"none"}
-        style={{ flex: 1, marginVertical: -60, marginHorizontal: -30 }}
+        style={{
+          flex: 1,
+          marginTop: -30,
+          marginBottom: -60,
+          marginHorizontal: -20,
+          borderRadius: 40,
+        }}
         start={{ x: 0, y: 1 }}
         end={{ x: 0, y: 0 }}
         colors={["#fef2f2", "#eff6ff"]}
       >
-        <View style={{ marginTop: 60, flex: 1, marginHorizontal: 30 }}>
+        <View style={{ marginTop: 20, flex: 1, marginHorizontal: 20 }}>
           <View style={styles.logoContainer}>
             <LinearGradient
               colors={["#DC2626", "#2563EB"]}
